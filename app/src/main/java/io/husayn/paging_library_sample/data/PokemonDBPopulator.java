@@ -10,6 +10,7 @@ import java.util.List;
 import io.husayn.paging_library_sample.R;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class PokemonDBPopulator {
@@ -27,7 +28,7 @@ public class PokemonDBPopulator {
     }
 
     public void populateDB() {
-        Completable.fromAction(() -> PokemonDataBase.getInstance(context).pokemonDao().insert(pokemonList()))
+        Disposable disposable = Completable.fromAction(() -> PokemonDataBase.getInstance(context).pokemonDao().insert(pokemonList()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onDBPopulationSuccess, this::onDBPopulationFailure);

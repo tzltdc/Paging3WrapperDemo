@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         final PokemonAdapter adapter = new PokemonAdapter();
         viewModel.pokemonList.observe(this, adapter::submitList);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.rv_pokemons);
+        RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
         recyclerView.setAdapter(adapter);
