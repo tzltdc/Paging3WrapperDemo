@@ -19,26 +19,26 @@ public class PokemonDataBaseShould {
     private PokemonDao dao;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         dao = PokemonDataBase.getInstance(context).pokemonDao();
         dao.deleteAll();
     }
 
     @Test
-    public void returnZero_whenDatabaseIsEmpty() throws Exception {
+    public void returnZero_whenDatabaseIsEmpty() {
         int dbSize = dao.pokemonsCount();
         assertEquals(0, dbSize);
     }
 
     @Test
-    public void returnCorrectSize_whenDatabaseIsFull() throws Exception {
+    public void returnCorrectSize_whenDatabaseIsFull() {
         dao.insert(anyPokemons());
         int dbSize = dao.pokemonsCount();
         assertEquals(10, dbSize);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if (dao != null)
             dao.deleteAll();
     }

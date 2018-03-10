@@ -25,9 +25,9 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
 
     PokemonViewHolder(View itemView) {
         super(itemView);
-        pokemonIdTextView = (TextView) itemView.findViewById(R.id.tv_pokemon_id);
-        pokemonNameTextView = (TextView) itemView.findViewById(R.id.tv_pokemon);
-        pokemonSpriteImageView = (ImageView) itemView.findViewById(R.id.iv_pokemon);
+        pokemonIdTextView = itemView.findViewById(R.id.tv_pokemon_id);
+        pokemonNameTextView = itemView.findViewById(R.id.tv_pokemon);
+        pokemonSpriteImageView = itemView.findViewById(R.id.iv_pokemon);
     }
 
     void bindTo(Pokemon pokemon) {
