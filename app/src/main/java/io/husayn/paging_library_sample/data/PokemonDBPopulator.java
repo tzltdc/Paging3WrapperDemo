@@ -1,6 +1,7 @@
 package io.husayn.paging_library_sample.data;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -10,7 +11,6 @@ import java.util.List;
 import io.husayn.paging_library_sample.R;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class PokemonDBPopulator {
@@ -27,8 +27,9 @@ public class PokemonDBPopulator {
         return new PokemonDBPopulator(context);
     }
 
+    @SuppressLint("CheckResult")
     public void populateDB() {
-        Disposable disposable = Completable.fromAction(() -> PokemonDataBase.getInstance(context).pokemonDao().insert(pokemonList()))
+        Completable.fromAction(() -> PokemonDataBase.getInstance(context).pokemonDao().insert(pokemonList()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::onDBPopulationSuccess, this::onDBPopulationFailure);
@@ -37,8 +38,13 @@ public class PokemonDBPopulator {
     private Pokemon[] pokemonList() {
         List<Pokemon> pokemons = new ArrayList<>();
         String[] pokemonNames = context.getResources().getStringArray(R.array.pokemon_names);
-        for (int i = 0; i < pokemonNames.length; i++)
-            pokemons.add(new Pokemon(i + 1, pokemonNames[i]));
+        int index = 0;
+        for (int j = 0; j < 1; j++) {
+            for (String pokemonName : pokemonNames) {
+                pokemons.add(new Pokemon(++index, pokemonName));
+            }
+        }
+
         return pokemons.toArray(new Pokemon[pokemons.size()]);
     }
 
