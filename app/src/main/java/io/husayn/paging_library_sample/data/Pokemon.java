@@ -6,9 +6,10 @@ import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 
-@Entity
+@Entity(tableName = Pokemon.TABLE_NAME)
 public class Pokemon {
 
+    public static final String TABLE_NAME = "pokemon";
     @PrimaryKey
     @ColumnInfo(name = "id")
     public int id;

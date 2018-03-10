@@ -14,22 +14,23 @@ import static io.husayn.paging_library_sample.PokemonApplication.getContext;
 
 public class PokemonAdapter extends PagedListAdapter<Pokemon, PokemonViewHolder> {
 
+    private PokemonViewHolder.OnItemClickCallback onItemClickCallback;
 
-    public PokemonAdapter() {
+    public PokemonAdapter(PokemonViewHolder.OnItemClickCallback onItemClickCallback) {
         super(Pokemon.DIFF_CALLBACK);
+        this.onItemClickCallback = onItemClickCallback;
     }
 
     @NonNull
     @Override
     public PokemonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(getContext()).inflate(R.layout.item_pokemon, parent, false);
-        return new PokemonViewHolder(itemView);
+        return new PokemonViewHolder(itemView, onItemClickCallback);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
         Pokemon pokemon = getItem(position);
-
         if (pokemon != null) {
             holder.bindTo(pokemon);
         } else {

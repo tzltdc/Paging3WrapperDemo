@@ -23,8 +23,9 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
     private ImageView pokemonSpriteImageView;
     private TextView pokemonNameTextView;
 
-    PokemonViewHolder(View itemView) {
+    PokemonViewHolder(View itemView, OnItemClickCallback onItemClickCallback) {
         super(itemView);
+        this.onItemClickCallback = onItemClickCallback;
         pokemonIdTextView = itemView.findViewById(R.id.tv_pokemon_id);
         pokemonNameTextView = itemView.findViewById(R.id.tv_pokemon);
         pokemonSpriteImageView = itemView.findViewById(R.id.iv_pokemon);
@@ -37,6 +38,15 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
         Picasso.with(itemView.getContext())
                 .load(pokemonSpriteUrl(pokemon.id))
                 .into(pokemonSpriteImageView, picassoPaletteCallBack(pokemonSpriteUrl(pokemon.id)));
+
+        itemView.setOnClickListener(v -> onItemClickCallback.onItemClick(pokemon));
+
+    }
+
+    private OnItemClickCallback onItemClickCallback;
+
+    public interface OnItemClickCallback {
+        void onItemClick(Pokemon pokemon);
     }
 
     private String pokemonSpriteUrl(int id) {

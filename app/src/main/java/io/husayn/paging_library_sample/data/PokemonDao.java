@@ -22,4 +22,12 @@ public interface PokemonDao {
     @VisibleForTesting()
     @Query("DELETE FROM pokemon")
     void deleteAll();
+
+
+    @Query("DELETE FROM pokemon WHERE id = :id")
+    void deleteById(long id);
+
+    @Query("UPDATE pokemon set name = :name WHERE id = :id")
+    int update(long id, String name);
+
 }
