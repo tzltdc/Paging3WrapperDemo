@@ -15,12 +15,15 @@ import io.husayn.paging_library_sample.data.PokemonDataBase;
 
 public class MainActivity extends AppCompatActivity implements PokemonViewHolder.OnItemClickCallback {
 
+    private MainViewModel viewModel;
+    private boolean orderBy;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         final PokemonAdapter adapter = new PokemonAdapter(this);
         viewModel.pokemonList.observe(this, adapter::submitList);
 
@@ -28,6 +31,9 @@ public class MainActivity extends AppCompatActivity implements PokemonViewHolder
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
         recyclerView.setAdapter(adapter);
+        viewModel.postValue(orderBy);
+        orderBy = !orderBy;
+
     }
 
     @Override
@@ -59,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements PokemonViewHolder
             } else {
                 PokemonDataBase.getInstance(MainActivity.this).pokemonDao().update(id, pokemon.name + " " + pokemon.name);
             }
+            viewModel.postValue(MainActivity.this.orderBy);
+            orderBy = !orderBy;
             return null;
         }
 

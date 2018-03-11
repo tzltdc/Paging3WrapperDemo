@@ -9,8 +9,13 @@ import android.support.annotation.VisibleForTesting;
 @Dao
 public interface PokemonDao {
 
+    @Query("SELECT * FROM pokemon  ORDER BY id DESC")
+    DataSource.Factory<Integer, Pokemon> allByDesc();
+
+
     @Query("SELECT * FROM pokemon ORDER BY id ASC")
-    DataSource.Factory<Integer, Pokemon> pokemons();
+    DataSource.Factory<Integer, Pokemon> allByAsc();
+
 
     @VisibleForTesting()
     @Query("SELECT COUNT(*) FROM pokemon")
