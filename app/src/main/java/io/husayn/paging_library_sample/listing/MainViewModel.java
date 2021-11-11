@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.paging.DataSource.Factory;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import io.husayn.paging_library_sample.PokemonApplication;
@@ -30,19 +31,18 @@ public class MainViewModel extends ViewModel {
             .build();
 
     pokemonList =
-        Transformations.switchMap(
-            query,
-            orderByDesc -> {
-              if (orderByDesc) {
-                return new LivePagedListBuilder<>(pokemonDao.allByDesc(), config)
-                    .setInitialLoadKey(INITIAL_LOAD_KEY)
-                    .build();
-              } else {
-                return new LivePagedListBuilder<>(pokemonDao.allByAsc(), config)
-                    .setInitialLoadKey(INITIAL_LOAD_KEY)
-                    .build();
-              }
-            });
+        Transformations.switchMap(query, orderByDesc -> liveData(pokemonDao, config, orderByDesc));
+  }
+
+  private LiveData<PagedList<Pokemon>> liveData(
+      PokemonDao pokemonDao, PagedList.Config config, Boolean orderByDesc) {
+    return new LivePagedListBuilder<>(factory(pokemonDao, orderByDesc), config)
+        .setInitialLoadKey(INITIAL_LOAD_KEY)
+        .build();
+  }
+
+  private Factory<Integer, Pokemon> factory(PokemonDao pokemonDao, Boolean orderByDesc) {
+    return orderByDesc ? pokemonDao.allByDesc() : pokemonDao.allByAsc();
   }
 
   public void postValue(boolean orderByDesc) {
