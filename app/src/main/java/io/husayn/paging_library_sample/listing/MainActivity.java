@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.husayn.paging_library_sample.R;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity
 
   private MainViewModel viewModel;
   private boolean orderBy;
+  private PokemonAdapter adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,8 @@ public class MainActivity extends AppCompatActivity
 
     // test google java format.
     viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-    final PokemonAdapter adapter = new PokemonAdapter(this);
-    viewModel.pokemonList.observe(this, adapter::submitList);
+    adapter = new PokemonAdapter(this);
+    viewModel.pokemonList.observe(this, this::submitList);
 
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setAdapter(adapter);
     viewModel.postValue(orderBy);
     orderBy = !orderBy;
+  }
+
+  private void submitList(PagingData<Pokemon> pokemonPagingData) {
+    adapter.submitData(getLifecycle(), pokemonPagingData);
   }
 
   @Override
