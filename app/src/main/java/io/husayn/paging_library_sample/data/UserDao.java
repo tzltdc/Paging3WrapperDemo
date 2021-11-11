@@ -8,12 +8,12 @@ import android.arch.persistence.room.Update;
 @Dao
 public interface UserDao {
 
-    @Insert
-    void insert(User... user);
+  @Insert
+  void insert(User... user);
 
-    @Update
-    void update(User... user);
+  @Update
+  void update(User... user);
 
-    @Delete
-    void delete(User... user);
+  @Delete
+  void delete(User... user);
 }

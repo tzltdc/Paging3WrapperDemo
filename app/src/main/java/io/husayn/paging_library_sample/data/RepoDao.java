@@ -10,17 +10,18 @@ import java.util.List;
 @Dao
 public interface RepoDao {
 
-    @Insert
-    void insert(Repo repo);
+  @Insert
+  void insert(Repo repo);
 
-    @Update
-    void update(Repo... repos);
+  @Update
+  void update(Repo... repos);
 
-    @Delete
-    void delete(Repo... repos);
-    @Query("SELECT * FROM repo")
-    List<Repo> getAllRepos();    
+  @Delete
+  void delete(Repo... repos);
 
-//    @Query("SELECT * FROM repo WHERE userId=:userId")
-//    List<Repo> findRepositoriesForUser(final int userId);
+  @Query("SELECT * FROM repo")
+  List<Repo> getAllRepos();
+
+  //    @Query("SELECT * FROM repo WHERE userId=:userId")
+  //    List<Repo> findRepositoriesForUser(final int userId);
 }
