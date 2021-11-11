@@ -2,11 +2,11 @@ package io.husayn.paging_library_sample.listing;
 
 import static io.husayn.paging_library_sample.PokemonApplication.getContext;
 
-import android.arch.paging.PagedListAdapter;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 

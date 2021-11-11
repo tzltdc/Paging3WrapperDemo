@@ -2,10 +2,10 @@ package io.husayn.paging_library_sample.listing;
 
 import static io.husayn.paging_library_sample.utilities.TextUtility.toThreeDigitNumber;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.RecyclerView;
 import com.github.florent37.picassopalette.PicassoPalette;
 import com.squareup.picasso.Picasso;
 import io.husayn.paging_library_sample.R;

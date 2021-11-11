@@ -3,7 +3,7 @@ package io.husayn.paging_library_sample.data;
 import static junit.framework.Assert.assertEquals;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

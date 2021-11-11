@@ -1,12 +1,12 @@
 package io.husayn.paging_library_sample.listing;
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDataBase;

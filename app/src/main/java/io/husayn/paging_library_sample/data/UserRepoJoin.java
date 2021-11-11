@@ -1,8 +1,8 @@
 package io.husayn.paging_library_sample.data;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.ForeignKey;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
 
 @Entity(
     tableName = UserRepoJoin.USER_REPO_JOIN,
