@@ -1,7 +1,7 @@
 package io.husayn.paging_library_sample.data;
 
 import androidx.annotation.VisibleForTesting;
-import androidx.paging.DataSource;
+import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -10,10 +10,10 @@ import androidx.room.Query;
 public interface PokemonDao {
 
   @Query("SELECT * FROM pokemon  ORDER BY id DESC")
-  DataSource.Factory<Integer, Pokemon> allByDesc();
+  PagingSource<Integer, Pokemon> allByDesc();
 
   @Query("SELECT * FROM pokemon ORDER BY id ASC")
-  DataSource.Factory<Integer, Pokemon> allByAsc();
+  PagingSource<Integer, Pokemon> allByAsc();
 
   @VisibleForTesting()
   @Query("SELECT COUNT(*) FROM pokemon")
