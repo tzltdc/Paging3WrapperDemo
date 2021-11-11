@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // test google java format.
     viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
     final PokemonAdapter adapter = new PokemonAdapter(this);
     viewModel.pokemonList.observe(this, adapter::submitList);
