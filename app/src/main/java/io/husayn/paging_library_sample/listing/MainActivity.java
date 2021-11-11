@@ -1,5 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
+import static com.uber.autodispose.AutoDispose.autoDisposable;
+
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
@@ -27,7 +30,10 @@ public class MainActivity extends AppCompatActivity
     // test google java format.
     viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
     adapter = new PokemonAdapter(this);
-    viewModel.pokemonList.observe(this, this::submitList);
+    viewModel
+        .rxPagingData()
+        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(this::submitList);
 
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
