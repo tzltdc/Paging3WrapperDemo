@@ -12,11 +12,11 @@ import org.junit.Test;
 public class PokemonDataBaseShould {
 
   public static final String ANY_POKEMON_NAME = "pokemon";
-  private Context context = InstrumentationRegistry.getTargetContext();
   private PokemonDao dao;
 
   @Before
   public void setUp() {
+    Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     dao = PokemonDataBase.getInstance(context).pokemonDao();
     dao.deleteAll();
   }
