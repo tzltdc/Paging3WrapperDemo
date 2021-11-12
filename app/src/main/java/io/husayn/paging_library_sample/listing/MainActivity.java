@@ -74,8 +74,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
 
   @SuppressLint("SetTextI18n")
   private Unit onLoaded(CombinedLoadStates state) {
-    tv_count.setText("total:" + adapter.getItemCount());
+    tv_count.post(this::updateStatus);
     return Unit.INSTANCE;
+  }
+
+  private void updateStatus() {
+    tv_count.setText("total:" + adapter.getItemCount());
   }
 
   @Override

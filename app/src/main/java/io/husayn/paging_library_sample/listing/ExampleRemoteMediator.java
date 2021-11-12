@@ -115,8 +115,11 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    */
   private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
     if (loadType == LoadType.REFRESH) {
+      Timber.w("tonny delete");
       delete(query.searchKey());
     }
+    Timber.w("tonny insertAll :%s", response.list().size());
+
     pokemonDao.insertAll(response.list());
   }
 
