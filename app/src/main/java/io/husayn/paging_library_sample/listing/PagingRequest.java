@@ -1,14 +1,18 @@
 package io.husayn.paging_library_sample.listing;
 
-class PagingRequest {
+import com.google.auto.value.AutoValue;
 
-  public final long offSet;
-  public final PagingQuery pagingQuery;
-  public final PagingQueryConfig queryConfig;
+@AutoValue
+abstract class PagingRequest {
 
-  public PagingRequest(long offSet, PagingQuery pagingQuery, PagingQueryConfig queryConfig) {
-    this.pagingQuery = pagingQuery;
-    this.queryConfig = queryConfig;
-    this.offSet = offSet;
+  public abstract long offSet();
+
+  public abstract PagingQuery pagingQuery();
+
+  public abstract PagingQueryConfig queryConfig();
+
+  public static PagingRequest create(
+      long offSet, PagingQuery pagingQuery, PagingQueryConfig queryConfig) {
+    return new AutoValue_PagingRequest(offSet, pagingQuery, queryConfig);
   }
 }

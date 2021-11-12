@@ -1,12 +1,15 @@
 package io.husayn.paging_library_sample.listing;
 
-class PagingAction {
+import com.google.auto.value.AutoValue;
 
-  public final PagingRequest request;
-  public final SearchPokemonResponse response;
+@AutoValue
+abstract class PagingAction {
 
-  public PagingAction(PagingRequest request, SearchPokemonResponse response) {
-    this.request = request;
-    this.response = response;
+  public abstract PagingRequest request();
+
+  public abstract SearchPokemonResponse response();
+
+  public static PagingAction create(PagingRequest newRequest, SearchPokemonResponse newResponse) {
+    return new AutoValue_PagingAction(newRequest, newResponse);
   }
 }

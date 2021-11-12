@@ -35,6 +35,6 @@ public class ExampleBackendServiceTest {
   }
 
   private PagingRequest firstRequest(@Nullable String searchKey) {
-    return new PagingRequest(0, new PagingQuery(searchKey), PagingQueryConfig.MAX_CONFIG);
+    return PagingRequest.create(0, PagingQuery.create(searchKey), PagingQueryConfig.MAX_CONFIG);
   }
 }

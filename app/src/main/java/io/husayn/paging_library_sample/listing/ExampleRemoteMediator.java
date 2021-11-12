@@ -72,7 +72,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private PagingRequest defaultPagingRequest(PagingQuery query) {
-    return new PagingRequest(0, query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
+    return PagingRequest.create(0, query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
   }
 
   /**
@@ -93,12 +93,12 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
     return networkService
         .query(pagingRequest)
-        .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
+        .map(response -> success(loadType, PagingAction.create(pagingRequest, response)))
         .onErrorResumeNext(this::error);
   }
 
   private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
-    return new PagingRequest(
+    return PagingRequest.create(
         OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
   }
 
@@ -111,7 +111,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private MediatorResult success(LoadType loadType, PagingAction action) {
-    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response));
+    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response()));
     return new Success(endOfPaging(action));
   }
 
