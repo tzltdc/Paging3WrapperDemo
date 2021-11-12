@@ -68,7 +68,12 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    */
   private Single<MediatorResult> refresh(LoadType loadType) {
     Timber.w("refresh :%s", loadType);
-    return fetch(loadType, networkService.searchPokemons(defaultPagingRequest(query)));
+    PagingRequest pagingRequest = defaultPagingRequest(query);
+    return networkService
+        .searchPokemons(pagingRequest)
+        .subscribeOn(Schedulers.io())
+        .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
+        .onErrorResumeNext(this::error);
   }
 
   private PagingRequest defaultPagingRequest(PagingQuery query) {
@@ -86,21 +91,18 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return fetch(loadType, networkService.searchPokemons(nextPagingRequest(query, lastItem)));
+      PagingRequest pagingRequest = nextPagingRequest(query, lastItem);
+      return networkService
+          .searchPokemons(pagingRequest)
+          .subscribeOn(Schedulers.io())
+          .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
+          .onErrorResumeNext(this::error);
     }
   }
 
   private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
     return new PagingRequest(
         OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
-  }
-
-  private Single<MediatorResult> fetch(
-      LoadType loadType, Single<SearchPokemonResponse> searchPokemonResponseSingle) {
-    return searchPokemonResponseSingle
-        .subscribeOn(Schedulers.io())
-        .map(response -> success(loadType, null))
-        .onErrorResumeNext(this::error);
   }
 
   private Single<MediatorResult> error(Throwable e) {
