@@ -9,14 +9,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
+import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
+import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
+import java.util.Arrays;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-    implements PokemonViewHolder.OnItemClickCallback {
+public class MainActivity extends AppCompatActivity implements OnItemClickCallback, QueryCallback {
 
   private MainViewModel viewModel;
   private boolean orderBy;
@@ -47,6 +51,12 @@ public class MainActivity extends AppCompatActivity
 
   private void bindQuery() {
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
+    queryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    queryRecyclerView.setAdapter(new QueryAdapter(this, get()));
+  }
+
+  private List<String> get() {
+    return Arrays.asList("a", "b", "c", "d", "ee", "ab", "abc");
   }
 
   private String getSearchKey() {
@@ -61,6 +71,11 @@ public class MainActivity extends AppCompatActivity
   public void onItemClick(Pokemon pokemon) {
 
     new DatabaseAsync().execute(pokemon);
+  }
+
+  @Override
+  public void onItemClick(String query) {
+    viewModel.postValue(PagingQuery.create(query));
   }
 
   @SuppressLint("StaticFieldLeak")
