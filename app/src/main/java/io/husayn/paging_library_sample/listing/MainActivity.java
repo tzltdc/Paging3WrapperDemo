@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   }
 
   private List<String> get() {
-    return Arrays.asList(EMPTY, "a", "b", "ee", "ab", "abc");
+    return Arrays.asList(EMPTY, "a", "b", "ee", "abc");
   }
 
   private String getSearchKey() {
