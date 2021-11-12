@@ -6,7 +6,6 @@ import android.preference.PreferenceManager;
 import io.husayn.paging_library_sample.data.PokemonDBPopulator;
 import timber.log.ThreadTree;
 import timber.log.Timber;
-import timber.log.Timber.DebugTree;
 
 public class PokemonApplication extends Application {
 
@@ -17,7 +16,6 @@ public class PokemonApplication extends Application {
   public void onCreate() {
     super.onCreate();
     Timber.plant(new ThreadTree());
-    Timber.plant(new DebugTree());
     init(this);
     intiDB();
   }
