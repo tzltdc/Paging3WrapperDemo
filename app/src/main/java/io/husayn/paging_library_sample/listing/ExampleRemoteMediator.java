@@ -10,6 +10,7 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import timber.log.Timber;
 
@@ -87,6 +88,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
     return ExampleBackendService.query(pagingRequest)
+        .subscribeOn(Schedulers.io())
         .map(response -> success(loadType, PagingAction.create(pagingRequest, response)))
         .onErrorResumeNext(this::error);
   }
