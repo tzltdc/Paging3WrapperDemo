@@ -2,9 +2,9 @@ package io.husayn.paging_library_sample.listing;
 
 import io.reactivex.Single;
 
-class ExampleBackendService {
+public class ExampleBackendService {
 
-  public Single<SearchPokemonResponse> searchPokemons(String query, Integer loadKey) {
+  public Single<SearchPokemonResponse> searchPokemons(Boolean query, Integer loadKey) {
     throw new RuntimeException();
   }
 }

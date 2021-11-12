@@ -1,6 +1,5 @@
 package io.husayn.paging_library_sample.listing;
 
-import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
@@ -38,13 +37,16 @@ public class MainViewModel extends ViewModel {
     return new Pager<>(
         pagingConfig,
         INITIAL_LOAD_KEY,
-        remoteMediator(),
+        remoteMediator(orderByDesc),
         () -> pagingSource(pokemonDao, orderByDesc));
   }
 
-  @Nullable
-  private RemoteMediator<Integer, Pokemon> remoteMediator() {
-    return null;
+  private RemoteMediator<Integer, Pokemon> remoteMediator(boolean orderByDesc) {
+    return new ExampleRemoteMediator(
+        orderByDesc,
+        PokemonDataBase.getInstance(PokemonApplication.getContext()),
+        new ExampleBackendService(),
+        pokemonDao);
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, Boolean orderByDesc) {
