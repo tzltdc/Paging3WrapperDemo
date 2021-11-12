@@ -17,7 +17,7 @@ import io.reactivex.subjects.BehaviorSubject;
 public class MainViewModel extends ViewModel {
 
   private static final int INITIAL_LOAD_KEY = 0;
-  private static final int PAGE_SIZE = 20;
+  private static final int PAGE_SIZE = 10;
   private static final int PREFETCH_DISTANCE = 5;
   private final BehaviorSubject<PagingQuery> query = BehaviorSubject.create();
   private final PokemonDao pokemonDao;
