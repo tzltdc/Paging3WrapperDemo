@@ -1,8 +1,8 @@
 package io.husayn.paging_library_sample.listing;
 
-import static com.google.common.truth.Truth.*;
-import static org.junit.Assert.*;
+import static com.google.common.truth.Truth.assertThat;
 
+import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,17 +12,31 @@ import org.robolectric.RobolectricTestRunner;
 public class EndOfPagingMapperTest {
 
   @Test
-  public void endOfPaging() {
-    assertThat(
-            EndOfPagingMapper.endOfPaging(PagingAction.create(initialRequest(), emptyResponse())))
+  public void whenEmpty_shouldReturnTrue() {
+    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(10), emptyResponse())))
         .isTrue();
+  }
+
+  @Test
+  public void whenResponseLessThanRequestedShouldReturnTrue() {
+    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(2), single()))).isTrue();
+  }
+
+  @Test
+  public void whenResponseEqualWithRequestedShouldReturnFalse() {
+    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(1), single()))).isFalse();
   }
 
   private SearchPokemonResponse emptyResponse() {
     return SearchPokemonResponse.create(Collections.emptyList());
   }
 
-  private PagingRequest initialRequest() {
-    return PagingRequest.create(0, PagingQuery.create(null), PagingQueryConfig.create(10));
+  private SearchPokemonResponse single() {
+    return SearchPokemonResponse.create(Collections.singletonList(new Pokemon(0, "test")));
+  }
+
+  private PagingRequest request(int countPerPage) {
+    return PagingRequest.create(
+        0, PagingQuery.create(null), PagingQueryConfig.create(countPerPage));
   }
 }
