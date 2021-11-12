@@ -5,6 +5,7 @@ import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import java.util.List;
 
 @Dao
 public interface PokemonDao {
@@ -22,12 +23,18 @@ public interface PokemonDao {
   @Insert
   void insert(Pokemon... pokemons);
 
+  @Insert
+  void insertAll(List<Pokemon> pokemons);
+
   @VisibleForTesting()
   @Query("DELETE FROM pokemon")
   void deleteAll();
 
   @Query("DELETE FROM pokemon WHERE id = :id")
   void deleteById(long id);
+
+  @Query("DELETE FROM pokemon WHERE name = :name")
+  void deleteByQuery(String name);
 
   @Query("UPDATE pokemon set name = :name WHERE id = :id")
   int update(long id, String name);
