@@ -26,7 +26,6 @@ public interface PokemonDao {
   @Insert
   void insertAll(List<Pokemon> pokemons);
 
-  @VisibleForTesting()
   @Query("DELETE FROM pokemon")
   void deleteAll();
 
