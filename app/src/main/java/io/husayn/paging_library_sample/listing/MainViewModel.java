@@ -47,8 +47,8 @@ public class MainViewModel extends ViewModel {
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
-    // TODO honor the query in db.
-    return pokemonDao.allByAsc();
+    String name = query.searchKey();
+    return name == null ? pokemonDao.allByAsc() : pokemonDao.queryBy(name);
   }
 
   public void postValue(PagingQuery orderByDesc) {
