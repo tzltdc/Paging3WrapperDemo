@@ -35,25 +35,25 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   @NonNull
   @Override
   public Single<InitializeAction> initializeSingle() {
+    return getLastUpdatedSingle().map(this::initializeAction);
+  }
+
+  private InitializeAction initializeAction(long lastUpdatedMillis) {
     long cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
-    return getLastUpdatedSingle()
-        .map(
-            lastUpdatedMillis -> {
-              if (System.currentTimeMillis() - lastUpdatedMillis >= cacheTimeout) {
-                // Cached data is up-to-date, so there is no need to re-fetch
-                // from the network.
-                return InitializeAction.SKIP_INITIAL_REFRESH;
-              } else {
-                // Need to refresh cached data from network; returning
-                // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
-                // APPEND and PREPEND from running until REFRESH succeeds.
-                return InitializeAction.LAUNCH_INITIAL_REFRESH;
-              }
-            });
+    if (System.currentTimeMillis() - lastUpdatedMillis >= cacheTimeout) {
+      // Cached data is up-to-date, so there is no need to re-fetch
+      // from the network.
+      return InitializeAction.SKIP_INITIAL_REFRESH;
+    } else {
+      // Need to refresh cached data from network; returning
+      // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
+      // APPEND and PREPEND from running until REFRESH succeeds.
+      return InitializeAction.LAUNCH_INITIAL_REFRESH;
+    }
   }
 
   private Single<Long> getLastUpdatedSingle() {
-    throw new RuntimeException("");
+    return Single.just(System.currentTimeMillis());
     //    return pokemonDao.lastUpdatedSingle();
   }
 
