@@ -11,7 +11,6 @@ import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
@@ -35,29 +34,9 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   @NonNull
   @Override
   public Single<InitializeAction> initializeSingle() {
-    return getLastUpdatedSingle().map(this::initializeAction);
+    return InitializeActionMapper.initializeSingle();
   }
 
-  private InitializeAction initializeAction(long lastUpdatedMillis) {
-    long cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
-    if (System.currentTimeMillis() - lastUpdatedMillis >= cacheTimeout) {
-      // Cached data is up-to-date, so there is no need to re-fetch
-      // from the network.
-      return InitializeAction.SKIP_INITIAL_REFRESH;
-    } else {
-      // Need to refresh cached data from network; returning
-      // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
-      // APPEND and PREPEND from running until REFRESH succeeds.
-      return InitializeAction.LAUNCH_INITIAL_REFRESH;
-    }
-  }
-
-  private Single<Long> getLastUpdatedSingle() {
-    return Single.just(System.currentTimeMillis());
-    //    return pokemonDao.lastUpdatedSingle();
-  }
-
-  // Prepare to fix it
   @NonNull
   @Override
   public Single<MediatorResult> loadSingle(
