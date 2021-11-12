@@ -18,13 +18,13 @@ class QueryViewHolder extends RecyclerView.ViewHolder {
   void bindTo(String query) {
     itemView.setTag(query);
     tv_query.setText(query);
-    itemView.setOnClickListener(v -> queryCallback.onItemClick(query));
+    itemView.setOnClickListener(v -> queryCallback.query(query));
   }
 
   private QueryCallback queryCallback;
 
   public interface QueryCallback {
 
-    void onItemClick(String query);
+    void query(String query);
   }
 }

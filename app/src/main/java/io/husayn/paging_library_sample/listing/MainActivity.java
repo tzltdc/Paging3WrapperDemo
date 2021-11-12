@@ -21,6 +21,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickCallback, QueryCallback {
 
+  public static final String EMPTY = "Empty";
   private MainViewModel viewModel;
   private boolean orderBy;
   private PokemonAdapter adapter;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   }
 
   private List<String> get() {
-    return Arrays.asList("", "a", "b", "ee", "ab", "abc");
+    return Arrays.asList(EMPTY, "a", "b", "ee", "ab", "abc");
   }
 
   private String getSearchKey() {
@@ -73,8 +74,8 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   }
 
   @Override
-  public void onItemClick(String query) {
-    viewModel.postValue(PagingQuery.create(query));
+  public void query(String query) {
+    viewModel.postValue(PagingQuery.create(query.equals(EMPTY) ? null : query));
   }
 
   @SuppressLint("StaticFieldLeak")
