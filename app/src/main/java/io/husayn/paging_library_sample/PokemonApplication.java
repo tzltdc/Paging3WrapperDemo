@@ -24,7 +24,7 @@ public class PokemonApplication extends Application {
 
   private void intiDB() {
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (!preferences.getBoolean(KEY_IS_DB_POPULATED, false)) {
+    if (!preferences.getBoolean(KEY_IS_DB_POPULATED, true)) {
       PokemonDBPopulator.with(this).populateDB();
       preferences.edit().putBoolean(KEY_IS_DB_POPULATED, true).apply();
     }
