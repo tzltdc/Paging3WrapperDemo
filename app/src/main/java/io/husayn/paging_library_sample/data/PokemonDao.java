@@ -33,7 +33,7 @@ public interface PokemonDao {
   @Query("DELETE FROM pokemon WHERE id = :id")
   void deleteById(long id);
 
-  @Query("DELETE FROM pokemon WHERE name = :name")
+  @Query("DELETE FROM pokemon WHERE name like '%' || :name || '%'")
   void deleteByQuery(String name);
 
   @Query("UPDATE pokemon set name = :name WHERE id = :id")

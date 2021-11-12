@@ -1,6 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.LoadType;
 import androidx.paging.PagingState;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
@@ -121,9 +122,17 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    */
   private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
     if (loadType == LoadType.REFRESH) {
-      pokemonDao.deleteByQuery(String.valueOf(query));
+      delete(query.searchKey());
     }
     pokemonDao.insertAll(response.list());
+  }
+
+  private void delete(@Nullable String key) {
+    if (key == null) {
+      pokemonDao.deleteAll();
+    } else {
+      pokemonDao.deleteByQuery(key);
+    }
   }
 
   private boolean endOfPaging(PagingAction action) {
