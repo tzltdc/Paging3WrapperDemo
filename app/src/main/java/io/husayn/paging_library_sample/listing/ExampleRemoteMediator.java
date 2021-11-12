@@ -16,12 +16,12 @@ import timber.log.Timber;
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PokemonDataBase pokemonDataBase;
-  private Boolean query;
+  private PagingQuery query;
   private ExampleBackendService networkService;
   private PokemonDao pokemonDao;
 
   ExampleRemoteMediator(
-      boolean query,
+      PagingQuery query,
       PokemonDataBase pokemonDataBase,
       ExampleBackendService networkService,
       PokemonDao pokemonDao) {
@@ -68,7 +68,11 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    */
   private Single<MediatorResult> refresh(LoadType loadType) {
     Timber.w("refresh :%s", loadType);
-    return fetch(loadType, networkService.searchPokemons(query, null));
+    return fetch(loadType, networkService.searchPokemons(defaultPagingRequest(query)));
+  }
+
+  private PagingRequest defaultPagingRequest(PagingQuery query) {
+    return new PagingRequest(0, query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
   }
 
   /**
@@ -82,8 +86,13 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return fetch(loadType, networkService.searchPokemons(query, lastItem.id));
+      return fetch(loadType, networkService.searchPokemons(pagingRequest(query, lastItem)));
     }
+  }
+
+  private PagingRequest pagingRequest(PagingQuery query, Pokemon lastItem) {
+    return new PagingRequest(
+        OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
   }
 
   private Single<MediatorResult> fetch(
