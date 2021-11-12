@@ -2,5 +2,5 @@
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/tv_query"
   style="@style/Widget.AppCompat.Button.Borderless"
-  android:layout_width="48dp"
-  android:layout_height="48dp" />
+  android:layout_width="96dp"
+  android:layout_height="72dp" />

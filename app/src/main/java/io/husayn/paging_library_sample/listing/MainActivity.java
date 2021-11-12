@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.husayn.paging_library_sample.R;
@@ -51,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
 
   private void bindQuery() {
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
-    queryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 12));
     queryRecyclerView.setAdapter(new QueryAdapter(this, get()));
   }
 
