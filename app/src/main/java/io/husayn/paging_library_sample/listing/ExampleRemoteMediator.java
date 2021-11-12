@@ -16,9 +16,9 @@ import timber.log.Timber;
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PokemonDataBase pokemonDataBase;
-  private PagingQuery query;
-  private ExampleBackendService networkService;
-  private PokemonDao pokemonDao;
+  private final PagingQuery query;
+  private final ExampleBackendService networkService;
+  private final PokemonDao pokemonDao;
 
   ExampleRemoteMediator(
       PagingQuery query,
@@ -26,8 +26,8 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       ExampleBackendService networkService,
       PokemonDao pokemonDao) {
     this.pokemonDataBase = pokemonDataBase;
-    query = query;
-    networkService = networkService;
+    this.query = query;
+    this.networkService = networkService;
     this.pokemonDao = pokemonDao;
   }
 
@@ -69,11 +69,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private Single<MediatorResult> refresh(LoadType loadType) {
     Timber.w("refresh :%s", loadType);
     PagingRequest pagingRequest = defaultPagingRequest(query);
-    return networkService
-        .searchPokemons(pagingRequest)
-        .subscribeOn(Schedulers.io())
-        .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
-        .onErrorResumeNext(this::error);
+    return execute(loadType, pagingRequest);
   }
 
   private PagingRequest defaultPagingRequest(PagingQuery query) {
@@ -91,13 +87,16 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      PagingRequest pagingRequest = nextPagingRequest(query, lastItem);
-      return networkService
-          .searchPokemons(pagingRequest)
-          .subscribeOn(Schedulers.io())
-          .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
-          .onErrorResumeNext(this::error);
+      return execute(loadType, nextPagingRequest(query, lastItem));
     }
+  }
+
+  private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
+    return networkService
+        .searchPokemons(pagingRequest)
+        .subscribeOn(Schedulers.io())
+        .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
+        .onErrorResumeNext(this::error);
   }
 
   private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
@@ -115,8 +114,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private MediatorResult success(LoadType loadType, PagingAction action) {
     pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response));
-    boolean endOfPaginationReached = endOfPaging(action);
-    return new Success(endOfPaginationReached);
+    return new Success(endOfPaging(action));
   }
 
   /**

@@ -19,7 +19,7 @@ public class MainViewModel extends ViewModel {
   private static final int INITIAL_LOAD_KEY = 0;
   private static final int PAGE_SIZE = 20;
   private static final int PREFETCH_DISTANCE = 5;
-  private final BehaviorSubject<Boolean> query = BehaviorSubject.create();
+  private final BehaviorSubject<PagingQuery> query = BehaviorSubject.create();
   private final PokemonDao pokemonDao;
 
   public MainViewModel() {
@@ -32,7 +32,7 @@ public class MainViewModel extends ViewModel {
         .switchMap(orderByDesc -> PagingRx.getObservable(pager(pokemonDao, orderByDesc)));
   }
 
-  private Pager<Integer, Pokemon> pager(PokemonDao pokemonDao, Boolean orderByDesc) {
+  private Pager<Integer, Pokemon> pager(PokemonDao pokemonDao, PagingQuery orderByDesc) {
     PagingConfig pagingConfig = new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
     return new Pager<>(
         pagingConfig,
@@ -41,7 +41,7 @@ public class MainViewModel extends ViewModel {
         () -> pagingSource(pokemonDao, orderByDesc));
   }
 
-  private RemoteMediator<Integer, Pokemon> remoteMediator(boolean orderByDesc) {
+  private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery orderByDesc) {
     return new ExampleRemoteMediator(
         orderByDesc,
         PokemonDataBase.getInstance(PokemonApplication.getContext()),
@@ -49,11 +49,12 @@ public class MainViewModel extends ViewModel {
         pokemonDao);
   }
 
-  private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, Boolean orderByDesc) {
-    return orderByDesc ? pokemonDao.allByDesc() : pokemonDao.allByAsc();
+  private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
+    // TODO honor the query in db.
+    return query.desc ? pokemonDao.allByDesc() : pokemonDao.allByAsc();
   }
 
-  public void postValue(boolean orderByDesc) {
+  public void postValue(PagingQuery orderByDesc) {
     query.onNext(orderByDesc);
   }
 }
