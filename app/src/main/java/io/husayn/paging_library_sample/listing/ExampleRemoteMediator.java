@@ -17,17 +17,11 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PokemonDataBase pokemonDataBase;
   private final PagingQuery query;
-  private final ExampleBackendService networkService;
   private final PokemonDao pokemonDao;
 
-  ExampleRemoteMediator(
-      PagingQuery query,
-      PokemonDataBase pokemonDataBase,
-      ExampleBackendService networkService,
-      PokemonDao pokemonDao) {
+  ExampleRemoteMediator(PagingQuery query, PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
     this.pokemonDataBase = pokemonDataBase;
     this.query = query;
-    this.networkService = networkService;
     this.pokemonDao = pokemonDao;
   }
 

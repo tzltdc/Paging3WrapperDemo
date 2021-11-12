@@ -43,10 +43,7 @@ public class MainViewModel extends ViewModel {
 
   private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery orderByDesc) {
     return new ExampleRemoteMediator(
-        orderByDesc,
-        PokemonDataBase.getInstance(PokemonApplication.getContext()),
-        new ExampleBackendService(),
-        pokemonDao);
+        orderByDesc, PokemonDataBase.getInstance(PokemonApplication.getContext()), pokemonDao);
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
