@@ -52,7 +52,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * the list. Immediately return, reporting end of pagination.
    */
   private Single<MediatorResult> ignorePrepend() {
-    Timber.w("Prepend LoadType ignored");
+    Timber.w("tonny Prepend LoadType ignored");
     return Single.just(new MediatorResult.Success(true));
   }
 
@@ -62,7 +62,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * pass null to load the first page.
    */
   private Single<MediatorResult> refresh(LoadType loadType) {
-    Timber.w("refresh :%s", loadType);
+    Timber.w("tonny refresh :%s", loadType);
     PagingRequest pagingRequest = defaultPagingRequest(query);
     return execute(loadType, pagingRequest);
   }
@@ -77,7 +77,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   private Single<MediatorResult> append(LoadType loadType, PagingState<Integer, Pokemon> state) {
-    Timber.w("append :%s", loadType);
+    Timber.w("tonny append :%s", loadType);
     Pokemon lastItem = state.lastItemOrNull();
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));

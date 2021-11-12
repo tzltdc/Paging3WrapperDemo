@@ -10,7 +10,7 @@ class OffsetHelper {
   /** Temporarily using the remote service to identify the offset position */
   public static long offset(Pokemon lastFetchedAsTarget, PagingQuery query) {
     long loaded = offSet(lastFetchedAsTarget, query);
-    Timber.i("loaded:%s, query:%s", loaded, query.searchKey());
+    Timber.i("tonny loaded:%s, query:%s", loaded, query.searchKey());
     return loaded;
   }
 
