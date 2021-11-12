@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setLayoutManager(
         new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
     recyclerView.setAdapter(adapter);
-    viewModel.postValue(orderBy);
+    viewModel.postValue(new PagingQuery(null, orderBy));
     orderBy = !orderBy;
   }
 
@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity
             .pokemonDao()
             .update(id, pokemon.name + " " + pokemon.name);
       }
-      viewModel.postValue(MainActivity.this.orderBy);
+      viewModel.postValue(new PagingQuery(null, orderBy));
       orderBy = !orderBy;
       return null;
     }
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPostExecute(Void aVoid) {
       super.onPostExecute(aVoid);
-
       // To after addition operation here.
     }
   }
