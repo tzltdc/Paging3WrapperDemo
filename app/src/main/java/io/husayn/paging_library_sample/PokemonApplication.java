@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import io.husayn.paging_library_sample.data.PokemonDBPopulator;
+import timber.log.Timber;
+import timber.log.Timber.DebugTree;
 
 public class PokemonApplication extends Application {
 
@@ -13,6 +15,7 @@ public class PokemonApplication extends Application {
   @Override
   public void onCreate() {
     super.onCreate();
+    Timber.plant(new DebugTree());
     init(this);
     intiDB();
   }
