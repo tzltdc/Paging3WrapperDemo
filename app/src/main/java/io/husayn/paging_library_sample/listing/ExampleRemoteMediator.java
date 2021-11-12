@@ -107,7 +107,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private MediatorResult success(LoadType loadType, PagingAction action) {
-    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response()));
+    flushDbData(loadType, action.response());
     return new Success(endOfPaging(action));
   }
 

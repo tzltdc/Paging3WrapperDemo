@@ -27,6 +27,7 @@ apply from: "${rootDir}/config/google_java_format.gradle"
 allprojects {
     repositories {
         jcenter()
+        maven { url 'https://jitpack.io' }
         maven { url 'https://maven.google.com' }
         maven {
             url 'https://maven.google.com/'
