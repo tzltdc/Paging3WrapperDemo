@@ -2,8 +2,6 @@ package io.husayn.paging_library_sample.listing;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
-import android.annotation.SuppressLint;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import java.util.Arrays;
 import java.util.List;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickCallback, QueryCallback {
 
@@ -69,45 +67,11 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
 
   @Override
   public void onItemClick(Pokemon pokemon) {
-
-    new DatabaseAsync().execute(pokemon);
+    Timber.i("pokemon:%s", pokemon);
   }
 
   @Override
   public void query(String query) {
     viewModel.postValue(PagingQuery.create(query.equals(EMPTY) ? null : query));
-  }
-
-  @SuppressLint("StaticFieldLeak")
-  private class DatabaseAsync extends AsyncTask<Pokemon, Void, Void> {
-
-    @Override
-    protected void onPreExecute() {
-      super.onPreExecute();
-
-      // Perform pre-adding operation here.
-    }
-
-    @Override
-    protected Void doInBackground(Pokemon... pokemons) {
-      Pokemon pokemon = pokemons[0];
-      int id = pokemon.id;
-      if (System.currentTimeMillis() % 20 != 0) {
-        PokemonDataBase.getInstance(MainActivity.this).pokemonDao().deleteById(id);
-      } else {
-        PokemonDataBase.getInstance(MainActivity.this)
-            .pokemonDao()
-            .update(id, pokemon.name + " " + pokemon.name);
-      }
-      viewModel.postValue(PagingQuery.create(getSearchKey()));
-      orderBy = !orderBy;
-      return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-      super.onPostExecute(aVoid);
-      // To after addition operation here.
-    }
   }
 }
