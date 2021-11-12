@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setLayoutManager(
         new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
     recyclerView.setAdapter(adapter);
-    viewModel.postValue(new PagingQuery(getSearchKey(), orderBy));
+    viewModel.postValue(new PagingQuery(getSearchKey()));
     orderBy = !orderBy;
   }
 
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
             .pokemonDao()
             .update(id, pokemon.name + " " + pokemon.name);
       }
-      viewModel.postValue(new PagingQuery(getSearchKey(), orderBy));
+      viewModel.postValue(new PagingQuery(getSearchKey()));
       orderBy = !orderBy;
       return null;
     }

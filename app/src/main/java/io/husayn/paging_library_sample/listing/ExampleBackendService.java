@@ -7,7 +7,7 @@ import io.reactivex.Single;
 
 public class ExampleBackendService {
 
-  public Single<SearchPokemonResponse> searchPokemons(PagingRequest pagingRequest) {
+  public static Single<SearchPokemonResponse> query(PagingRequest pagingRequest) {
     return Observable.fromIterable(RemoteDataServer.all())
         .filter(pokemon -> validItem(pokemon, pagingRequest.pagingQuery))
         .skip(pagingRequest.offSet)

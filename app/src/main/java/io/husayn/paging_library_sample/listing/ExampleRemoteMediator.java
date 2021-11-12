@@ -92,7 +92,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
     return networkService
-        .searchPokemons(pagingRequest)
+        .query(pagingRequest)
         .map(response -> success(loadType, new PagingAction(pagingRequest, response)))
         .onErrorResumeNext(this::error);
   }

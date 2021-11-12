@@ -51,7 +51,7 @@ public class MainViewModel extends ViewModel {
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
     // TODO honor the query in db.
-    return query.desc ? pokemonDao.allByDesc() : pokemonDao.allByAsc();
+    return pokemonDao.allByAsc();
   }
 
   public void postValue(PagingQuery orderByDesc) {
