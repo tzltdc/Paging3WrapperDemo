@@ -7,13 +7,13 @@ import io.reactivex.Observable;
 class OffsetHelper {
 
   /** Temporarily using the remote service to identify the offset position */
-  public static long offset(Pokemon target, PagingQuery query) {
+  public static long offset(Pokemon lastFetchedAsTarget, PagingQuery query) {
     Observable<Pokemon> pokemonObservable =
         Observable.fromIterable(RemoteDataServer.all())
-            .filter(item -> ExampleBackendService.validItem(target, query))
+            .filter(item -> ExampleBackendService.validItem(lastFetchedAsTarget, query))
             .takeUntil(
                 pokemon -> {
-                  return pokemon.equals(target);
+                  return pokemon.equals(lastFetchedAsTarget);
                 });
     return pokemonObservable.count().blockingGet();
   }
