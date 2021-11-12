@@ -105,7 +105,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
                         pokemonDao.insertAll(response.getPokemons());
                       });
 
-                  return new MediatorResult.Success(response.getNextKey() == null);
+                  return new MediatorResult.Success(endOfPaging(response));
                 })
         .onErrorResumeNext(
             e -> {
@@ -114,5 +114,9 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
               }
               return Single.error(e);
             });
+  }
+
+  private boolean endOfPaging(SearchPokemonResponse response) {
+    return response.getNextKey() == null;
   }
 }
