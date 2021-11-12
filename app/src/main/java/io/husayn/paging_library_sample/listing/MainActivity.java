@@ -2,9 +2,12 @@ package io.husayn.paging_library_sample.listing;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.CombinedLoadStates;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +18,7 @@ import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCall
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import java.util.Arrays;
 import java.util.List;
+import kotlin.Unit;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements OnItemClickCallback, QueryCallback {
@@ -23,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   private MainViewModel viewModel;
   private boolean orderBy;
   private PokemonAdapter adapter;
+  private TextView tv_count;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   }
 
   private void bindQuery() {
+    tv_count = findViewById(R.id.tv_count);
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
     queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 12));
     queryRecyclerView.setAdapter(new QueryAdapter(this, get()));
@@ -63,6 +69,13 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
 
   private void submitList(PagingData<Pokemon> pokemonPagingData) {
     adapter.submitData(getLifecycle(), pokemonPagingData);
+    adapter.addLoadStateListener(this::onLoaded);
+  }
+
+  @SuppressLint("SetTextI18n")
+  private Unit onLoaded(CombinedLoadStates state) {
+    tv_count.setText("total:" + adapter.getItemCount());
+    return Unit.INSTANCE;
   }
 
   @Override
