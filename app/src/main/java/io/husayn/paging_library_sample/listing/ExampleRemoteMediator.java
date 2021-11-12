@@ -56,6 +56,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     //    return pokemonDao.lastUpdatedSingle();
   }
 
+  // Prepare to fix it
   @NonNull
   @Override
   public Single<MediatorResult> loadSingle(
