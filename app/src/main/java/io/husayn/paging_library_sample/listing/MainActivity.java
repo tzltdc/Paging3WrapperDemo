@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::submitList);
 
+    bindQuery();
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(
@@ -42,6 +43,10 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setAdapter(adapter);
     viewModel.postValue(PagingQuery.create(getSearchKey()));
     orderBy = !orderBy;
+  }
+
+  private void bindQuery() {
+    RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
   }
 
   private String getSearchKey() {
