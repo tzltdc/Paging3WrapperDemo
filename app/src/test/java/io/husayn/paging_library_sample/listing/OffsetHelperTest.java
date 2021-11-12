@@ -18,6 +18,13 @@ public class OffsetHelperTest {
   @Test
   public void whenQueryIsNotEmpty() {
     long offset = OffsetHelper.offset(RemoteDataServer.all().get(1), PagingQuery.create("Ivy"));
-    Truth.assertThat(offset).isEqualTo(2);
+    Truth.assertThat(offset).isEqualTo(1);
+  }
+
+  @Test
+  public void whenQueryIsNotxxEmpty() {
+    long offset =
+        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
+    Truth.assertThat(offset).isEqualTo(4);
   }
 }

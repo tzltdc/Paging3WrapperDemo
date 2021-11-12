@@ -3,6 +3,7 @@ package io.husayn.paging_library_sample.listing;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
 import io.reactivex.Observable;
+import java.util.List;
 import timber.log.Timber;
 
 class OffsetHelper {
@@ -15,8 +16,12 @@ class OffsetHelper {
   }
 
   private static Long offSet(Pokemon lastFetchedAsTarget, PagingQuery query) {
-    return Observable.fromIterable(RemoteDataServer.all())
-        .filter(item -> ExampleBackendService.validItem(lastFetchedAsTarget, query))
+    List<Pokemon> matched =
+        Observable.fromIterable(RemoteDataServer.all())
+            .filter(item -> ExampleBackendService.validItem(item, query))
+            .toList()
+            .blockingGet();
+    return Observable.fromIterable(matched)
         .takeUntil(
             pokemon -> {
               return matchTarget(lastFetchedAsTarget, pokemon);
