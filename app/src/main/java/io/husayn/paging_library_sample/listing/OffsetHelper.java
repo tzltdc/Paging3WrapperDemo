@@ -8,13 +8,17 @@ class OffsetHelper {
 
   /** Temporarily using the remote service to identify the offset position */
   public static long offset(Pokemon lastFetchedAsTarget, PagingQuery query) {
-    Observable<Pokemon> pokemonObservable =
-        Observable.fromIterable(RemoteDataServer.all())
-            .filter(item -> ExampleBackendService.validItem(lastFetchedAsTarget, query))
-            .takeUntil(
-                pokemon -> {
-                  return pokemon.equals(lastFetchedAsTarget);
-                });
-    return pokemonObservable.count().blockingGet();
+    return Observable.fromIterable(RemoteDataServer.all())
+        .filter(item -> ExampleBackendService.validItem(lastFetchedAsTarget, query))
+        .takeUntil(
+            pokemon -> {
+              return matchTarget(lastFetchedAsTarget, pokemon);
+            })
+        .count()
+        .blockingGet();
+  }
+
+  private static boolean matchTarget(Pokemon lastFetchedAsTarget, Pokemon pokemon) {
+    return pokemon.equals(lastFetchedAsTarget);
   }
 }

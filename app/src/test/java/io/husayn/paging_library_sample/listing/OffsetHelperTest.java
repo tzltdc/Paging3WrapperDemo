@@ -10,8 +10,14 @@ import org.robolectric.RobolectricTestRunner;
 public class OffsetHelperTest {
 
   @Test
-  public void offset() {
+  public void whenQueryIsEmpty() {
     long offset = OffsetHelper.offset(RemoteDataServer.all().get(10), PagingQuery.create(null));
     Truth.assertThat(offset).isEqualTo(11);
+  }
+
+  @Test
+  public void whenQueryIsNotEmpty() {
+    long offset = OffsetHelper.offset(RemoteDataServer.all().get(1), PagingQuery.create("Ivy"));
+    Truth.assertThat(offset).isEqualTo(2);
   }
 }
