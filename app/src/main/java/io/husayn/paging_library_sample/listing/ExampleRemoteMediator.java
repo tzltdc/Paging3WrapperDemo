@@ -3,12 +3,12 @@ package io.husayn.paging_library_sample.listing;
 import androidx.annotation.NonNull;
 import androidx.paging.LoadType;
 import androidx.paging.PagingState;
+import androidx.paging.RemoteMediator.MediatorResult.Success;
 import androidx.paging.rxjava2.RxRemoteMediator;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -64,7 +64,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
     switch (loadType) {
       case REFRESH:
-        return refresh(loadType, state);
+        return refresh(loadType);
       case APPEND:
         return append(loadType, state);
       case PREPEND:
@@ -81,12 +81,13 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     Timber.w("Prepend LoadType ignored");
     return Single.just(new MediatorResult.Success(true));
   }
+
   /**
    * The network load method takes an optional after=<Pokemon.id> parameter. For every page after
    * the first, pass the last Pokemon ID to let it continue from where it left off. For REFRESH,
    * pass null to load the first page.
    */
-  private Single<MediatorResult> refresh(LoadType loadType, PagingState<Integer, Pokemon> state) {
+  private Single<MediatorResult> refresh(LoadType loadType) {
     Timber.w("refresh :%s", loadType);
     return fetch(loadType, networkService.searchPokemons(query, null));
   }
@@ -110,29 +111,33 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       LoadType loadType, Single<SearchPokemonResponse> searchPokemonResponseSingle) {
     return searchPokemonResponseSingle
         .subscribeOn(Schedulers.io())
-        .map(
-            (Function<SearchPokemonResponse, MediatorResult>)
-                response -> {
-                  pokemonDataBase.runInTransaction(
-                      () -> {
-                        if (loadType == LoadType.REFRESH) {
-                          pokemonDao.deleteByQuery(String.valueOf(query));
-                        }
+        .map(response -> success(loadType, response))
+        .onErrorResumeNext(this::error);
+  }
 
-                        // Insert new Pokemons into database, which invalidates the current
-                        // PagingData, allowing Paging to present the updates in the DB.
-                        pokemonDao.insertAll(response.getPokemons());
-                      });
+  private Single<MediatorResult> error(Throwable e) {
+    if (e instanceof IOException) {
+      return Single.just(new MediatorResult.Error(e));
+    } else {
+      return Single.error(e);
+    }
+  }
 
-                  return new MediatorResult.Success(endOfPaging(response));
-                })
-        .onErrorResumeNext(
-            e -> {
-              if (e instanceof IOException) {
-                return Single.just(new MediatorResult.Error(e));
-              }
-              return Single.error(e);
-            });
+  private MediatorResult success(LoadType loadType, SearchPokemonResponse response) {
+    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, response));
+    boolean endOfPaginationReached = endOfPaging(response);
+    return new Success(endOfPaginationReached);
+  }
+
+  /**
+   * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
+   * present the updates in the DB.
+   */
+  private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
+    if (loadType == LoadType.REFRESH) {
+      pokemonDao.deleteByQuery(String.valueOf(query));
+    }
+    pokemonDao.insertAll(response.getPokemons());
   }
 
   private boolean endOfPaging(SearchPokemonResponse response) {
