@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RemoteDataServer {
 
-  private static List<Pokemon> pokemonList() {
+  public static List<Pokemon> all() {
     return Collections.unmodifiableList(insertInternal());
   }
 
