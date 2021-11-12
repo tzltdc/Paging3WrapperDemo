@@ -1,8 +1,8 @@
 package io.husayn.paging_library_sample.listing;
 
+import static com.google.common.truth.Truth.*;
 import static org.junit.Assert.*;
 
-import com.google.common.truth.Truth;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ public class EndOfPagingMapperTest {
 
   @Test
   public void endOfPaging() {
-    Truth.assertThat(
+    assertThat(
             EndOfPagingMapper.endOfPaging(PagingAction.create(initialRequest(), emptyResponse())))
         .isTrue();
   }
