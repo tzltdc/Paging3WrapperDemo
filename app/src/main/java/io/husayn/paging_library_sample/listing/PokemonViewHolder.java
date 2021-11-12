@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.github.florent37.picassopalette.PicassoPalette;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 
@@ -34,9 +33,9 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
     pokemonIdTextView.setText(
         itemView.getContext().getString(R.string.pokemon_id, toThreeDigitNumber(pokemon.id)));
     pokemonNameTextView.setText(pokemon.name);
-    Picasso.with(itemView.getContext())
+    Glide.with(itemView.getContext())
         .load(pokemonSpriteUrl(pokemon.id))
-        .into(pokemonSpriteImageView, picassoPaletteCallBack(pokemonSpriteUrl(pokemon.id)));
+        .into(pokemonSpriteImageView);
 
     itemView.setOnClickListener(v -> onItemClickCallback.onItemClick(pokemon));
   }
@@ -49,12 +48,6 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
 
   private String pokemonSpriteUrl(int id) {
     return POKE_IMAGE_URL_PREFIX + id + POKE_IMAGE_URL_SUFFIX;
-  }
-
-  private PicassoPalette picassoPaletteCallBack(String spriteUrl) {
-    return PicassoPalette.with(spriteUrl, pokemonSpriteImageView)
-        .use(PicassoPalette.Profile.MUTED)
-        .intoBackground(itemView);
   }
 
   void clear() {

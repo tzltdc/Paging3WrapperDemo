@@ -1,53 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                                    xmlns:tools="http://schemas.android.com/tools"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="2dp"
-                                    app:cardCornerRadius="@dimen/cardview_default_radius"
-                                    app:cardElevation="@dimen/cardview_default_elevation"
-                                    app:cardUseCompatPadding="true">
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_margin="2dp"
+  app:cardCornerRadius="@dimen/cardview_default_radius"
+  app:cardElevation="@dimen/cardview_default_elevation"
+  app:cardUseCompatPadding="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="16dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="16dp">
+  <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="8dp"
+    android:paddingTop="16dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="16dp">
 
-        <TextView
-            android:id="@+id/tv_pokemon_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="#001"/>
+    <TextView
+      android:id="@+id/tv_pokemon_id"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_alignParentStart="true"
+      tools:text="#001" />
 
-        <ImageView
-            android:id="@+id/iv_pokemon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/iv_pokemon_cd"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_pokemon_id"
-            tools:src="@drawable/pokedex"/>
+    <ImageView
+      android:id="@+id/iv_pokemon"
+      android:layout_width="70dp"
+      android:layout_height="70dp"
+      android:layout_marginTop="8dp"
+      android:layout_centerInParent="true"
+      android:contentDescription="@string/iv_pokemon_cd"
+      tools:src="@drawable/pokedex" />
 
-        <TextView
-            android:id="@+id/tv_pokemon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/white"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_pokemon"
-            tools:text="Bulbasaur"/>
+    <TextView
+      android:id="@+id/tv_pokemon"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_alignParentBottom="true"
+      tools:text="Bulbasaur" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+  </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
