@@ -3,10 +3,10 @@ package io.husayn.paging_library_sample.listing;
 class PagingRequest {
 
   public final int offSet;
-  public final int countPerPage;
+  public final PagingQueryConfig pagingQueryConfig;
 
-  public PagingRequest(int offSet, int countPerPage) {
-    this.countPerPage = countPerPage;
+  public PagingRequest(int offSet, PagingQueryConfig pagingQueryConfig) {
+    this.pagingQueryConfig = pagingQueryConfig;
     this.offSet = offSet;
   }
 }
