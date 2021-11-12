@@ -5,11 +5,17 @@ import java.util.List;
 
 class SearchPokemonResponse {
 
+  private final List<Pokemon> list;
+
+  public SearchPokemonResponse(List<Pokemon> list) {
+    this.list = list;
+  }
+
   public List<Pokemon> getPokemons() {
-    throw new RuntimeException();
+    return list;
   }
 
   public String getNextKey() {
-    return null;
+    throw new RuntimeException();
   }
 }
