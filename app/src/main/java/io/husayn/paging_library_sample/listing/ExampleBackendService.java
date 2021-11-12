@@ -13,7 +13,7 @@ public class ExampleBackendService {
         .skip(pagingRequest.offSet())
         .take(pagingRequest.queryConfig().countPerPage())
         .toList()
-        .map(SearchPokemonResponse::new);
+        .map(SearchPokemonResponse::create);
   }
 
   public static boolean validItem(Pokemon pokemon, PagingQuery pagingQuery) {

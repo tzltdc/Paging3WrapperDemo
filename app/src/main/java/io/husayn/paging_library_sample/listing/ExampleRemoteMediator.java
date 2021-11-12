@@ -123,7 +123,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (loadType == LoadType.REFRESH) {
       pokemonDao.deleteByQuery(String.valueOf(query));
     }
-    pokemonDao.insertAll(response.getPokemons());
+    pokemonDao.insertAll(response.list());
   }
 
   private boolean endOfPaging(PagingAction action) {

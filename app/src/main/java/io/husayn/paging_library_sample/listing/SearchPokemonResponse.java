@@ -1,17 +1,15 @@
 package io.husayn.paging_library_sample.listing;
 
+import com.google.auto.value.AutoValue;
 import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.List;
 
-class SearchPokemonResponse {
+@AutoValue
+abstract class SearchPokemonResponse {
 
-  private final List<Pokemon> list;
+  public abstract List<Pokemon> list();
 
-  public SearchPokemonResponse(List<Pokemon> list) {
-    this.list = list;
-  }
-
-  public List<Pokemon> getPokemons() {
-    return list;
+  public static SearchPokemonResponse create(List<Pokemon> list) {
+    return new AutoValue_SearchPokemonResponse(list);
   }
 }

@@ -12,29 +12,29 @@ public class ExampleBackendServiceTest {
 
   @Test
   public void initial_queryWithoutFilter_shouldReturn10() {
-    assertThat(ExampleBackendService.query(firstRequest(null)).test().values().get(0).getPokemons())
+    assertThat(ExampleBackendService.query(firstRequest(null)).test().values().get(0).list())
         .hasSize(151);
   }
 
   @Test
   public void initial_queryWithFilter_shouldReturn10() {
-    assertThat(ExampleBackendService.query(firstRequest("a")).test().values().get(0).getPokemons())
+    assertThat(ExampleBackendService.query(firstRequest("a")).test().values().get(0).list())
         .hasSize(83);
   }
 
   @Test
   public void initial_queryWithDoubleFilter_shouldReturn10() {
-    assertThat(ExampleBackendService.query(firstRequest("aa")).test().values().get(0).getPokemons())
+    assertThat(ExampleBackendService.query(firstRequest("aa")).test().values().get(0).list())
         .hasSize(0);
   }
 
   @Test
   public void initial_queryWithAb_shouldReturn10() {
-    assertThat(ExampleBackendService.query(firstRequest("ab")).test().values().get(0).getPokemons())
+    assertThat(ExampleBackendService.query(firstRequest("ab")).test().values().get(0).list())
         .hasSize(6);
   }
 
-  private PagingRequest firstRequest(@Nullable String searchKey) {
+  private static PagingRequest firstRequest(@Nullable String searchKey) {
     return PagingRequest.create(0, PagingQuery.create(searchKey), PagingQueryConfig.MAX_CONFIG);
   }
 }
