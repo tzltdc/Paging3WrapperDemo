@@ -1,8 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/rv_pokemons"
+  android:id="@+id/ll_root_view"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:orientation="vertical"
   android:padding="2dp"
-  tools:context="io.husayn.paging_library_sample.listing.MainActivity" />
+  tools:context="io.husayn.paging_library_sample.listing.MainActivity">
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rv_query"
+    android:layout_width="match_parent"
+    android:layout_height="240dp" />
+
+  <TextView
+    android:id="@+id/tv_count"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    tools:text="Total:100" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rv_pokemons"
+    android:layout_width="match_parent"
+
+    android:layout_height="0dp"
+    android:layout_marginTop="16dp"
+    android:layout_weight="1" />
+
+</LinearLayout>
