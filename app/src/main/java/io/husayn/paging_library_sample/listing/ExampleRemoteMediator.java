@@ -1,117 +1,136 @@
 package io.husayn.paging_library_sample.listing;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.paging.LoadType;
 import androidx.paging.PagingState;
+import androidx.paging.RemoteMediator.MediatorResult.Success;
 import androidx.paging.rxjava2.RxRemoteMediator;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Single;
-import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import timber.log.Timber;
 
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PokemonDataBase pokemonDataBase;
-  private Boolean query;
-  private ExampleBackendService networkService;
-  private PokemonDao pokemonDao;
+  private final PagingQuery query;
+  private final PokemonDao pokemonDao;
 
-  ExampleRemoteMediator(
-      boolean query,
-      PokemonDataBase pokemonDataBase,
-      ExampleBackendService networkService,
-      PokemonDao pokemonDao) {
+  ExampleRemoteMediator(PagingQuery query, PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
     this.pokemonDataBase = pokemonDataBase;
-    query = query;
-    networkService = networkService;
+    this.query = query;
     this.pokemonDao = pokemonDao;
   }
 
   @NonNull
   @Override
   public Single<InitializeAction> initializeSingle() {
-    long cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS);
-    return getLastUpdatedSingle()
-        .map(
-            lastUpdatedMillis -> {
-              if (System.currentTimeMillis() - lastUpdatedMillis >= cacheTimeout) {
-                // Cached data is up-to-date, so there is no need to re-fetch
-                // from the network.
-                return InitializeAction.SKIP_INITIAL_REFRESH;
-              } else {
-                // Need to refresh cached data from network; returning
-                // LAUNCH_INITIAL_REFRESH here will also block RemoteMediator's
-                // APPEND and PREPEND from running until REFRESH succeeds.
-                return InitializeAction.LAUNCH_INITIAL_REFRESH;
-              }
-            });
-  }
-
-  private Single<Long> getLastUpdatedSingle() {
-    throw new RuntimeException("");
-    //    return pokemonDao.lastUpdatedSingle();
+    return InitializeActionMapper.initializeSingle();
   }
 
   @NonNull
   @Override
   public Single<MediatorResult> loadSingle(
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
-    // The network load method takes an optional after=<Pokemon.id> parameter. For
-    // every page after the first, pass the last Pokemon ID to let it continue from
-    // where it left off. For REFRESH, pass null to load the first page.
-    Integer loadKey = null;
     switch (loadType) {
       case REFRESH:
-        break;
-      case PREPEND:
-        // In this example, you never need to prepend, since REFRESH will always
-        // load the first page in the list. Immediately return, reporting end of
-        // pagination.
-        return Single.just(new MediatorResult.Success(true));
+        return refresh(loadType);
       case APPEND:
-        Pokemon lastItem = state.lastItemOrNull();
-
-        // You must explicitly check if the last item is null when appending,
-        // since passing null to networkService is only valid for initial load.
-        // If lastItem is null it means no items were loaded after the initial
-        // REFRESH and there are no more items to load.
-        if (lastItem == null) {
-          return Single.just(new MediatorResult.Success(true));
-        }
-
-        loadKey = lastItem.id;
-        break;
+        return append(loadType, state);
+      case PREPEND:
+      default:
+        return ignorePrepend();
     }
+  }
 
-    return networkService
-        .searchPokemons(query, loadKey)
+  /**
+   * In this example, you never need to prepend, since REFRESH will always load the first page in
+   * the list. Immediately return, reporting end of pagination.
+   */
+  private Single<MediatorResult> ignorePrepend() {
+    Timber.w("tonny Prepend LoadType ignored");
+    return Single.just(new MediatorResult.Success(true));
+  }
+
+  /**
+   * The network load method takes an optional after=<Pokemon.id> parameter. For every page after
+   * the first, pass the last Pokemon ID to let it continue from where it left off. For REFRESH,
+   * pass null to load the first page.
+   */
+  private Single<MediatorResult> refresh(LoadType loadType) {
+    Timber.w("tonny refresh :%s", loadType);
+    PagingRequest pagingRequest = defaultPagingRequest(query);
+    return execute(loadType, pagingRequest);
+  }
+
+  private PagingRequest defaultPagingRequest(PagingQuery query) {
+    return PagingRequest.create(0, query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
+  }
+
+  /**
+   * You must explicitly check if the last item is null when appending, since passing null to
+   * networkService is only valid for initial load. If lastItem is null it means no items were
+   * loaded after the initial ø REFRESH and there are no more items to load.
+   */
+  private Single<MediatorResult> append(LoadType loadType, PagingState<Integer, Pokemon> state) {
+    Timber.w("tonny append :%s", loadType);
+    Pokemon lastItem = state.lastItemOrNull();
+    if (lastItem == null) {
+      return Single.just(new MediatorResult.Success(true));
+    } else {
+      return execute(loadType, nextPagingRequest(query, lastItem));
+    }
+  }
+
+  private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
+    return ExampleBackendService.query(pagingRequest)
         .subscribeOn(Schedulers.io())
-        .map(
-            (Function<SearchPokemonResponse, MediatorResult>)
-                response -> {
-                  pokemonDataBase.runInTransaction(
-                      () -> {
-                        if (loadType == LoadType.REFRESH) {
-                          pokemonDao.deleteByQuery(String.valueOf(query));
-                        }
+        .map(response -> success(loadType, PagingAction.create(pagingRequest, response)))
+        .onErrorResumeNext(this::error);
+  }
 
-                        // Insert new Pokemons into database, which invalidates the current
-                        // PagingData, allowing Paging to present the updates in the DB.
-                        pokemonDao.insertAll(response.getPokemons());
-                      });
+  private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
+    return PagingRequest.create(
+        OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
+  }
 
-                  return new MediatorResult.Success(response.getNextKey() == null);
-                })
-        .onErrorResumeNext(
-            e -> {
-              if (e instanceof IOException) {
-                return Single.just(new MediatorResult.Error(e));
-              }
-              return Single.error(e);
-            });
+  private Single<MediatorResult> error(Throwable e) {
+    if (e instanceof IOException) {
+      return Single.just(new MediatorResult.Error(e));
+    } else {
+      return Single.error(e);
+    }
+  }
+
+  private MediatorResult success(LoadType loadType, PagingAction action) {
+    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response()));
+    return new Success(endOfPaging(action));
+  }
+
+  /**
+   * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
+   * present the updates in the DB.
+   */
+  private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
+    if (loadType == LoadType.REFRESH) {
+      delete(query.searchKey());
+    }
+    pokemonDao.insertAll(response.list());
+  }
+
+  private void delete(@Nullable String key) {
+    if (key == null) {
+      pokemonDao.deleteAll();
+    } else {
+      pokemonDao.deleteByQuery(key);
+    }
+  }
+
+  private boolean endOfPaging(PagingAction action) {
+    return EndOfPagingMapper.endOfPaging(action);
   }
 }
