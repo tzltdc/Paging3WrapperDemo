@@ -86,11 +86,11 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return fetch(loadType, networkService.searchPokemons(pagingRequest(query, lastItem)));
+      return fetch(loadType, networkService.searchPokemons(nextPagingRequest(query, lastItem)));
     }
   }
 
-  private PagingRequest pagingRequest(PagingQuery query, Pokemon lastItem) {
+  private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
     return new PagingRequest(
         OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
   }
@@ -99,7 +99,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       LoadType loadType, Single<SearchPokemonResponse> searchPokemonResponseSingle) {
     return searchPokemonResponseSingle
         .subscribeOn(Schedulers.io())
-        .map(response -> success(loadType, response))
+        .map(response -> success(loadType, null))
         .onErrorResumeNext(this::error);
   }
 
@@ -111,9 +111,9 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     }
   }
 
-  private MediatorResult success(LoadType loadType, SearchPokemonResponse response) {
-    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, response));
-    boolean endOfPaginationReached = endOfPaging(response);
+  private MediatorResult success(LoadType loadType, PagingAction action) {
+    pokemonDataBase.runInTransaction(() -> flushDbData(loadType, action.response));
+    boolean endOfPaginationReached = endOfPaging(action);
     return new Success(endOfPaginationReached);
   }
 
@@ -128,7 +128,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     pokemonDao.insertAll(response.getPokemons());
   }
 
-  private boolean endOfPaging(SearchPokemonResponse response) {
-    return response.getNextKey() == null;
+  private boolean endOfPaging(PagingAction action) {
+    return EndOfPagingMapper.endOfPaging(action);
   }
 }
