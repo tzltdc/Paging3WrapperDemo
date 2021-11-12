@@ -14,8 +14,4 @@ class SearchPokemonResponse {
   public List<Pokemon> getPokemons() {
     return list;
   }
-
-  public String getNextKey() {
-    throw new RuntimeException();
-  }
 }

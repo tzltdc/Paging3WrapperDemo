@@ -78,7 +78,6 @@ dependencies {
     // Backwards compatibility from Java 8 features
     implementation 'com.annimon:stream:1.1.8'
 
-//    compileOnlyApi      "com.google.auto.value:auto-value-annotations:1.8.2"
     implementation      "com.google.auto.value:auto-value-annotations:1.8.2"
     annotationProcessor "com.google.auto.value:auto-value:1.8.2"
 
