@@ -1,7 +1,6 @@
 package io.husayn.paging_library_sample;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import io.husayn.paging_library_sample.data.PokemonDBPopulator;
@@ -9,17 +8,17 @@ import io.husayn.paging_library_sample.data.PokemonDBPopulator;
 public class PokemonApplication extends Application {
 
   public static final String KEY_IS_DB_POPULATED = "DB_IS_POPULATED";
-  private static Context context;
+  private static Application context;
 
   @Override
   public void onCreate() {
     super.onCreate();
-    initContext();
+    init(this);
     intiDB();
   }
 
-  private void initContext() {
-    context = this;
+  public static void init(Application context) {
+    PokemonApplication.context = context;
   }
 
   private void intiDB() {
@@ -30,7 +29,7 @@ public class PokemonApplication extends Application {
     }
   }
 
-  public static Context getContext() {
+  public static Application getContext() {
     return context;
   }
 }
