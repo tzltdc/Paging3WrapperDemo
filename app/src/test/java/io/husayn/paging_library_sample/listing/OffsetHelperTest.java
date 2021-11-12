@@ -1,7 +1,9 @@
 package io.husayn.paging_library_sample.listing;
 
 import com.google.common.truth.Truth;
+import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -26,5 +28,24 @@ public class OffsetHelperTest {
     long offset =
         OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
     Truth.assertThat(offset).isEqualTo(4);
+  }
+
+  @Test
+  public void e2e() {
+
+    long offset =
+        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
+    List<Pokemon> nextBatch =
+        ExampleBackendService.query(
+                PagingRequest.create(offset, PagingQuery.create("ee"), PagingQueryConfig.create(4)))
+            .test()
+            .values()
+            .get(0)
+            .list();
+
+    Truth.assertThat(nextBatch.get(0)).isEqualTo(RemoteDataServer.indexBy("Weepinbell"));
+    Truth.assertThat(nextBatch.get(1)).isEqualTo(RemoteDataServer.indexBy("Victreebel"));
+    Truth.assertThat(nextBatch.get(2)).isEqualTo(RemoteDataServer.indexBy("Seel"));
+    Truth.assertThat(nextBatch.get(3)).isEqualTo(RemoteDataServer.indexBy("Drowzee"));
   }
 }

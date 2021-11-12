@@ -9,7 +9,7 @@ public class ExampleBackendService {
 
   public static Single<SearchPokemonResponse> query(PagingRequest pagingRequest) {
     return Observable.fromIterable(RemoteDataServer.all())
-        .filter(pokemon -> validItem(pokemon, pagingRequest.pagingQuery()))
+        .filter(item -> validItem(item, pagingRequest.pagingQuery()))
         .skip(pagingRequest.offSet())
         .take(pagingRequest.queryConfig().countPerPage())
         .toList()
