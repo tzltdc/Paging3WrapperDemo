@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private String getSearchKey() {
-    return "e";
+    return null;
   }
 
   private void submitList(PagingData<Pokemon> pokemonPagingData) {
