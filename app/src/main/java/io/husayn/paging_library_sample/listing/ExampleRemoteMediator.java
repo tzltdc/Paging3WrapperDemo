@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PokemonDataBase pokemonDataBase;
-  private String query;
+  private Boolean query;
   private ExampleBackendService networkService;
   private PokemonDao pokemonDao;
 
   ExampleRemoteMediator(
-      String query,
+      boolean query,
       PokemonDataBase pokemonDataBase,
       ExampleBackendService networkService,
       PokemonDao pokemonDao) {
@@ -96,7 +96,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
                   pokemonDataBase.runInTransaction(
                       () -> {
                         if (loadType == LoadType.REFRESH) {
-                          pokemonDao.deleteByQuery(query);
+                          pokemonDao.deleteByQuery(String.valueOf(query));
                         }
 
                         // Insert new Pokemons into database, which invalidates the current
