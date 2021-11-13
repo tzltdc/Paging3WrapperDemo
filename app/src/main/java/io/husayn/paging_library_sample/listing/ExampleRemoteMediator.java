@@ -9,17 +9,21 @@ import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
+import io.thread.WorkerScheduler;
 import java.io.IOException;
 import timber.log.Timber;
 
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQuery query;
+  private final WorkerScheduler workerScheduler;
   private final PokemonRepo pokemonRepo;
 
   @AssistedInject
-  ExampleRemoteMediator(@Assisted PagingQuery query, PokemonRepo pokemonRepo) {
+  ExampleRemoteMediator(
+      @Assisted PagingQuery query, WorkerScheduler workerScheduler, PokemonRepo pokemonRepo) {
     this.query = query;
+    this.workerScheduler = workerScheduler;
     this.pokemonRepo = pokemonRepo;
   }
 
@@ -81,6 +85,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
     return ExampleBackendService.query(pagingRequest)
+        .subscribeOn(workerScheduler.get())
         .map(response -> PagingAction.create(response, pagingRequest, loadType))
         .map(this::success)
         .onErrorResumeNext(this::error);
