@@ -60,12 +60,12 @@ public class PokemonRepo {
    * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
    * present the updates in the DB.
    */
-  public void flushDbData(LoadType loadType, String searchKey, SearchPokemonResponse response) {
-    if (loadType == LoadType.REFRESH) {
+  public void flushDbData(PagingAction action) {
+    if (action.loadType() == LoadType.REFRESH) {
       Timber.w("tonny delete");
-      delete(searchKey);
+      delete(action.request().pagingQuery().searchKey());
     }
-    Timber.w("tonny insertAll :%s", response.list().size());
-    pokemonDao.insertAll(response.list());
+    Timber.w("tonny insertAll :%s", action.response().list().size());
+    pokemonDao.insertAll(action.response().list());
   }
 }
