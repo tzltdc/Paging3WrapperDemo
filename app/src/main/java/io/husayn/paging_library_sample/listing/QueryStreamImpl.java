@@ -5,7 +5,8 @@ import io.reactivex.Observable;
 
 class QueryStreamImpl implements QueryStreaming, QueryStream {
 
-  private final BehaviorRelay<PagingQuery> query = BehaviorRelay.create();
+  private final BehaviorRelay<PagingQuery> query =
+      BehaviorRelay.createDefault(PagingQuery.create(null));
 
   @Override
   public Observable<PagingQuery> streaming() {
