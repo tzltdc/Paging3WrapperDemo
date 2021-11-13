@@ -74,10 +74,14 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   private Single<MediatorResult> append() {
+    return Single.defer(this::deferAppend).subscribeOn(workerScheduler.get());
+  }
+
+  private Single<MediatorResult> deferAppend() {
     Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
     Timber.i("tonny append with query:%s, last_item:%s", query, lastItem);
     if (lastItem == null) {
-      return Single.just(new MediatorResult.Success(true));
+      return Single.just(new Success(true));
     } else {
       return execute(PagingRequestMapper.nextPagingRequest(query, lastItem), LoadType.APPEND);
     }
