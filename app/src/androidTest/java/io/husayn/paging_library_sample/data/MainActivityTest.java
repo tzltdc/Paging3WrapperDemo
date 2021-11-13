@@ -1,16 +1,23 @@
 package io.husayn.paging_library_sample.data;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static io.husayn.paging_library_sample.data.TestUtils.withRecyclerView;
 
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.action.ViewActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.listing.MainActivity;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +29,7 @@ public class MainActivityTest {
   @Rule
   public ActivityScenarioRule<MainActivity> rule = new ActivityScenarioRule<>(MainActivity.class);
 
+  @Ignore("Flaky due to database mutation")
   @Test
   public void onAppStarts_shouldAllData() {
     ViewInteraction totalViewCount = onView(withText("total:151"));
@@ -33,10 +41,62 @@ public class MainActivityTest {
 
   @Test
   public void onAppStarts_shouldShowAllFilters() {
-    ViewInteraction validFilter = onView(withText("ABC"));
-    validFilter.check(matches(isDisplayed()));
+    ViewInteraction upperCaseValidFilter = onView(withText("ABC"));
+    upperCaseValidFilter.check(matches(isDisplayed()));
 
-    ViewInteraction invalidFilter = onView(withText("abc"));
-    invalidFilter.check(matches(isDisplayed()));
+    ViewInteraction lowCaseValidFilter = onView(withText("abc"));
+    lowCaseValidFilter.check(matches(isDisplayed()));
+
+    ViewInteraction invalidFilter = onView(withText("abcd"));
+    invalidFilter.check((doesNotExist()));
+  }
+
+  @Test
+  public void demo_1_whenFullFiltered_shouldShowNoData() {
+    onView(withId(R.id.rv_query)).perform(RecyclerViewActions.actionOnItemAtPosition(5, click()));
+    onView(withText("total:0")).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void demo_2_whenFullFiltered_shouldShowNoData() {
+    ViewInteraction validFilter = onView(withText("ABC"));
+    validFilter.perform(ViewActions.click());
+    onView(withText("total:0")).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void whenHalfFiltered_shouldShowNoData() {
+    ViewInteraction validFilter = onView(withText("ee"));
+    validFilter.perform(ViewActions.click());
+    onView(withText("total:12")).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void mutateFromZeroToMaxToHalf_shouldShowData() {
+
+    // zero
+    onView(withText("ABC")).perform(ViewActions.click());
+    onView(withText("total:0")).check(matches(isDisplayed()));
+    // max
+    onView(withText("a")).perform(ViewActions.click());
+    onView(withText("total:70")).check(matches(isDisplayed()));
+    // half
+    onView(withText("ee")).perform(ViewActions.click());
+    onView(withText("total:12")).check(matches(isDisplayed()));
+  }
+
+  @Test
+  public void validRecyclerViewItemCorrect() {
+    onView(withText("a")).perform(ViewActions.click());
+    onView(withRecyclerView(R.id.rv_pokemons).atPositionOnView(1, R.id.tv_pokemon))
+        .check(matches(withText("Ivysaur")));
+  }
+
+  @Test
+  public void scrollToCertainItem_checkItsText() {
+    onView(withText("a")).perform(ViewActions.click());
+    onView(withText("total:70")).check(matches(isDisplayed()));
+    onView(withRecyclerView(R.id.rv_pokemons).atPositionOnView(8, R.id.tv_pokemon))
+        .check(matches(withText("Caterpie")));
   }
 }
