@@ -6,14 +6,23 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 abstract class PagingAction {
 
-  public abstract LoadType loadType();
+  public abstract LoadType type();
 
-  public abstract PagingRequest request();
+  public abstract Data data();
 
-  public abstract PokemonDto response();
+  public static PagingAction create(LoadType loadType, Data data) {
+    return new AutoValue_PagingAction(loadType, data);
+  }
 
-  public static PagingAction create(
-      PokemonDto newResponse, PagingRequest newRequest, LoadType loadType) {
-    return new AutoValue_PagingAction(loadType, newRequest, newResponse);
+  @AutoValue
+  abstract static class Data {
+
+    public abstract PagingRequest request();
+
+    public abstract PokemonDto response();
+
+    public static Data create(PokemonDto newResponse, PagingRequest newRequest) {
+      return new AutoValue_PagingAction_Data(newRequest, newResponse);
+    }
   }
 }
