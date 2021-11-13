@@ -20,6 +20,7 @@ public class PokemonApplication extends DaggerApplication {
   public void onCreate() {
     super.onCreate();
     Timber.plant(new ThreadTree());
+    Timber.plant(new Timber.DebugTree());
     init(this);
     intiDB();
   }
