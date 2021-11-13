@@ -10,10 +10,10 @@ abstract class PagingAction {
 
   public abstract PagingRequest request();
 
-  public abstract SearchPokemonResponse response();
+  public abstract PokemonDto response();
 
   public static PagingAction create(
-      SearchPokemonResponse newResponse, PagingRequest newRequest, LoadType loadType) {
+      PokemonDto newResponse, PagingRequest newRequest, LoadType loadType) {
     return new AutoValue_PagingAction(loadType, newRequest, newResponse);
   }
 }
