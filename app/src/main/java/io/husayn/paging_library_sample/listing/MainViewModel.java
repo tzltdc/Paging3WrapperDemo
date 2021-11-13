@@ -24,8 +24,8 @@ public class MainViewModel extends ViewModel {
   private final PokemonDao pokemonDao;
 
   @Inject
-  public MainViewModel() {
-    pokemonDao = PokemonDataBase.getInstance(PokemonApplication.getContext()).pokemonDao();
+  public MainViewModel(PokemonDao pokemonDao) {
+    this.pokemonDao = pokemonDao;
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
