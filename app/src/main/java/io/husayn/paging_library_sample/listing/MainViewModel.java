@@ -32,20 +32,20 @@ public class MainViewModel extends ViewModel {
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
-    return queryStreaming.streaming().switchMap(query -> PagingRx.getObservable(pager(query)));
+    return queryStreaming
+        .streaming()
+        .map(pagingQuery -> pager(pagingQuery, rxRemoteMediatorFactory.create(pagingQuery)))
+        .switchMap(PagingRx::getObservable);
   }
 
-  private Pager<Integer, Pokemon> pager(PagingQuery pagingQuery) {
+  private Pager<Integer, Pokemon> pager(
+      PagingQuery pagingQuery, RemoteMediator<Integer, Pokemon> integerPokemonRemoteMediator) {
     PagingConfig pagingConfig = new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
     return new Pager<>(
         pagingConfig,
         INITIAL_LOAD_KEY,
-        remoteMediator(pagingQuery),
+        integerPokemonRemoteMediator,
         () -> pagingSource(this.pokemonDao, pagingQuery));
-  }
-
-  private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery pagingQuery) {
-    return rxRemoteMediatorFactory.create(pagingQuery);
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
