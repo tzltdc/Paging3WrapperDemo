@@ -4,21 +4,9 @@ import android.app.Application;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjector;
-import dagger.android.support.AndroidSupportInjectionModule;
-import io.di.view_module.ViewModelMultiBindingModule;
-import io.di.view_module.ViewModelRegisterModule;
 
 @AppScope
-@Component(
-    modules = {
-      AndroidSupportInjectionModule.class,
-      ApplicationDerivedModule.class,
-      AppWorkerModule.class,
-      RepoModule.class,
-      ViewModelMultiBindingModule.class,
-      ViewModelRegisterModule.class,
-      ActivityInjectorModule.class
-    })
+@Component(modules = {AppModule.class, AndroidModule.class})
 public interface AppComponent extends AndroidInjector<PokemonApplication> {
 
   Application application();
