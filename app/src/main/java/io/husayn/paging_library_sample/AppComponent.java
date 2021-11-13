@@ -11,6 +11,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
     modules = {
       AndroidSupportInjectionModule.class,
       ApplicationDerivedModule.class,
+      AppWorkerModule.class,
       RepoModule.class,
       ActivityInjectorModule.class
     })
