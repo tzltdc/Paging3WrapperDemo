@@ -52,10 +52,6 @@ public class PokemonRepo {
     }
   }
 
-  public void insertAll(List<Pokemon> list) {
-    pokemonDao.insertAll(list);
-  }
-
   /**
    * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
    * present the updates in the DB.
