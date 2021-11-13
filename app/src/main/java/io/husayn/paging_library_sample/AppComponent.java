@@ -4,6 +4,7 @@ import android.app.Application;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjector;
+import io.app.config.AppContext;
 
 @AppScope
 @Component(modules = {AppModule.class, AndroidModule.class})
@@ -14,6 +15,6 @@ public interface AppComponent extends AndroidInjector<PokemonApplication> {
   @Component.Factory
   interface Factory {
 
-    AppComponent create(@BindsInstance Application application);
+    AppComponent create(@BindsInstance AppContext appContext);
   }
 }

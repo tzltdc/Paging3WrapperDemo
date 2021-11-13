@@ -9,6 +9,7 @@ import io.di.view_module.ViewModelRegisterModule;
       ApplicationDerivedModule.class,
       AppWorkerModule.class,
       RepoModule.class,
+      AppContextDerivedModule.class,
       ViewModelMultiBindingModule.class,
       ViewModelRegisterModule.class
     })
