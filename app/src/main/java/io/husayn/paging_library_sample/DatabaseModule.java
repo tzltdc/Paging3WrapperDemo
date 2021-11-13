@@ -15,9 +15,7 @@ public abstract class DatabaseModule {
   @AppScope
   @Provides
   public static PokemonDataBase pokemonDataBase(Application application) {
-    return Room.databaseBuilder(application, PokemonDataBase.class, POKEMON_DB)
-        .allowMainThreadQueries()
-        .build();
+    return Room.databaseBuilder(application, PokemonDataBase.class, POKEMON_DB).build();
   }
 
   @AppScope
