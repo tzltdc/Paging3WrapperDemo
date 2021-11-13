@@ -12,6 +12,7 @@ import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
+import dagger.Binds;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
@@ -21,7 +22,8 @@ import java.util.List;
 import kotlin.Unit;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity implements OnItemClickCallback, QueryCallback {
+public class MainActivity extends AppCompatActivity
+    implements OnItemClickCallback, QueryCallback, MainUI {
 
   public static final String EMPTY = "Empty";
   private MainViewModel viewModel;
@@ -90,5 +92,12 @@ public class MainActivity extends AppCompatActivity implements OnItemClickCallba
   @Override
   public void query(String query) {
     viewModel.postValue(PagingQuery.create(query.equals(EMPTY) ? null : query));
+  }
+
+  @dagger.Module
+  public abstract static class Module {
+
+    @Binds
+    public abstract MainUI mainUI(MainActivity mainActivity);
   }
 }
