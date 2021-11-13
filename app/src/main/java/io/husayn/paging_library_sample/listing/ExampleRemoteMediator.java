@@ -35,9 +35,9 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
     switch (loadType) {
       case REFRESH:
-        return refresh(loadType);
+        return refresh();
       case APPEND:
-        return append(state);
+        return append();
       case PREPEND:
       default:
         return ignorePrepend();
@@ -49,7 +49,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * the list. Immediately return, reporting end of pagination.
    */
   private Single<MediatorResult> ignorePrepend() {
-    Timber.w("tonny Prepend LoadType ignored");
+    Timber.w("tonny Prepend LoadType ignored for query :%s", query);
     return Single.just(new MediatorResult.Success(true));
   }
 
@@ -58,14 +58,10 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * the first, pass the last Pokemon ID to let it continue from where it left off. For REFRESH,
    * pass null to load the first page.
    */
-  private Single<MediatorResult> refresh(LoadType loadType) {
-    Timber.w("tonny refresh :%s", loadType);
-    PagingRequest pagingRequest = defaultPagingRequest(query);
-    return execute(pagingRequest, loadType);
-  }
-
-  private PagingRequest defaultPagingRequest(PagingQuery query) {
-    return PagingRequest.create(0, query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
+  private Single<MediatorResult> refresh() {
+    Timber.i("tonny refresh with query :%s", query);
+    PagingRequest pagingRequest = PagingRequestMapper.defaultPagingRequest(query);
+    return execute(pagingRequest, LoadType.REFRESH);
   }
 
   /**
@@ -73,13 +69,13 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * networkService is only valid for initial load. If lastItem is null it means no items were
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
-  private Single<MediatorResult> append(PagingState<Integer, Pokemon> state) {
+  private Single<MediatorResult> append() {
     Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
-    Timber.w("tonny append with query:%s, last_item:%s", query, lastItem);
+    Timber.i("tonny append with query:%s, last_item:%s", query, lastItem);
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return execute(nextPagingRequest(query, lastItem), LoadType.APPEND);
+      return execute(PagingRequestMapper.nextPagingRequest(query, lastItem), LoadType.APPEND);
     }
   }
 
@@ -90,12 +86,8 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
         .onErrorResumeNext(this::error);
   }
 
-  private PagingRequest nextPagingRequest(PagingQuery query, Pokemon lastItem) {
-    return PagingRequest.create(
-        OffsetHelper.offset(lastItem, query), query, PagingQueryConfig.DEFAULT_QUERY_CONFIG);
-  }
-
   private Single<MediatorResult> error(Throwable e) {
+    Timber.e("tonny", e);
     if (e instanceof IOException) {
       return Single.just(new MediatorResult.Error(e));
     } else {
