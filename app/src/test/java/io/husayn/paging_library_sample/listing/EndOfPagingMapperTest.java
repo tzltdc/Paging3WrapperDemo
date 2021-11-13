@@ -2,6 +2,7 @@ package io.husayn.paging_library_sample.listing;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import androidx.paging.LoadType;
 import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.Collections;
 import org.junit.Test;
@@ -15,19 +16,23 @@ public class EndOfPagingMapperTest {
   public void whenEmpty_shouldReturnTrue() {
     assertThat(
             EndOfPagingMapper.endOfPaging(
-                PagingAction.create(emptyResponse(), request(10), loadType)))
+                PagingAction.create(emptyResponse(), request(10), LoadType.REFRESH)))
         .isTrue();
   }
 
   @Test
   public void whenResponseLessThanRequestedShouldReturnTrue() {
-    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(single(), request(2), loadType)))
+    assertThat(
+            EndOfPagingMapper.endOfPaging(
+                PagingAction.create(single(), request(2), LoadType.REFRESH)))
         .isTrue();
   }
 
   @Test
   public void whenResponseEqualWithRequestedShouldReturnFalse() {
-    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(single(), request(1), loadType)))
+    assertThat(
+            EndOfPagingMapper.endOfPaging(
+                PagingAction.create(single(), request(1), LoadType.REFRESH)))
         .isFalse();
   }
 
