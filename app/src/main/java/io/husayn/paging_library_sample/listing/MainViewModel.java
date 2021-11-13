@@ -13,19 +13,20 @@ import io.reactivex.Observable;
 import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
-
   private static final int INITIAL_LOAD_KEY = 0;
-  private static final int PAGE_SIZE = 20;
-  private static final int PREFETCH_DISTANCE = 5;
+
+  private final PagingConfig androidPagingConfig;
   private final RxRemoteMediatorFactory rxRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
   private final PokemonDao pokemonDao;
 
   @Inject
   public MainViewModel(
+      PagingConfig androidPagingConfig,
       RxRemoteMediatorFactory rxRemoteMediatorFactory,
       QueryStreaming queryStreaming,
       PokemonDao pokemonDao) {
+    this.androidPagingConfig = androidPagingConfig;
     this.rxRemoteMediatorFactory = rxRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
     this.pokemonDao = pokemonDao;
@@ -40,9 +41,8 @@ public class MainViewModel extends ViewModel {
 
   private Pager<Integer, Pokemon> pager(
       PagingQuery pagingQuery, RemoteMediator<Integer, Pokemon> integerPokemonRemoteMediator) {
-    PagingConfig pagingConfig = new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
     return new Pager<>(
-        pagingConfig,
+        androidPagingConfig,
         INITIAL_LOAD_KEY,
         integerPokemonRemoteMediator,
         () -> pagingSource(this.pokemonDao, pagingQuery));
