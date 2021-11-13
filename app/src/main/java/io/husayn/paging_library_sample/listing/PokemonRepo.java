@@ -8,6 +8,7 @@ import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
+import io.reactivex.Flowable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -81,5 +82,9 @@ public class PokemonRepo {
     return name == null
         ? pokemonDao.lastItemOrNull()
         : pokemonDao.lastItemOrNull(query.searchKey());
+  }
+
+  public Flowable<Pokemon> observe(PokemonId id) {
+    return pokemonDao.queryById(id.get());
   }
 }

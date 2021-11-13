@@ -6,6 +6,7 @@ import androidx.paging.PagingSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import io.reactivex.Flowable;
 import java.util.List;
 
 @Dao
@@ -20,6 +21,9 @@ public interface PokemonDao {
   @Nullable
   @Query("SELECT * FROM pokemon WHERE name like '%' || :name || '%'  ORDER BY id DESC limit 1")
   Pokemon lastItemOrNull(String name);
+
+  @Query("SELECT * FROM pokemon WHERE id =:id")
+  Flowable<Pokemon> queryById(int id);
 
   @Nullable
   @Query("SELECT * FROM pokemon ORDER BY id DESC limit 1")
