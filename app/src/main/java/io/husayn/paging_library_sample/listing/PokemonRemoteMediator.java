@@ -88,7 +88,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
-    return ExampleBackendService.query(pagingRequest)
+    return PokemonBackendService.query(pagingRequest)
         .subscribeOn(workerScheduler.get())
         .doOnSuccess(this::logOnSuccess)
         .map(response -> PagingAction.create(response, pagingRequest, loadType))
