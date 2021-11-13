@@ -11,7 +11,9 @@ class OffsetHelper {
   /** Temporarily using the remote service to identify the offset position */
   public static long offset(Pokemon lastFetchedAsTarget, PagingQuery query) {
     long loaded = offSet(lastFetchedAsTarget, query);
-    Timber.i("tonny loaded:%s, query:%s", loaded, query.searchKey());
+    Timber.i(
+        "tonny offset loaded count:%s, query:%s, last item:%s",
+        loaded, query.searchKey(), lastFetchedAsTarget);
     return loaded;
   }
 
