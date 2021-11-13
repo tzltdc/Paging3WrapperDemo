@@ -1,6 +1,5 @@
 package io.husayn.paging_library_sample.listing;
 
-import androidx.lifecycle.ViewModel;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
@@ -9,7 +8,7 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Observable;
 import javax.inject.Inject;
 
-public class MainViewModel extends ViewModel {
+public class PagingPokemonRepo {
 
   private static final int INITIAL_LOAD_KEY = 0;
 
@@ -19,7 +18,7 @@ public class MainViewModel extends ViewModel {
   private final QueryStreaming queryStreaming;
 
   @Inject
-  public MainViewModel(
+  public PagingPokemonRepo(
       PokemonRepo pokemonRepo,
       PagingConfig androidPagingConfig,
       RxRemoteMediatorFactory rxRemoteMediatorFactory,
