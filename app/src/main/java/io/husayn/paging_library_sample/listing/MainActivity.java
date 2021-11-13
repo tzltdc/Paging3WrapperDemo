@@ -2,7 +2,6 @@ package io.husayn.paging_library_sample.listing;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +28,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
-  private boolean orderBy;
-
   @Inject QueryStream queryStream;
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter adapter;
@@ -47,12 +44,12 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindRecyclerView() {
+    adapter.addLoadStateListener(this::onStateChanged);
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(
         new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
     recyclerView.setAdapter(adapter);
-    orderBy = !orderBy;
   }
 
   private void bindPagingData() {
@@ -71,11 +68,10 @@ public class MainActivity extends AppCompatActivity
 
   private void submitList(PagingData<Pokemon> pokemonPagingData) {
     adapter.submitData(getLifecycle(), pokemonPagingData);
-    adapter.addLoadStateListener(this::onLoaded);
   }
 
-  @SuppressLint("SetTextI18n")
-  private Unit onLoaded(CombinedLoadStates state) {
+  private Unit onStateChanged(CombinedLoadStates state) {
+    Timber.i("onStateChanged:%s", state);
     findViewById(R.id.tv_count).post(this::updateStatus);
     return Unit.INSTANCE;
   }
