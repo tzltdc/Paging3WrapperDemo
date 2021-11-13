@@ -7,7 +7,6 @@ import androidx.paging.PagingData;
 import androidx.paging.PagingSource;
 import androidx.paging.RemoteMediator;
 import androidx.paging.rxjava2.PagingRx;
-import io.husayn.paging_library_sample.PokemonApplication;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
@@ -21,10 +20,12 @@ public class MainViewModel extends ViewModel {
   private static final int PAGE_SIZE = 20;
   private static final int PREFETCH_DISTANCE = 5;
   private final BehaviorSubject<PagingQuery> query = BehaviorSubject.create();
+  private final PokemonDataBase pokemonDataBase;
   private final PokemonDao pokemonDao;
 
   @Inject
-  public MainViewModel(PokemonDao pokemonDao) {
+  public MainViewModel(PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
+    this.pokemonDataBase = pokemonDataBase;
     this.pokemonDao = pokemonDao;
   }
 
@@ -44,8 +45,7 @@ public class MainViewModel extends ViewModel {
   }
 
   private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery orderByDesc) {
-    return new ExampleRemoteMediator(
-        orderByDesc, PokemonDataBase.getInstance(PokemonApplication.getContext()), pokemonDao);
+    return new ExampleRemoteMediator(orderByDesc, pokemonDataBase, pokemonDao);
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
