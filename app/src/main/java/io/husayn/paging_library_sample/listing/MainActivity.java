@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
   private boolean orderBy;
 
   @Inject QueryStream queryStream;
-  @Inject MainViewModel viewModel;
+  @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter adapter;
   @Inject QueryAdapter queryAdapter;
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindPagingData() {
-    viewModel
+    pagingPokemonRepo
         .rxPagingData()
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::submitList);
