@@ -36,7 +36,7 @@ public class OffsetHelperTest {
     long offset =
         OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
     List<Pokemon> nextBatch =
-        ExampleBackendService.query(
+        PokemonBackendService.query(
                 PagingRequest.create(offset, PagingQuery.create("ee"), PagingQueryConfig.create(4)))
             .test()
             .values()

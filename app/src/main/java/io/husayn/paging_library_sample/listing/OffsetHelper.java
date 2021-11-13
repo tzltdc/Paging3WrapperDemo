@@ -20,7 +20,7 @@ class OffsetHelper {
   private static Long offSet(Pokemon lastFetchedAsTarget, PagingQuery query) {
     List<Pokemon> matched =
         Observable.fromIterable(RemoteDataServer.all())
-            .filter(item -> ExampleBackendService.validItem(item, query))
+            .filter(item -> PokemonBackendService.validItem(item, query))
             .toList()
             .blockingGet();
     return Observable.fromIterable(matched)
