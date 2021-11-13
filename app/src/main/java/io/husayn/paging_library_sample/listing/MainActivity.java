@@ -17,8 +17,7 @@ import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
 import timber.log.Timber;
@@ -26,7 +25,6 @@ import timber.log.Timber;
 public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
-  public static final String EMPTY = "Empty";
   private boolean orderBy;
   private PokemonAdapter adapter;
   private TextView tv_count;
@@ -39,12 +37,12 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     adapter = new PokemonAdapter(this);
-    viewModel
-        .rxPagingData()
-        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
-        .subscribe(this::submitList);
-
+    bindPagingData();
     bindQuery();
+    bindRecyclerView();
+  }
+
+  private void bindRecyclerView() {
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(
@@ -54,15 +52,18 @@ public class MainActivity extends AppCompatActivity
     orderBy = !orderBy;
   }
 
+  private void bindPagingData() {
+    viewModel
+        .rxPagingData()
+        .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .subscribe(this::submitList);
+  }
+
   private void bindQuery() {
     tv_count = findViewById(R.id.tv_count);
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
     queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 12));
-    queryRecyclerView.setAdapter(new QueryAdapter(this, get()));
-  }
-
-  private List<String> get() {
-    return Arrays.asList(EMPTY, "a", "b", "ee", "abc");
+    queryRecyclerView.setAdapter(new QueryAdapter(this, FilterOptionProvider.get()));
   }
 
   private String getSearchKey() {
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void updateStatus() {
-    tv_count.setText("total:" + adapter.getItemCount());
+    tv_count.setText(String.format(Locale.getDefault(), "total:%d", adapter.getItemCount()));
   }
 
   @Override
@@ -91,7 +92,8 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public void query(String query) {
-    viewModel.postValue(PagingQuery.create(query.equals(EMPTY) ? null : query));
+    viewModel.postValue(
+        PagingQuery.create(query.equals(FilterOptionProvider.EMPTY) ? null : query));
   }
 
   @dagger.Module
