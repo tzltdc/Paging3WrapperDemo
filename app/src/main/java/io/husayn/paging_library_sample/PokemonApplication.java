@@ -4,16 +4,12 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
+import dagger.android.DaggerApplication;
 import io.husayn.paging_library_sample.data.PokemonDBPopulator;
-import javax.inject.Inject;
 import timber.log.ThreadTree;
 import timber.log.Timber;
 
-public class PokemonApplication extends Application implements HasAndroidInjector {
-
-  @Inject DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
+public class PokemonApplication extends DaggerApplication {
 
   public static final String KEY_IS_DB_POPULATED = "DB_IS_POPULATED";
   private static Application context;
@@ -25,6 +21,11 @@ public class PokemonApplication extends Application implements HasAndroidInjecto
     Timber.plant(new ThreadTree());
     init(this);
     intiDB();
+  }
+
+  @Override
+  protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+    return DaggerAppComponent.factory().newMyComponent(this);
   }
 
   public static void init(Application context) {
@@ -45,10 +46,5 @@ public class PokemonApplication extends Application implements HasAndroidInjecto
 
   private void initDagger() {
     DaggerAppComponent.factory().newMyComponent(this).inject(this);
-  }
-
-  @Override
-  public AndroidInjector<Object> androidInjector() {
-    return dispatchingAndroidInjector;
   }
 }
