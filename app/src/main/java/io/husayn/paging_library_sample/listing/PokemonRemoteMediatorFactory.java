@@ -3,7 +3,7 @@ package io.husayn.paging_library_sample.listing;
 import dagger.assisted.AssistedFactory;
 
 @AssistedFactory
-interface RxRemoteMediatorFactory {
+interface PokemonRemoteMediatorFactory {
 
-  ExampleRemoteMediator create(PagingQuery pagingQuery);
+  PokemonRemoteMediator create(PagingQuery pagingQuery);
 }
