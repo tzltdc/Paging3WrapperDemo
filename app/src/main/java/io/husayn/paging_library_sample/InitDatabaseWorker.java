@@ -1,11 +1,9 @@
 package io.husayn.paging_library_sample;
 
-import androidx.annotation.NonNull;
-import com.uber.rib.core.Worker;
-import com.uber.rib.core.WorkerScopeProvider;
+import com.uber.autodispose.ScopeProvider;
 import javax.inject.Inject;
 
-public class InitDatabaseWorker implements Worker {
+public class InitDatabaseWorker implements AutoDisposeWorker {
 
   private final AppStatusRepo appStatusRepo;
   private final PokemonRepo pokemonRepo;
@@ -17,7 +15,7 @@ public class InitDatabaseWorker implements Worker {
   }
 
   @Override
-  public void onStart(@NonNull WorkerScopeProvider lifecycle) {
+  public void attach(ScopeProvider scopeProvider) {
     if (!appStatusRepo.initialized()) {
       pokemonRepo.populateDB();
       appStatusRepo.markAsInitialized();

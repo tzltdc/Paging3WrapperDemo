@@ -1,8 +1,9 @@
 package io.husayn.paging_library_sample;
 
-import com.uber.rib.core.Worker;
+import com.google.common.collect.ImmutableSet;
 import dagger.Binds;
 import dagger.Module;
+import dagger.Provides;
 import dagger.multibindings.Multibinds;
 import java.util.Set;
 
@@ -10,8 +11,14 @@ import java.util.Set;
 public abstract class AppWorkerModule {
 
   @Multibinds
-  public abstract Set<Worker> appWorkerSet();
+  public abstract Set<AutoDisposeWorker> appWorkerSet();
+
+  @AppScope
+  @Provides
+  public static ImmutableSet<AutoDisposeWorker> immutableAppWorkerSet(Set<AutoDisposeWorker> set) {
+    return ImmutableSet.copyOf(set);
+  }
 
   @Binds
-  public abstract Worker bind(InitDatabaseWorker databaseWorker);
+  public abstract AutoDisposeWorker bind(InitDatabaseWorker databaseWorker);
 }

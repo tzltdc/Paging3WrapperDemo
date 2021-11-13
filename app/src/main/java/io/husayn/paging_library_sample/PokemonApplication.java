@@ -1,18 +1,18 @@
 package io.husayn.paging_library_sample;
 
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import com.uber.autodispose.ScopeProvider;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
-import io.husayn.paging_library_sample.data.PokemonDBPopulator;
+import javax.inject.Inject;
 import timber.log.ThreadTree;
 import timber.log.Timber;
 
 public class PokemonApplication extends DaggerApplication {
 
-  public static final String KEY_IS_DB_POPULATED = "DB_IS_POPULATED";
   private static Application context;
+
+  @Inject AppWorkerBinder appWorkerBinder;
 
   @Override
   public void onCreate() {
@@ -33,11 +33,7 @@ public class PokemonApplication extends DaggerApplication {
   }
 
   private void intiDB() {
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-    if (!preferences.getBoolean(KEY_IS_DB_POPULATED, true)) {
-      PokemonDBPopulator.with(this).populateDB();
-      preferences.edit().putBoolean(KEY_IS_DB_POPULATED, true).apply();
-    }
+    appWorkerBinder.attach(ScopeProvider.UNBOUND);
   }
 
   public static Application getContext() {
