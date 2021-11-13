@@ -11,14 +11,19 @@ import java.util.List;
 @Dao
 public interface PokemonDao {
 
-  @Query("SELECT * FROM pokemon  ORDER BY id DESC")
-  PagingSource<Integer, Pokemon> allByDesc();
-
   @Query("SELECT * FROM pokemon ORDER BY id ASC")
   PagingSource<Integer, Pokemon> allByAsc();
 
   @Query("SELECT * FROM pokemon  WHERE name like '%' || :name || '%' ORDER BY id ASC")
   PagingSource<Integer, Pokemon> queryBy(String name);
+
+  @Nullable
+  @Query("SELECT * FROM pokemon WHERE name like '%' || :name || '%'  ORDER BY id DESC")
+  Pokemon lastItemOrNull(String name);
+
+  @Nullable
+  @Query("SELECT * FROM pokemon ORDER BY id DESC")
+  Pokemon lastItemOrNull();
 
   @VisibleForTesting()
   @Query("SELECT COUNT(*) FROM pokemon")

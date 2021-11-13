@@ -37,7 +37,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       case REFRESH:
         return refresh(loadType);
       case APPEND:
-        return append(loadType, state);
+        return append(state);
       case PREPEND:
       default:
         return ignorePrepend();
@@ -73,13 +73,13 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * networkService is only valid for initial load. If lastItem is null it means no items were
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
-  private Single<MediatorResult> append(LoadType loadType, PagingState<Integer, Pokemon> state) {
-    Timber.w("tonny append :%s", loadType);
-    Pokemon lastItem = state.lastItemOrNull();
+  private Single<MediatorResult> append(PagingState<Integer, Pokemon> state) {
+    Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
+    Timber.w("tonny append with query:%s, last_item:%s", query, lastItem);
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return execute(nextPagingRequest(query, lastItem), loadType);
+      return execute(nextPagingRequest(query, lastItem), LoadType.APPEND);
     }
   }
 

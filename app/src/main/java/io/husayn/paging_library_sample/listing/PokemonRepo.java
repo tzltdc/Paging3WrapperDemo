@@ -82,4 +82,13 @@ public class PokemonRepo {
       }
     }
   }
+
+  /** Inspired from https://stackoverflow.com/a/66814196/4068957 */
+  @Nullable
+  public Pokemon lastItemOrNull(PagingQuery query) {
+    String name = query.searchKey();
+    return name == null
+        ? pokemonDao.lastItemOrNull()
+        : pokemonDao.lastItemOrNull(query.searchKey());
+  }
 }
