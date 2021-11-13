@@ -1,12 +1,15 @@
 package io.husayn.paging_library_sample.listing;
 
+import androidx.annotation.Nullable;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
+import androidx.paging.PagingSource;
 import androidx.paging.rxjava2.PagingRx;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Observable;
 import javax.inject.Inject;
+import kotlin.jvm.functions.Function0;
 
 public class PagingPokemonRepo {
 
@@ -38,16 +41,27 @@ public class PagingPokemonRepo {
   }
 
   private PagerContext pagerContext(PagingQuery query) {
-    return PagerContext.create(
-        pokemonRemoteMediatorFactory.create(query),
-        () -> pokemonRepo.pokemonLocalPagingSource(query));
+    return PagerContext.create(pagingSourceFunction(query), optionalRemoteMediator(query));
+  }
+
+  /**
+   * By default the app will initialize the database. Hence no need to use the remote source on app
+   * fresh installed.
+   */
+  @Nullable
+  private PokemonRemoteMediator optionalRemoteMediator(PagingQuery query) {
+    return query.searchKey() == null ? null : pokemonRemoteMediatorFactory.create(query);
+  }
+
+  private Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction(PagingQuery query) {
+    return () -> pokemonRepo.pokemonLocalPagingSource(query);
   }
 
   private Pager<Integer, Pokemon> pager(PagerContext context) {
     return new Pager<>(
         androidPagingConfig,
         INITIAL_LOAD_KEY,
-        context.pokemonRemoteMediator(),
+        context.optionalRemoteMediator(),
         context.localPagingSource());
   }
 }
