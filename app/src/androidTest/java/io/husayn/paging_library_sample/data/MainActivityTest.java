@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.*;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -11,7 +12,6 @@ import static io.husayn.paging_library_sample.data.TestUtils.withRecyclerView;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.action.ViewActions;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -53,7 +53,7 @@ public class MainActivityTest {
 
   @Test
   public void demo_1_whenFullFiltered_shouldShowNoData() {
-    onView(withId(R.id.rv_query)).perform(RecyclerViewActions.actionOnItemAtPosition(5, click()));
+    onView(withId(R.id.rv_query)).perform(actionOnItemAtPosition(5, click()));
     onView(withText("total:0")).check(matches(isDisplayed()));
   }
 
@@ -100,5 +100,13 @@ public class MainActivityTest {
     onView(withText("total:70")).check(matches(isDisplayed()));
     onView(withRecyclerView(R.id.rv_pokemons).atPositionOnView(8, R.id.tv_pokemon))
         .check(matches(withText("Caterpie")));
+  }
+
+  @Test
+  public void itemClicked_shouldShowDetails() {
+    onView(withText("a")).perform(ViewActions.click());
+    onView(withId(R.id.rv_pokemons)).perform(actionOnItemAtPosition(6, click()));
+    onView(withText("8")).check(matches(isDisplayed()));
+    onView(withText("Wartortle")).check(matches(isDisplayed()));
   }
 }
