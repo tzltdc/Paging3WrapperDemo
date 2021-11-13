@@ -1,6 +1,9 @@
-package io.husayn.paging_library_sample;
+package io.husayn.paging_library_sample.listing;
 
 import android.app.Application;
+import androidx.annotation.Nullable;
+import androidx.paging.PagingSource;
+import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import java.util.ArrayList;
@@ -32,5 +35,22 @@ public class PokemonRepo {
       }
     }
     return list.toArray(new Pokemon[0]);
+  }
+
+  public PagingSource<Integer, Pokemon> pokemonLocalPagingSource(PagingQuery query) {
+    String name = query.searchKey();
+    return name == null ? pokemonDao.allByAsc() : pokemonDao.queryBy(name);
+  }
+
+  public void delete(@Nullable String key) {
+    if (key == null) {
+      pokemonDao.deleteAll();
+    } else {
+      pokemonDao.deleteByQuery(key);
+    }
+  }
+
+  public void insertAll(List<Pokemon> list) {
+    pokemonDao.insertAll(list);
   }
 }

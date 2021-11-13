@@ -2,6 +2,7 @@ package io.husayn.paging_library_sample;
 
 import com.uber.autodispose.ScopeProvider;
 import io.app.config.AppConfig;
+import io.husayn.paging_library_sample.listing.PokemonRepo;
 import javax.inject.Inject;
 
 public class InitDatabaseWorker implements AutoDisposeWorker {
