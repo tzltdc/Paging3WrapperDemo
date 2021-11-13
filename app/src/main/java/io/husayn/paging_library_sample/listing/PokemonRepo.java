@@ -7,6 +7,7 @@ import androidx.paging.PagingSource;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
+import io.husayn.paging_library_sample.data.PokemonDataBase;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,11 +15,13 @@ import timber.log.Timber;
 
 public class PokemonRepo {
 
+  private final PokemonDataBase dataBase;
   private final Application application;
   private final PokemonDao pokemonDao;
 
   @Inject
-  public PokemonRepo(Application application, PokemonDao pokemonDao) {
+  public PokemonRepo(PokemonDataBase dataBase, Application application, PokemonDao pokemonDao) {
+    this.dataBase = dataBase;
     this.application = application;
     this.pokemonDao = pokemonDao;
   }
@@ -57,6 +60,10 @@ public class PokemonRepo {
    * present the updates in the DB.
    */
   public void flushDbData(PagingAction action) {
+    dataBase.runInTransaction(() -> execute(action));
+  }
+
+  private void execute(PagingAction action) {
     if (action.loadType() == LoadType.REFRESH) {
       Timber.w("tonny delete");
       delete(action.request().pagingQuery().searchKey());
