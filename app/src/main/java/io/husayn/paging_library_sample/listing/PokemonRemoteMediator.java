@@ -96,7 +96,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
         .onErrorResumeNext(this::error);
   }
 
-  private void logOnSuccess(SearchPokemonResponse response) {
+  private void logOnSuccess(PokemonDto response) {
     Timber.i(
         "[thread:%s]:tonny fetched remote repo size :%s",
         Thread.currentThread().getName(), response.list().size());

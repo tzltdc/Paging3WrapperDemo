@@ -9,14 +9,14 @@ import timber.log.Timber;
 
 public class ExampleBackendService {
 
-  public static Single<SearchPokemonResponse> query(PagingRequest pagingRequest) {
+  public static Single<PokemonDto> query(PagingRequest pagingRequest) {
     return Observable.fromIterable(RemoteDataServer.all())
         .doOnSubscribe(ExampleBackendService::logSubscribed)
         .filter(item -> validItem(item, pagingRequest.pagingQuery()))
         .skip(pagingRequest.offSet())
         .take(pagingRequest.queryConfig().countPerPage())
         .toList()
-        .map(SearchPokemonResponse::create)
+        .map(PokemonDto::create)
         .doOnDispose(ExampleBackendService::logOnDispose);
   }
 

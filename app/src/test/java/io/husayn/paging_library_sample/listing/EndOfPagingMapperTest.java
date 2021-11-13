@@ -31,12 +31,12 @@ public class EndOfPagingMapperTest {
         .isFalse();
   }
 
-  private SearchPokemonResponse emptyResponse() {
-    return SearchPokemonResponse.create(Collections.emptyList());
+  private PokemonDto emptyResponse() {
+    return PokemonDto.create(Collections.emptyList());
   }
 
-  private SearchPokemonResponse single() {
-    return SearchPokemonResponse.create(Collections.singletonList(new Pokemon(0, "test")));
+  private PokemonDto single() {
+    return PokemonDto.create(Collections.singletonList(new Pokemon(0, "test")));
   }
 
   private PagingRequest request(int countPerPage) {
