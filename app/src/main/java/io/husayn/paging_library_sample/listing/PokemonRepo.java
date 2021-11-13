@@ -72,15 +72,7 @@ public class PokemonRepo {
     }
     List<Pokemon> list = action.response().list();
     Timber.w("tonny insertAll :%s", list.size());
-    for (Pokemon pokemon : list) {
-      Pokemon existed = pokemonDao.findById(pokemon.id);
-      if (existed == null) {
-        Timber.w("tonny inserted new pokemon :%s", pokemon);
-        pokemonDao.insert(pokemon);
-      } else {
-        Timber.w("tonny skipped existing pokemon :%s", pokemon);
-      }
-    }
+    pokemonDao.insertAll(list);
   }
 
   /** Inspired from https://stackoverflow.com/a/66814196/4068957 */

@@ -18,11 +18,11 @@ public interface PokemonDao {
   PagingSource<Integer, Pokemon> queryBy(String name);
 
   @Nullable
-  @Query("SELECT * FROM pokemon WHERE name like '%' || :name || '%'  ORDER BY id DESC")
+  @Query("SELECT * FROM pokemon WHERE name like '%' || :name || '%'  ORDER BY id DESC limit 1")
   Pokemon lastItemOrNull(String name);
 
   @Nullable
-  @Query("SELECT * FROM pokemon ORDER BY id DESC")
+  @Query("SELECT * FROM pokemon ORDER BY id DESC limit 1")
   Pokemon lastItemOrNull();
 
   @VisibleForTesting()
