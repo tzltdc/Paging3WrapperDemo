@@ -86,9 +86,16 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
     return ExampleBackendService.query(pagingRequest)
         .subscribeOn(workerScheduler.get())
+        .doOnSuccess(this::logOnSuccess)
         .map(response -> PagingAction.create(response, pagingRequest, loadType))
         .map(this::success)
         .onErrorResumeNext(this::error);
+  }
+
+  private void logOnSuccess(SearchPokemonResponse response) {
+    Timber.i(
+        "[thread:%s]:tonny fetched remote repo size :%s",
+        Thread.currentThread().getName(), response.list().size());
   }
 
   private Single<MediatorResult> error(Throwable e) {
