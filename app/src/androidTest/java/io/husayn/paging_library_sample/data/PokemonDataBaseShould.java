@@ -16,6 +16,7 @@ public class PokemonDataBaseShould {
 
   @Before
   public void setUp() {
+
     Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
     dao = PokemonDataBase.getInstance(context).pokemonDao();
     dao.deleteAll();
