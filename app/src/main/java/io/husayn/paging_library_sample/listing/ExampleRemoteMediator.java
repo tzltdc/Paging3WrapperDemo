@@ -103,21 +103,9 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private MediatorResult success(LoadType loadType, PagingAction action) {
-    flushDbData(loadType, action.response());
+    pokemonRepo.flushDbData(
+        loadType, action.request().pagingQuery().searchKey(), action.response());
     return new Success(endOfPaging(action));
-  }
-
-  /**
-   * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
-   * present the updates in the DB.
-   */
-  private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
-    if (loadType == LoadType.REFRESH) {
-      Timber.w("tonny delete");
-      pokemonRepo.delete(query.searchKey());
-    }
-    Timber.w("tonny insertAll :%s", response.list().size());
-    pokemonRepo.insertAll(response.list());
   }
 
   private boolean endOfPaging(PagingAction action) {
