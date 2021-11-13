@@ -14,18 +14,18 @@ public class PagingPokemonRepo {
 
   private final PokemonRepo pokemonRepo;
   private final PagingConfig androidPagingConfig;
-  private final RxRemoteMediatorFactory rxRemoteMediatorFactory;
+  private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
 
   @Inject
   public PagingPokemonRepo(
       PokemonRepo pokemonRepo,
       PagingConfig androidPagingConfig,
-      RxRemoteMediatorFactory rxRemoteMediatorFactory,
+      PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory,
       QueryStreaming queryStreaming) {
     this.pokemonRepo = pokemonRepo;
     this.androidPagingConfig = androidPagingConfig;
-    this.rxRemoteMediatorFactory = rxRemoteMediatorFactory;
+    this.pokemonRemoteMediatorFactory = pokemonRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
   }
 
@@ -39,14 +39,15 @@ public class PagingPokemonRepo {
 
   private PagerContext pagerContext(PagingQuery query) {
     return PagerContext.create(
-        rxRemoteMediatorFactory.create(query), () -> pokemonRepo.pokemonLocalPagingSource(query));
+        pokemonRemoteMediatorFactory.create(query),
+        () -> pokemonRepo.pokemonLocalPagingSource(query));
   }
 
   private Pager<Integer, Pokemon> pager(PagerContext context) {
     return new Pager<>(
         androidPagingConfig,
         INITIAL_LOAD_KEY,
-        context.exampleRemoteMediator(),
-        context.pagingSourceFunction());
+        context.pokemonRemoteMediator(),
+        context.localPagingSource());
   }
 }

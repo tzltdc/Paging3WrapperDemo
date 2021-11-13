@@ -13,14 +13,14 @@ import io.thread.WorkerScheduler;
 import java.io.IOException;
 import timber.log.Timber;
 
-class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
+class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQuery query;
   private final WorkerScheduler workerScheduler;
   private final PokemonRepo pokemonRepo;
 
   @AssistedInject
-  ExampleRemoteMediator(
+  PokemonRemoteMediator(
       @Assisted PagingQuery query, WorkerScheduler workerScheduler, PokemonRepo pokemonRepo) {
     this.query = query;
     this.workerScheduler = workerScheduler;

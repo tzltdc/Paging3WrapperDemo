@@ -8,13 +8,13 @@ import kotlin.jvm.functions.Function0;
 @AutoValue
 public abstract class PagerContext {
 
-  public abstract ExampleRemoteMediator exampleRemoteMediator();
+  public abstract PokemonRemoteMediator pokemonRemoteMediator();
 
-  public abstract Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction();
+  public abstract Function0<PagingSource<Integer, Pokemon>> localPagingSource();
 
   public static PagerContext create(
-      ExampleRemoteMediator exampleRemoteMediator,
+      PokemonRemoteMediator pokemonRemoteMediator,
       Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction) {
-    return new AutoValue_PagerContext(exampleRemoteMediator, pagingSourceFunction);
+    return new AutoValue_PagerContext(pokemonRemoteMediator, pagingSourceFunction);
   }
 }
