@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 
@@ -16,11 +18,13 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
       "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
   private static final String POKE_IMAGE_URL_SUFFIX = ".png";
 
-  private TextView pokemonIdTextView;
-  private ImageView pokemonSpriteImageView;
-  private TextView pokemonNameTextView;
+  private final TextView pokemonIdTextView;
+  private final ImageView pokemonSpriteImageView;
+  private final TextView pokemonNameTextView;
+  private final OnItemClickCallback onItemClickCallback;
 
-  PokemonViewHolder(View itemView, OnItemClickCallback onItemClickCallback) {
+  @AssistedInject
+  PokemonViewHolder(@Assisted View itemView, OnItemClickCallback onItemClickCallback) {
     super(itemView);
     this.onItemClickCallback = onItemClickCallback;
     pokemonIdTextView = itemView.findViewById(R.id.tv_pokemon_id);
@@ -40,9 +44,8 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
     itemView.setOnClickListener(v -> onItemClickCallback.onItemClick(pokemon));
   }
 
-  private OnItemClickCallback onItemClickCallback;
-
   public interface OnItemClickCallback {
+
     void onItemClick(Pokemon pokemon);
   }
 

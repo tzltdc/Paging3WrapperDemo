@@ -13,19 +13,19 @@ import javax.inject.Inject;
 
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, PokemonViewHolder> {
 
-  private PokemonViewHolder.OnItemClickCallback onItemClickCallback;
+  private final PokemonViewHolderFactory pokemonViewHolderFactory;
 
   @Inject
-  public PokemonAdapter(PokemonViewHolder.OnItemClickCallback onItemClickCallback) {
+  public PokemonAdapter(PokemonViewHolderFactory pokemonViewHolderFactory) {
     super(Pokemon.DIFF_CALLBACK);
-    this.onItemClickCallback = onItemClickCallback;
+    this.pokemonViewHolderFactory = pokemonViewHolderFactory;
   }
 
   @NonNull
   @Override
   public PokemonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(getContext()).inflate(R.layout.item_pokemon, parent, false);
-    return new PokemonViewHolder(itemView, onItemClickCallback);
+    return pokemonViewHolderFactory.create(itemView);
   }
 
   @Override
