@@ -8,16 +8,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import java.util.List;
+import javax.inject.Inject;
 
 public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 
-  private final QueryViewHolder.QueryCallback onItemClickCallback;
+  private final QueryViewHolderFactory queryViewHolderFactory;
   private final List<String> queryList;
 
-  public QueryAdapter(QueryCallback onItemClickCallback, List<String> queryList) {
-    this.onItemClickCallback = onItemClickCallback;
+  @Inject
+  public QueryAdapter(QueryViewHolderFactory queryViewHolderFactory, List<String> queryList) {
+    this.queryViewHolderFactory = queryViewHolderFactory;
     this.queryList = queryList;
   }
 
@@ -25,7 +26,7 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
   @Override
   public QueryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     View itemView = LayoutInflater.from(getContext()).inflate(R.layout.item_query, parent, false);
-    return new QueryViewHolder(itemView, onItemClickCallback);
+    return queryViewHolderFactory.create(itemView);
   }
 
   @Override

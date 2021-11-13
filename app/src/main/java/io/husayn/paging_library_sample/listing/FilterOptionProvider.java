@@ -5,9 +5,9 @@ import java.util.List;
 
 public class FilterOptionProvider {
 
-  public static final String EMPTY = "Empty";
+  public static final String EMPTY = "All";
 
   public static List<String> get() {
-    return Arrays.asList(EMPTY, "a", "b", "ee", "abc");
+    return Arrays.asList(EMPTY, "a", "b", "ee", "Ivy", "abc");
   }
 }
