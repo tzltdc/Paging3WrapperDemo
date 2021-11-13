@@ -30,14 +30,23 @@ public class PagingPokemonRepo {
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
-    return queryStreaming.streaming().map(this::pager).switchMap(PagingRx::getObservable);
+    return queryStreaming
+        .streaming()
+        .map(this::pagerContext)
+        .map(this::pager)
+        .switchMap(PagingRx::getObservable);
   }
 
-  private Pager<Integer, Pokemon> pager(PagingQuery pagingQuery) {
+  private PagerContext pagerContext(PagingQuery query) {
+    return PagerContext.create(
+        rxRemoteMediatorFactory.create(query), () -> pokemonRepo.pokemonLocalPagingSource(query));
+  }
+
+  private Pager<Integer, Pokemon> pager(PagerContext context) {
     return new Pager<>(
         androidPagingConfig,
         INITIAL_LOAD_KEY,
-        rxRemoteMediatorFactory.create(pagingQuery),
-        () -> pokemonRepo.pokemonLocalPagingSource(pagingQuery));
+        context.exampleRemoteMediator(),
+        context.pagingSourceFunction());
   }
 }
