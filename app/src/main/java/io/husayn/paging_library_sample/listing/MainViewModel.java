@@ -13,6 +13,7 @@ import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Observable;
 import io.reactivex.subjects.BehaviorSubject;
+import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
 
@@ -22,6 +23,7 @@ public class MainViewModel extends ViewModel {
   private final BehaviorSubject<PagingQuery> query = BehaviorSubject.create();
   private final PokemonDao pokemonDao;
 
+  @Inject
   public MainViewModel() {
     pokemonDao = PokemonDataBase.getInstance(PokemonApplication.getContext()).pokemonDao();
   }
