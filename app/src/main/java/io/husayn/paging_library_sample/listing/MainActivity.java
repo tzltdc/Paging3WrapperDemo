@@ -12,11 +12,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.Binds;
+import dagger.Provides;
 import dagger.android.AndroidInjection;
+import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
+import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
 import kotlin.Unit;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity
 
   @Inject MainViewModel viewModel;
   @Inject PokemonAdapter adapter;
+  @Inject QueryAdapter queryAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +65,9 @@ public class MainActivity extends AppCompatActivity
   private void bindQuery() {
     tv_count = findViewById(R.id.tv_count);
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
-    queryRecyclerView.setLayoutManager(new GridLayoutManager(this, 12));
-    queryRecyclerView.setAdapter(new QueryAdapter(this, FilterOptionProvider.get()));
+    queryRecyclerView.setLayoutManager(
+        new GridLayoutManager(this, getResources().getInteger(R.integer.query_span_count)));
+    queryRecyclerView.setAdapter(queryAdapter);
   }
 
   private String getSearchKey() {
@@ -100,6 +105,16 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract MainUI mainUI(MainActivity mainActivity);
+
+    @ActivityScope
+    @Provides
+    public static List<String> query() {
+      return FilterOptionProvider.get();
+    }
+
+    @Binds
+    public abstract QueryViewHolder.QueryCallback queryViewHolderQueryCallback(
+        MainActivity mainActivity);
 
     @Binds
     public abstract PokemonViewHolder.OnItemClickCallback pokemonViewHolderOnItemClickCallback(

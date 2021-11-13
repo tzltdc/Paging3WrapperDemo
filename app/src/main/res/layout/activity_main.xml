@@ -10,8 +10,8 @@
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/rv_query"
-    android:layout_width="wrap_content"
-    android:layout_height="240dp" />
+    android:layout_width="match_parent"
+    android:layout_height="144dp" />
 
   <TextView
     android:id="@+id/tv_count"
@@ -23,7 +23,6 @@
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/rv_pokemons"
     android:layout_width="match_parent"
-
     android:layout_height="0dp"
     android:layout_marginTop="16dp"
     android:layout_weight="1" />
