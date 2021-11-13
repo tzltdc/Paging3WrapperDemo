@@ -27,8 +27,7 @@ public class PokemonApplication extends DaggerApplication {
   @Override
   protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
 
-    return DaggerAppComponent.factory()
-        .create(AppContext.create(AppConfig.DEFAULT_CONFIG, this).application());
+    return DaggerAppComponent.factory().create(AppContext.create(AppConfig.DEFAULT_CONFIG, this));
   }
 
   public static void init(Application context) {

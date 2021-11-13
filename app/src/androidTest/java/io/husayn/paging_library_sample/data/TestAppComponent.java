@@ -1,8 +1,8 @@
 package io.husayn.paging_library_sample.data;
 
-import android.app.Application;
 import dagger.BindsInstance;
 import dagger.Component;
+import io.app.config.AppContext;
 import io.husayn.paging_library_sample.AppModule;
 import io.husayn.paging_library_sample.AppScope;
 
@@ -15,6 +15,6 @@ public interface TestAppComponent {
   @Component.Factory
   interface Factory {
 
-    TestAppComponent create(@BindsInstance Application application);
+    TestAppComponent create(@BindsInstance AppContext appContext);
   }
 }

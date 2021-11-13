@@ -23,7 +23,7 @@ public class PokemonDataBaseShould {
   @Before
   public void setUp() {
     DaggerTestAppComponent.factory()
-        .create(AppContext.create(AppConfig.DEFAULT_CONFIG, testApplication()).application())
+        .create(AppContext.create(AppConfig.DEFAULT_CONFIG, testApplication()))
         .inject(this);
     dao.deleteAll();
   }
