@@ -49,7 +49,9 @@ dependencies {
     implementation "com.uber.rib:rib-android:${ribs_version}"
     testImplementation "com.uber.rib:rib-test:${ribs_version}"
 
+
     implementation "com.uber.autodispose:autodispose-android-archcomponents:${auto_dispose_version}"
+    implementation "com.google.guava:guava:31.0.1-android"
 
     implementation "com.google.dagger:dagger:${dagger_version}"
     annotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"
