@@ -8,6 +8,7 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
+import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import java.io.IOException;
@@ -91,9 +92,14 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     return PokemonBackendService.query(pagingRequest)
         .subscribeOn(workerScheduler.get())
         .doOnSuccess(this::logOnSuccess)
-        .map(response -> PagingAction.create(response, pagingRequest, loadType))
+        .map(response -> Data.create(response, pagingRequest))
+        .map(data -> pagingAction(data, loadType))
         .map(this::success)
         .onErrorResumeNext(this::error);
+  }
+
+  private PagingAction pagingAction(Data data, LoadType loadType) {
+    return PagingAction.create(loadType, data);
   }
 
   private void logOnSuccess(PokemonDto response) {
@@ -117,6 +123,6 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private boolean endOfPaging(PagingAction action) {
-    return EndOfPagingMapper.endOfPaging(action);
+    return EndOfPagingMapper.endOfPaging(action.data());
   }
 }

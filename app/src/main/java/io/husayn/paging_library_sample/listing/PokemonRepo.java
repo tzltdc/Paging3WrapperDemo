@@ -61,16 +61,15 @@ public class PokemonRepo {
    */
   public void flushDbData(PagingAction action) {
     Timber.w("tonny flushDbData");
-
     dataBase.runInTransaction(() -> execute(action));
   }
 
   private void execute(PagingAction action) {
-    if (action.loadType() == LoadType.REFRESH) {
+    if (action.type() == LoadType.REFRESH) {
       Timber.w("tonny delete");
-      delete(action.request().pagingQuery().searchKey());
+      delete(action.data().request().pagingQuery().searchKey());
     }
-    List<Pokemon> list = action.response().list();
+    List<Pokemon> list = action.data().response().list();
     Timber.w("tonny insertAll :%s", list.size());
     pokemonDao.insertAll(list);
   }
