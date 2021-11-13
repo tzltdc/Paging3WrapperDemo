@@ -19,6 +19,6 @@ public class AppStatusRepo {
   }
 
   public void markAsInitialized() {
-    sharedPreferences.edit().putBoolean(KEY_IS_DB_POPULATED, true);
+    sharedPreferences.edit().putBoolean(KEY_IS_DB_POPULATED, true).apply();
   }
 }
