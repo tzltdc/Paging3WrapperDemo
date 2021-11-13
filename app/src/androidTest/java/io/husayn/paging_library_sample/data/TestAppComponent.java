@@ -15,6 +15,6 @@ public interface TestAppComponent {
   @Component.Factory
   interface Factory {
 
-    TestAppComponent newMyComponent(@BindsInstance Application application);
+    TestAppComponent create(@BindsInstance Application application);
   }
 }

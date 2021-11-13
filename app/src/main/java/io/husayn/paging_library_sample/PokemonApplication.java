@@ -4,6 +4,8 @@ import android.app.Application;
 import com.uber.autodispose.ScopeProvider;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
+import io.app.config.AppConfig;
+import io.app.config.AppContext;
 import javax.inject.Inject;
 import timber.log.ThreadTree;
 import timber.log.Timber;
@@ -16,7 +18,6 @@ public class PokemonApplication extends DaggerApplication {
 
   @Override
   public void onCreate() {
-    initDagger();
     super.onCreate();
     Timber.plant(new ThreadTree());
     init(this);
@@ -25,7 +26,9 @@ public class PokemonApplication extends DaggerApplication {
 
   @Override
   protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
-    return DaggerAppComponent.factory().newMyComponent(this);
+
+    return DaggerAppComponent.factory()
+        .create(AppContext.create(AppConfig.DEFAULT_CONFIG, this).application());
   }
 
   public static void init(Application context) {
@@ -38,9 +41,5 @@ public class PokemonApplication extends DaggerApplication {
 
   public static Application getContext() {
     return context;
-  }
-
-  private void initDagger() {
-    DaggerAppComponent.factory().newMyComponent(this).inject(this);
   }
 }

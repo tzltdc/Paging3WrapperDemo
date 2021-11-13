@@ -14,6 +14,6 @@ public interface AppComponent extends AndroidInjector<PokemonApplication> {
   @Component.Factory
   interface Factory {
 
-    AppComponent newMyComponent(@BindsInstance Application application);
+    AppComponent create(@BindsInstance Application application);
   }
 }

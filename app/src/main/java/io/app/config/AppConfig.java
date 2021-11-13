@@ -1,13 +1,16 @@
-package io.husayn.paging_library_sample.listing;
+package io.app.config;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class AppConfig {
+public abstract class AppConfig {
+
+  public static final AppConfig DEFAULT_CONFIG = builder().initializeDatabase(false).build();
 
   public abstract boolean initializeDatabase();
 
   public static Builder builder() {
+
     return new AutoValue_AppConfig.Builder();
   }
 

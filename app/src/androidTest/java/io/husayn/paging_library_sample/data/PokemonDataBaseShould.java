@@ -3,9 +3,10 @@ package io.husayn.paging_library_sample.data;
 import static junit.framework.Assert.assertEquals;
 
 import android.app.Application;
-import android.content.Context;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
+import io.app.config.AppConfig;
+import io.app.config.AppContext;
 import javax.inject.Inject;
 import org.junit.After;
 import org.junit.Before;
@@ -21,15 +22,15 @@ public class PokemonDataBaseShould {
 
   @Before
   public void setUp() {
-    Application application = testApplication();
-    DaggerTestAppComponent.factory().newMyComponent(application).inject(this);
+    DaggerTestAppComponent.factory()
+        .create(AppContext.create(AppConfig.DEFAULT_CONFIG, testApplication()).application())
+        .inject(this);
     dao.deleteAll();
   }
 
   public static Application testApplication() {
-    Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    Context applicationContext = context.getApplicationContext();
-    return (Application) applicationContext;
+    return (Application)
+        InstrumentationRegistry.getInstrumentation().getTargetContext().getApplicationContext();
   }
 
   @Test
