@@ -103,14 +103,26 @@ public class MainActivity extends AppCompatActivity
   @dagger.Module
   public abstract static class Module {
 
-    @Binds
-    public abstract MainUI mainUI(MainActivity mainActivity);
-
     @ActivityScope
     @Provides
     public static List<String> query() {
       return FilterOptionProvider.get();
     }
+
+    @ActivityScope
+    @Provides
+    public static QueryStreamImpl queryStreamImpl() {
+      return new QueryStreamImpl();
+    }
+
+    @Binds
+    public abstract MainUI mainUI(MainActivity mainActivity);
+
+    @Binds
+    public abstract QueryStream bindQueryStream(QueryStreamImpl impl);
+
+    @Binds
+    public abstract QueryStreaming bindQueryStreaming(QueryStreamImpl impl);
 
     @Binds
     public abstract QueryViewHolder.QueryCallback queryViewHolderQueryCallback(
