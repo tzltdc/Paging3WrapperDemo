@@ -6,19 +6,20 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.paging.CombinedLoadStates;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.Binds;
+import dagger.android.AndroidInjection;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import java.util.Arrays;
 import java.util.List;
+import javax.inject.Inject;
 import kotlin.Unit;
 import timber.log.Timber;
 
@@ -26,18 +27,17 @@ public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
   public static final String EMPTY = "Empty";
-  private MainViewModel viewModel;
   private boolean orderBy;
   private PokemonAdapter adapter;
   private TextView tv_count;
 
+  @Inject MainViewModel viewModel;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
+    AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-
-    // test google java format.
-    viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
     adapter = new PokemonAdapter(this);
     viewModel
         .rxPagingData()
