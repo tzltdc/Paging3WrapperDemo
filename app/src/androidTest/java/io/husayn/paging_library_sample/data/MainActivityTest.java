@@ -30,4 +30,13 @@ public class MainActivityTest {
     ViewInteraction absentViewCount = onView(withText("total:152"));
     absentViewCount.check(doesNotExist());
   }
+
+  @Test
+  public void onAppStarts_shouldShowAllFilters() {
+    ViewInteraction validFilter = onView(withText("ABC"));
+    validFilter.check(matches(isDisplayed()));
+
+    ViewInteraction invalidFilter = onView(withText("abc"));
+    invalidFilter.check(matches(isDisplayed()));
+  }
 }
