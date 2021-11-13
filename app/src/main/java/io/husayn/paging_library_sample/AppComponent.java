@@ -7,7 +7,8 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @AppScope
-@Component(modules = {AndroidSupportInjectionModule.class, RepoModule.class})
+@Component(
+    modules = {AndroidSupportInjectionModule.class, RepoModule.class, ActivityInjectorModule.class})
 public interface AppComponent extends AndroidInjector<PokemonApplication> {
 
   Application application();
