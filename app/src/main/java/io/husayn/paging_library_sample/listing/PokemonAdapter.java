@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.paging.PagingDataAdapter;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
+import javax.inject.Inject;
 
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, PokemonViewHolder> {
 
   private PokemonViewHolder.OnItemClickCallback onItemClickCallback;
 
+  @Inject
   public PokemonAdapter(PokemonViewHolder.OnItemClickCallback onItemClickCallback) {
     super(Pokemon.DIFF_CALLBACK);
     this.onItemClickCallback = onItemClickCallback;
