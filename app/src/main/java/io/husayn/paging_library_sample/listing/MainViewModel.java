@@ -11,7 +11,6 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Observable;
-import io.reactivex.subjects.BehaviorSubject;
 import javax.inject.Inject;
 
 public class MainViewModel extends ViewModel {
@@ -19,19 +18,21 @@ public class MainViewModel extends ViewModel {
   private static final int INITIAL_LOAD_KEY = 0;
   private static final int PAGE_SIZE = 20;
   private static final int PREFETCH_DISTANCE = 5;
-  private final BehaviorSubject<PagingQuery> query = BehaviorSubject.create();
+  private final QueryStreaming queryStreaming;
   private final PokemonDataBase pokemonDataBase;
   private final PokemonDao pokemonDao;
 
   @Inject
-  public MainViewModel(PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
+  public MainViewModel(
+      QueryStreaming queryStreaming, PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
+    this.queryStreaming = queryStreaming;
     this.pokemonDataBase = pokemonDataBase;
     this.pokemonDao = pokemonDao;
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
-    return query
-        .hide()
+    return queryStreaming
+        .streaming()
         .switchMap(orderByDesc -> PagingRx.getObservable(pager(pokemonDao, orderByDesc)));
   }
 
@@ -51,9 +52,5 @@ public class MainViewModel extends ViewModel {
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
     String name = query.searchKey();
     return name == null ? pokemonDao.allByAsc() : pokemonDao.queryBy(name);
-  }
-
-  public void postValue(PagingQuery orderByDesc) {
-    query.onNext(orderByDesc);
   }
 }

@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
   private boolean orderBy;
-  private TextView tv_count;
 
+  @Inject QueryStream queryStream;
   @Inject MainViewModel viewModel;
   @Inject PokemonAdapter adapter;
   @Inject QueryAdapter queryAdapter;
@@ -40,10 +40,13 @@ public class MainActivity extends AppCompatActivity
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    initView();
     bindPagingData();
     bindQuery();
     bindRecyclerView();
   }
+
+  private void initView() {}
 
   private void bindRecyclerView() {
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
@@ -51,7 +54,6 @@ public class MainActivity extends AppCompatActivity
     recyclerView.setLayoutManager(
         new GridLayoutManager(this, getResources().getInteger(R.integer.span_count)));
     recyclerView.setAdapter(adapter);
-    viewModel.postValue(PagingQuery.create(getSearchKey()));
     orderBy = !orderBy;
   }
 
@@ -63,15 +65,10 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindQuery() {
-    tv_count = findViewById(R.id.tv_count);
     RecyclerView queryRecyclerView = findViewById(R.id.rv_query);
     queryRecyclerView.setLayoutManager(
         new GridLayoutManager(this, getResources().getInteger(R.integer.query_span_count)));
     queryRecyclerView.setAdapter(queryAdapter);
-  }
-
-  private String getSearchKey() {
-    return null;
   }
 
   private void submitList(PagingData<Pokemon> pokemonPagingData) {
@@ -81,12 +78,16 @@ public class MainActivity extends AppCompatActivity
 
   @SuppressLint("SetTextI18n")
   private Unit onLoaded(CombinedLoadStates state) {
-    tv_count.post(this::updateStatus);
+    findViewById(R.id.tv_count).post(this::updateStatus);
     return Unit.INSTANCE;
   }
 
   private void updateStatus() {
-    tv_count.setText(String.format(Locale.getDefault(), "total:%d", adapter.getItemCount()));
+    ((TextView) findViewById(R.id.tv_count)).setText(content());
+  }
+
+  private String content() {
+    return String.format(Locale.getDefault(), "total:%d", adapter.getItemCount());
   }
 
   @Override
@@ -96,8 +97,7 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public void query(String query) {
-    viewModel.postValue(
-        PagingQuery.create(query.equals(FilterOptionProvider.EMPTY) ? null : query));
+    queryStream.accept(PagingQueryMapper.map(query));
   }
 
   @dagger.Module
