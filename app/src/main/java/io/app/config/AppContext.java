@@ -1,10 +1,10 @@
-package io.husayn.paging_library_sample.listing;
+package io.app.config;
 
 import android.app.Application;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class AppContext {
+public abstract class AppContext {
 
   public abstract AppConfig appConfig();
 
