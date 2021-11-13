@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public void onItemClick(Pokemon pokemon) {
-    Timber.i("pokemon:%s", pokemon);
+    Timber.i("onItemClick:%s", pokemon);
     startActivity(DetailActivity.construct(PokemonId.create(pokemon.id), this));
   }
 
