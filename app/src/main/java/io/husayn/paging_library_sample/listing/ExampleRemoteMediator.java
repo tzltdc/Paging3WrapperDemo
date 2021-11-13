@@ -1,7 +1,6 @@
 package io.husayn.paging_library_sample.listing;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.paging.LoadType;
 import androidx.paging.PagingState;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
@@ -9,7 +8,6 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.data.PokemonDao;
 import io.reactivex.Single;
 import java.io.IOException;
 import timber.log.Timber;
@@ -17,12 +15,12 @@ import timber.log.Timber;
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQuery query;
-  private final PokemonDao pokemonDao;
+  private final PokemonRepo pokemonRepo;
 
   @AssistedInject
-  ExampleRemoteMediator(@Assisted PagingQuery query, PokemonDao pokemonDao) {
+  ExampleRemoteMediator(@Assisted PagingQuery query, PokemonRepo pokemonRepo) {
     this.query = query;
-    this.pokemonDao = pokemonDao;
+    this.pokemonRepo = pokemonRepo;
   }
 
   @NonNull
@@ -116,19 +114,10 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private void flushDbData(LoadType loadType, SearchPokemonResponse response) {
     if (loadType == LoadType.REFRESH) {
       Timber.w("tonny delete");
-      delete(query.searchKey());
+      pokemonRepo.delete(query.searchKey());
     }
     Timber.w("tonny insertAll :%s", response.list().size());
-
-    pokemonDao.insertAll(response.list());
-  }
-
-  private void delete(@Nullable String key) {
-    if (key == null) {
-      pokemonDao.deleteAll();
-    } else {
-      pokemonDao.deleteByQuery(key);
-    }
+    pokemonRepo.insertAll(response.list());
   }
 
   private boolean endOfPaging(PagingAction action) {
