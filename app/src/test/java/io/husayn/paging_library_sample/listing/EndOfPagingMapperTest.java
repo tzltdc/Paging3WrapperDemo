@@ -13,18 +13,22 @@ public class EndOfPagingMapperTest {
 
   @Test
   public void whenEmpty_shouldReturnTrue() {
-    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(10), emptyResponse())))
+    assertThat(
+            EndOfPagingMapper.endOfPaging(
+                PagingAction.create(emptyResponse(), request(10), loadType)))
         .isTrue();
   }
 
   @Test
   public void whenResponseLessThanRequestedShouldReturnTrue() {
-    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(2), single()))).isTrue();
+    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(single(), request(2), loadType)))
+        .isTrue();
   }
 
   @Test
   public void whenResponseEqualWithRequestedShouldReturnFalse() {
-    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(request(1), single()))).isFalse();
+    assertThat(EndOfPagingMapper.endOfPaging(PagingAction.create(single(), request(1), loadType)))
+        .isFalse();
   }
 
   private SearchPokemonResponse emptyResponse() {

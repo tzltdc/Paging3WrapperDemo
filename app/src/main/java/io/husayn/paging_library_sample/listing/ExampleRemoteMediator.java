@@ -61,7 +61,7 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private Single<MediatorResult> refresh(LoadType loadType) {
     Timber.w("tonny refresh :%s", loadType);
     PagingRequest pagingRequest = defaultPagingRequest(query);
-    return execute(loadType, pagingRequest);
+    return execute(pagingRequest, loadType);
   }
 
   private PagingRequest defaultPagingRequest(PagingQuery query) {
@@ -79,13 +79,14 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     if (lastItem == null) {
       return Single.just(new MediatorResult.Success(true));
     } else {
-      return execute(loadType, nextPagingRequest(query, lastItem));
+      return execute(nextPagingRequest(query, lastItem), loadType);
     }
   }
 
-  private Single<MediatorResult> execute(LoadType loadType, PagingRequest pagingRequest) {
+  private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
     return ExampleBackendService.query(pagingRequest)
-        .map(response -> success(loadType, PagingAction.create(pagingRequest, response)))
+        .map(response -> PagingAction.create(response, pagingRequest, loadType))
+        .map(this::success)
         .onErrorResumeNext(this::error);
   }
 
@@ -102,9 +103,8 @@ class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
     }
   }
 
-  private MediatorResult success(LoadType loadType, PagingAction action) {
-    pokemonRepo.flushDbData(
-        loadType, action.request().pagingQuery().searchKey(), action.response());
+  private MediatorResult success(PagingAction action) {
+    pokemonRepo.flushDbData(action);
     return new Success(endOfPaging(action));
   }
 
