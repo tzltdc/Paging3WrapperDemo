@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.paging.CombinedLoadStates;
+import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity
   @dagger.Module
   public abstract static class Module {
 
+    private static final int PAGE_SIZE = 20;
+    private static final int PREFETCH_DISTANCE = 5;
+
     @ActivityScope
     @Provides
     public static List<String> query() {
@@ -110,6 +114,12 @@ public class MainActivity extends AppCompatActivity
     @Provides
     public static QueryStreamImpl queryStreamImpl() {
       return new QueryStreamImpl();
+    }
+
+    @ActivityScope
+    @Provides
+    public static PagingConfig androidPagingConfig() {
+      return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
     }
 
     @Binds
