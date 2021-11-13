@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoSet;
 import dagger.multibindings.Multibinds;
 import java.util.Set;
 
@@ -20,5 +21,6 @@ public abstract class AppWorkerModule {
   }
 
   @Binds
+  @IntoSet
   public abstract AutoDisposeWorker bind(InitDatabaseWorker databaseWorker);
 }
