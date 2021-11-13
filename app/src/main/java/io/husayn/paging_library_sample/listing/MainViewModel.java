@@ -9,7 +9,6 @@ import androidx.paging.RemoteMediator;
 import androidx.paging.rxjava2.PagingRx;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
-import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Observable;
 import javax.inject.Inject;
 
@@ -18,35 +17,35 @@ public class MainViewModel extends ViewModel {
   private static final int INITIAL_LOAD_KEY = 0;
   private static final int PAGE_SIZE = 20;
   private static final int PREFETCH_DISTANCE = 5;
+  private final RxRemoteMediatorFactory rxRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
-  private final PokemonDataBase pokemonDataBase;
   private final PokemonDao pokemonDao;
 
   @Inject
   public MainViewModel(
-      QueryStreaming queryStreaming, PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
+      RxRemoteMediatorFactory rxRemoteMediatorFactory,
+      QueryStreaming queryStreaming,
+      PokemonDao pokemonDao) {
+    this.rxRemoteMediatorFactory = rxRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
-    this.pokemonDataBase = pokemonDataBase;
     this.pokemonDao = pokemonDao;
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
-    return queryStreaming
-        .streaming()
-        .switchMap(orderByDesc -> PagingRx.getObservable(pager(pokemonDao, orderByDesc)));
+    return queryStreaming.streaming().switchMap(query -> PagingRx.getObservable(pager(query)));
   }
 
-  private Pager<Integer, Pokemon> pager(PokemonDao pokemonDao, PagingQuery orderByDesc) {
+  private Pager<Integer, Pokemon> pager(PagingQuery pagingQuery) {
     PagingConfig pagingConfig = new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
     return new Pager<>(
         pagingConfig,
         INITIAL_LOAD_KEY,
-        remoteMediator(orderByDesc),
-        () -> pagingSource(pokemonDao, orderByDesc));
+        remoteMediator(pagingQuery),
+        () -> pagingSource(this.pokemonDao, pagingQuery));
   }
 
-  private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery orderByDesc) {
-    return new ExampleRemoteMediator(orderByDesc, pokemonDataBase, pokemonDao);
+  private RemoteMediator<Integer, Pokemon> remoteMediator(PagingQuery pagingQuery) {
+    return rxRemoteMediatorFactory.create(pagingQuery);
   }
 
   private PagingSource<Integer, Pokemon> pagingSource(PokemonDao pokemonDao, PagingQuery query) {
