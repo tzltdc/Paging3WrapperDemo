@@ -19,10 +19,15 @@ public class PokemonApplication extends DaggerApplication {
   @Override
   public void onCreate() {
     super.onCreate();
-    Timber.plant(new ThreadTree());
-    Timber.plant(new Timber.DebugTree());
+    initLog();
     init(this);
     intiDB();
+  }
+
+  private void initLog() {
+    Timber.plant(new ThreadTree());
+    Timber.plant(new Timber.DebugTree());
+    Timber.i("tonny App started:%s", this);
   }
 
   @Override
