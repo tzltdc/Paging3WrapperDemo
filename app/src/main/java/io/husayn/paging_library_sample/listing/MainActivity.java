@@ -26,17 +26,16 @@ public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
   private boolean orderBy;
-  private PokemonAdapter adapter;
   private TextView tv_count;
 
   @Inject MainViewModel viewModel;
+  @Inject PokemonAdapter adapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    adapter = new PokemonAdapter(this);
     bindPagingData();
     bindQuery();
     bindRecyclerView();
@@ -101,5 +100,9 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract MainUI mainUI(MainActivity mainActivity);
+
+    @Binds
+    public abstract PokemonViewHolder.OnItemClickCallback pokemonViewHolderOnItemClickCallback(
+        MainActivity mainActivity);
   }
 }
