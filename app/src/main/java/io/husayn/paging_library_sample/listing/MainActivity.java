@@ -40,13 +40,10 @@ public class MainActivity extends AppCompatActivity
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
-    initView();
     bindPagingData();
     bindQuery();
     bindRecyclerView();
   }
-
-  private void initView() {}
 
   private void bindRecyclerView() {
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);

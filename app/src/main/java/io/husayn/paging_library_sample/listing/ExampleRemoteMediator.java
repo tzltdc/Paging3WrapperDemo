@@ -6,21 +6,21 @@ import androidx.paging.LoadType;
 import androidx.paging.PagingState;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import androidx.paging.rxjava2.RxRemoteMediator;
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
-import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Single;
 import java.io.IOException;
 import timber.log.Timber;
 
 class ExampleRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
-  private final PokemonDataBase pokemonDataBase;
   private final PagingQuery query;
   private final PokemonDao pokemonDao;
 
-  ExampleRemoteMediator(PagingQuery query, PokemonDataBase pokemonDataBase, PokemonDao pokemonDao) {
-    this.pokemonDataBase = pokemonDataBase;
+  @AssistedInject
+  ExampleRemoteMediator(@Assisted PagingQuery query, PokemonDao pokemonDao) {
     this.query = query;
     this.pokemonDao = pokemonDao;
   }
