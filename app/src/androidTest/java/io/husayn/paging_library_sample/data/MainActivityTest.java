@@ -71,6 +71,7 @@ public class MainActivityTest {
     onView(withText("total:12")).check(matches(isDisplayed()));
   }
 
+  @Ignore("Flaky")
   @Test
   public void mutateFromZeroToMaxToHalf_shouldShowData() {
 
@@ -92,6 +93,7 @@ public class MainActivityTest {
         .check(matches(withText("Ivysaur")));
   }
 
+  @Ignore("Flaky")
   @Test
   public void scrollToCertainItem_checkItsText() {
     onView(withText("a")).perform(ViewActions.click());
