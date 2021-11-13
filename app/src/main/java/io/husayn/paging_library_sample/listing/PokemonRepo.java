@@ -60,6 +60,8 @@ public class PokemonRepo {
    * present the updates in the DB.
    */
   public void flushDbData(PagingAction action) {
+    Timber.w("tonny flushDbData");
+
     dataBase.runInTransaction(() -> execute(action));
   }
 
@@ -68,7 +70,15 @@ public class PokemonRepo {
       Timber.w("tonny delete");
       delete(action.request().pagingQuery().searchKey());
     }
-    Timber.w("tonny insertAll :%s", action.response().list().size());
-    pokemonDao.insertAll(action.response().list());
+    List<Pokemon> list = action.response().list();
+    Timber.w("tonny insertAll :%s", list.size());
+    for (Pokemon pokemon : list) {
+      Pokemon existed = pokemonDao.findById(pokemon.id);
+      if (existed == null) {
+        pokemonDao.insert(pokemon);
+      } else {
+        Timber.w("tonny skipped existing pokemon :%s", pokemon);
+      }
+    }
   }
 }

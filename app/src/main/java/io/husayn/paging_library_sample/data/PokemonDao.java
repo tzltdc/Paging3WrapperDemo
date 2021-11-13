@@ -1,5 +1,6 @@
 package io.husayn.paging_library_sample.data;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.paging.PagingSource;
 import androidx.room.Dao;
@@ -40,4 +41,8 @@ public interface PokemonDao {
 
   @Query("UPDATE pokemon set name = :name WHERE id = :id")
   int update(long id, String name);
+
+  @Query("select * from pokemon WHERE id = :id")
+  @Nullable
+  Pokemon findById(int id);
 }
