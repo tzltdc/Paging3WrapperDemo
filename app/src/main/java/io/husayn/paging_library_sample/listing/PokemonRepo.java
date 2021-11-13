@@ -75,6 +75,7 @@ public class PokemonRepo {
     for (Pokemon pokemon : list) {
       Pokemon existed = pokemonDao.findById(pokemon.id);
       if (existed == null) {
+        Timber.w("tonny inserted new pokemon :%s", pokemon);
         pokemonDao.insert(pokemon);
       } else {
         Timber.w("tonny skipped existing pokemon :%s", pokemon);
