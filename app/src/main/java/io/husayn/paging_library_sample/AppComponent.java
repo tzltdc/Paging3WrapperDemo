@@ -9,6 +9,8 @@ import dagger.android.AndroidInjector;
 @Component
 public interface AppComponent extends AndroidInjector<AppComponent> {
 
+  Application application();
+
   @Component.Factory
   interface Factory {
 
