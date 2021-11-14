@@ -60,17 +60,18 @@ public class PokemonRepo {
    * present the updates in the DB.
    */
   public void flushDbData(PageActionResult data) {
-    Timber.w("tonny flushDbData");
+    Timber.i("flushDbData");
     dataBase.runInTransaction(() -> execute(data));
   }
 
   private void execute(PageActionResult data) {
+    Timber.i("execute flushDbData");
     if (initialLoad(data)) {
-      Timber.w("tonny delete");
+      Timber.w("clear flushDbData first");
       delete(data.request().pagingQueryParam().searchKey());
     }
     List<Pokemon> list = data.response().list();
-    Timber.w("tonny insertAll :%s", list.size());
+    Timber.w("tonny insert new data :%s", list.size());
     pokemonDao.insertAll(list);
   }
 
