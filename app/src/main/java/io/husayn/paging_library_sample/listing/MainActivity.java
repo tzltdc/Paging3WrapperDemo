@@ -4,7 +4,9 @@ import static com.uber.autodispose.AutoDispose.autoDisposable;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.paging.CombinedLoadStates;
 import androidx.paging.PagingConfig;
@@ -28,9 +30,9 @@ import io.thread.MainScheduler;
 import io.view.header.FooterAdapter;
 import io.view.header.FooterEntity;
 import io.view.header.FooterEntity.Error;
-import io.view.header.HeaderAdapter;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Error.ErrorAction;
+import io.view.header.HeaderViewContract;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -44,12 +46,14 @@ public class MainActivity extends AppCompatActivity
   @Inject QueryStream queryStream;
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
-  @Inject HeaderAdapter headerAdapter;
   @Inject QueryAdapter queryAdapter;
   @Inject FooterAdapter footerAdapter;
   private ConcatAdapter concatAdapter;
   private TextView tv_summary;
+  private FrameLayout fl_header_root_view;
+  private FrameLayout fl_page_data_list_root_view;
   private SwipeRefreshLayout srl_refresh;
+  private HeaderViewContract headerViewContract;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,9 @@ public class MainActivity extends AppCompatActivity
   private void initView() {
     tv_summary = findViewById(R.id.tv_count);
     srl_refresh = findViewById(R.id.srl_refresh);
+    fl_header_root_view = findViewById(R.id.fl_header_root_view);
+    fl_page_data_list_root_view = findViewById(R.id.fl_page_data_list_root_view);
+    headerViewContract = new HeaderViewContract(fl_header_root_view);
   }
 
   private void bindRecyclerView() {
@@ -77,8 +84,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(layout());
-    concatAdapter =
-        new ConcatAdapter(config(), Arrays.asList(headerAdapter, pokemonAdapter, footerAdapter));
+    concatAdapter = new ConcatAdapter(config(), Arrays.asList(pokemonAdapter, footerAdapter));
     recyclerView.setAdapter(concatAdapter);
   }
 
@@ -132,10 +138,21 @@ public class MainActivity extends AppCompatActivity
             PagingViewModel.create(state.getAppend(), snapshot), new FooterErrorAction());
     Timber.i(
         "onStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
-    headerAdapter.bind(headerEntity);
+    updateLayer(headerEntity);
     footerAdapter.bind(footerEntity);
     tv_summary.setText(summary);
     return Unit.INSTANCE;
+  }
+
+  private void updateLayer(@Nullable HeaderEntity headerEntity) {
+    if (headerEntity == null) {
+      fl_header_root_view.setVisibility(View.GONE);
+      fl_page_data_list_root_view.setVisibility(View.VISIBLE);
+    } else {
+      headerViewContract.bind(headerEntity);
+      fl_header_root_view.setVisibility(View.VISIBLE);
+      fl_page_data_list_root_view.setVisibility(View.GONE);
+    }
   }
 
   private String content(List<Pokemon> snapshot) {
