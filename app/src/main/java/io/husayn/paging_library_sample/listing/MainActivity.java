@@ -45,15 +45,21 @@ public class MainActivity extends AppCompatActivity
   @Inject QueryAdapter queryAdapter;
   @Inject FooterAdapter footerAdapter;
   private ConcatAdapter concatAdapter;
+  private TextView tv_summary;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    initView();
     bindPagingData();
     bindQuery();
     bindRecyclerView();
+  }
+
+  private void initView() {
+    tv_summary = findViewById(R.id.tv_count);
   }
 
   private void bindRecyclerView() {
@@ -115,12 +121,8 @@ public class MainActivity extends AppCompatActivity
         "onStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     headerAdapter.bind(headerEntity);
     footerAdapter.bind(footerEntity);
-    findViewById(R.id.tv_count).post(() -> updateStatus(summary));
+    tv_summary.setText(summary);
     return Unit.INSTANCE;
-  }
-
-  private void updateStatus(String content) {
-    ((TextView) findViewById(R.id.tv_count)).setText(content);
   }
 
   private String content(List<Pokemon> snapshot) {
