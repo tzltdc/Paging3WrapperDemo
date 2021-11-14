@@ -2,6 +2,7 @@ package io.husayn.paging_library_sample.listing;
 
 import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
+import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+@ActivityScope
 public class PokemonLoadMoreSource {
 
   private final PokemonRepo pokemonRepo;
