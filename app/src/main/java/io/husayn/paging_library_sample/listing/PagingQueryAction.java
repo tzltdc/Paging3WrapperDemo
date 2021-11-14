@@ -7,14 +7,14 @@ abstract class PagingQueryAction {
 
   public abstract PagingQueryParam param();
 
-  public abstract ActionType actionType();
+  public abstract LoadType actionType();
 
-  public static PagingQueryAction create(PagingQueryParam param, ActionType actionType) {
-    return new AutoValue_PagingQueryAction(param, actionType);
+  public static PagingQueryAction create(PagingQueryParam param, LoadType loadType) {
+    return new AutoValue_PagingQueryAction(param, loadType);
   }
 
-  public enum ActionType {
-    INITIAL_LOAD,
-    LOAD_MORE
+  public enum LoadType {
+    REFRESH,
+    APPEND
   }
 }

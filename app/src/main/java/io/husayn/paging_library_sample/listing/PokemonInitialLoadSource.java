@@ -1,6 +1,5 @@
 package io.husayn.paging_library_sample.listing;
 
-import androidx.paging.LoadType;
 import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.husayn.paging_library_sample.listing.PagingAction.Data;
@@ -54,7 +53,7 @@ public class PokemonInitialLoadSource {
   }
 
   private PagingAction pagingAction(Data data) {
-    return PagingAction.create(LoadType.REFRESH, data);
+    return PagingAction.create(PagingQueryAction.LoadType.REFRESH, data);
   }
 
   private Single<MediatorResult> error(Throwable e) {

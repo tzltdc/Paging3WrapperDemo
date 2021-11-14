@@ -2,7 +2,6 @@ package io.husayn.paging_library_sample.listing;
 
 import android.app.Application;
 import androidx.annotation.Nullable;
-import androidx.paging.LoadType;
 import androidx.paging.PagingSource;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
@@ -66,7 +65,7 @@ public class PokemonRepo {
   }
 
   private void execute(PagingAction action) {
-    if (action.type() == LoadType.REFRESH) {
+    if (action.type() == PagingQueryAction.LoadType.REFRESH) {
       Timber.w("tonny delete");
       delete(action.data().request().pagingQueryParam().searchKey());
     }
