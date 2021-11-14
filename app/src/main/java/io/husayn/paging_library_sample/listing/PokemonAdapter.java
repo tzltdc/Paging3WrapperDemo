@@ -30,12 +30,14 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    if (footerEntity == null) {
+    if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
       View itemView =
           LayoutInflater.from(getContext()).inflate(R.layout.item_pokemon, parent, false);
       return pokemonViewHolderFactory.create(itemView);
-    } else {
+    } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
       return new FooterViewHolder(parent);
+    } else {
+      throw new RuntimeException("Unsupported viewType:" + viewType);
     }
   }
 
@@ -44,7 +46,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     int viewType = getItemViewType(position);
     if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
       ((FooterViewHolder) viewHolder).bind(footerEntity);
-    } else if (viewHolder instanceof PokemonViewHolder) {
+    } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
       if (pokemon != null) {
@@ -63,33 +65,49 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private boolean footerViewType(int position) {
-    return showFooterView() && position == super.getItemCount();
+    return extraPosition(position) && footerDataPresent();
+  }
+
+  private boolean extraPosition(int position) {
+    return position == super.getItemCount();
   }
 
   @Override
   public int getItemCount() {
-    return super.getItemCount() + (showFooterView() ? 1 : 0);
+    return super.getItemCount() + (footerDataPresent() ? 1 : 0);
   }
 
-  private boolean showFooterView() {
+  private boolean footerDataPresent() {
     // For now, always show the footer as long it is present.
     return footerEntity != null;
   }
 
   public void bind(@Nullable FooterEntity newFooterEntity) {
     Timber.i("bindFooterEntity:%s", newFooterEntity);
-    FooterEntity previousState = this.footerEntity;
-    boolean showFooterViewBefore = showFooterView();
+    FooterEntity previousFooter = this.footerEntity;
+    boolean oldFooterVisible = footerDataPresent();
     this.footerEntity = newFooterEntity;
-    boolean showFooterViewNow = showFooterView();
-    if (showFooterViewBefore != showFooterViewNow) {
-      if (showFooterViewBefore) {
-        notifyItemRemoved(super.getItemCount());
+    boolean newFooterVisible = footerDataPresent();
+    if (oldFooterVisible != newFooterVisible) {
+      if (oldFooterVisible) {
+        removeFooter();
       } else {
-        notifyItemInserted(super.getItemCount());
+        showFooter();
       }
-    } else if (showFooterViewNow && !previousState.equals(newFooterEntity)) {
-      notifyItemChanged(super.getItemCount());
+    } else if (newFooterVisible && !previousFooter.equals(newFooterEntity)) {
+      refreshFooter();
     }
+  }
+
+  private void removeFooter() {
+    notifyItemRemoved(super.getItemCount());
+  }
+
+  private void showFooter() {
+    notifyItemInserted(super.getItemCount());
+  }
+
+  private void refreshFooter() {
+    notifyItemChanged(super.getItemCount());
   }
 }
