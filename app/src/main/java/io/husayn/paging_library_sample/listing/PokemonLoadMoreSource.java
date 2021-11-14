@@ -4,6 +4,8 @@ import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
+import io.thread.WorkerScheduler;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -11,12 +13,16 @@ public class PokemonLoadMoreSource {
 
   private final PokemonRepo pokemonRepo;
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
+  private final WorkerScheduler workerScheduler;
 
   @Inject
   public PokemonLoadMoreSource(
-      PokemonRepo pokemonRepo, PokemonMediatorResultRepo pokemonMediatorResultRepo) {
+      PokemonRepo pokemonRepo,
+      PokemonMediatorResultRepo pokemonMediatorResultRepo,
+      WorkerScheduler workerScheduler) {
     this.pokemonRepo = pokemonRepo;
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
+    this.workerScheduler = workerScheduler;
   }
 
   /**
@@ -35,7 +41,11 @@ public class PokemonLoadMoreSource {
   }
 
   private Single<MediatorResult> simulateError() {
-    return Single.just(new MediatorResult.Error(new RuntimeException("loading more happened")));
+    return Single.just(error()).delay(800, TimeUnit.MILLISECONDS, workerScheduler.get());
+  }
+
+  private MediatorResult error() {
+    return new MediatorResult.Error(new RuntimeException("loading more happened"));
   }
 
   private Single<MediatorResult> execute(PagingQueryParam query) {
