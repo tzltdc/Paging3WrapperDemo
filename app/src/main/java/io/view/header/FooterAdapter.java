@@ -22,6 +22,7 @@ public class FooterAdapter extends RecyclerView.Adapter<FooterViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull FooterViewHolder holder, int position) {
+    Timber.w("onBindViewHolder:%s:%s", position, this);
     if (footerEntity != null) {
       holder.bind(footerEntity);
     } else {
@@ -41,6 +42,7 @@ public class FooterAdapter extends RecyclerView.Adapter<FooterViewHolder> {
 
   public void bind(FooterEntity footerEntity) {
     this.footerEntity = footerEntity;
-    notifyDataSetChanged();
+    Timber.e("bind to onBindViewHolder:%s,%s", footerEntity, this);
+    notifyItemChanged(0);
   }
 }

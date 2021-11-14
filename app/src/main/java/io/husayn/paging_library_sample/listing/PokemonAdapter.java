@@ -10,6 +10,7 @@ import androidx.paging.PagingDataAdapter;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, PokemonViewHolder> {
 
@@ -35,6 +36,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, PokemonViewHolder
 
   @Override
   public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
+    Timber.w("onBindViewHolder:%s:%s", position, this);
     Pokemon pokemon = getItem(position);
     if (pokemon != null) {
       holder.bindTo(pokemon);

@@ -23,6 +23,7 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull HeaderViewHolder holder, int position) {
+    Timber.w("onBindViewHolder:%s:%s", position, this);
     if (headerEntity == null) {
       Timber.w("headerEntity is empty on BindViewHolder %s", this);
     } else {
