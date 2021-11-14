@@ -3,13 +3,20 @@ package io.husayn.paging_library_sample.listing;
 import androidx.paging.RemoteMediator.InitializeAction;
 import io.reactivex.Single;
 import java.util.concurrent.TimeUnit;
+import timber.log.Timber;
 
 class InitializeActionMapper {
 
   public static final boolean DISABLE_CACHE = true;
 
   public static Single<InitializeAction> initializeSingle() {
-    return lastUpdatedSingle().map(InitializeActionMapper::initializeAction);
+    return lastUpdatedSingle()
+        .map(InitializeActionMapper::initializeAction)
+        .doOnSuccess(InitializeActionMapper::logOnInitialize);
+  }
+
+  private static void logOnInitialize(InitializeAction initializeAction) {
+    Timber.i("logOnInitialize:%s", initializeAction);
   }
 
   private static InitializeAction initializeAction(long expireTs) {
