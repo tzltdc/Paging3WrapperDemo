@@ -65,13 +65,17 @@ public class PokemonRepo {
   }
 
   private void execute(PageActionResult data) {
-    if (data.request().type() == PagingQueryAction.LoadType.REFRESH) {
+    if (initialLoad(data)) {
       Timber.w("tonny delete");
       delete(data.request().pagingQueryParam().searchKey());
     }
     List<Pokemon> list = data.response().list();
     Timber.w("tonny insertAll :%s", list.size());
     pokemonDao.insertAll(list);
+  }
+
+  private boolean initialLoad(PageActionResult data) {
+    return data.request().offSet() == 0;
   }
 
   /** Inspired from https://stackoverflow.com/a/66814196/4068957 */

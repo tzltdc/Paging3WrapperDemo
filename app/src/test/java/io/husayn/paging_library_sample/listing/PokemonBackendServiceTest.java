@@ -3,7 +3,6 @@ package io.husayn.paging_library_sample.listing;
 import static com.google.common.truth.Truth.assertThat;
 
 import androidx.annotation.Nullable;
-import io.husayn.paging_library_sample.listing.PagingQueryAction.LoadType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -43,9 +42,6 @@ public class PokemonBackendServiceTest {
 
   private static PagingRequest firstRequest(@Nullable String searchKey) {
     return PagingRequest.create(
-        0,
-        LoadType.APPEND,
-        PagingQueryParam.create(searchKey),
-        PagingRemoteRequestConfig.MAX_CONFIG);
+        0, PagingQueryParam.create(searchKey), PagingRemoteRequestConfig.MAX_CONFIG);
   }
 }

@@ -3,7 +3,6 @@ package io.husayn.paging_library_sample.listing;
 import static com.google.common.truth.Truth.assertThat;
 
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.listing.PagingQueryAction.LoadType;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,9 +39,6 @@ public class EndOfPagingMapperTest {
 
   private PagingRequest request(int countPerPage) {
     return PagingRequest.create(
-        0,
-        LoadType.REFRESH,
-        PagingQueryParam.create(null),
-        PagingRemoteRequestConfig.create(countPerPage));
+        0, PagingQueryParam.create(null), PagingRemoteRequestConfig.create(countPerPage));
   }
 }
