@@ -19,14 +19,14 @@ class QueryViewHolder extends RecyclerView.ViewHolder {
     this.tv_query = itemView.findViewById(R.id.tv_query);
   }
 
-  void bindTo(String query) {
+  void bindTo(FilterBean query) {
     itemView.setTag(query);
-    tv_query.setText(query);
+    tv_query.setText(query.description());
     itemView.setOnClickListener(v -> queryCallback.query(query));
   }
 
   public interface QueryCallback {
 
-    void query(String query);
+    void query(FilterBean query);
   }
 }
