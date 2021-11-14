@@ -9,7 +9,7 @@ abstract class PageActionResult {
 
   public abstract PokemonDto response();
 
-  public static PageActionResult create(PokemonDto newResponse, PagingRequest newRequest) {
-    return new AutoValue_PageActionResult(newRequest, newResponse);
+  public static PageActionResult create(PokemonDto response, PagingRequest request) {
+    return new AutoValue_PageActionResult(request, response);
   }
 }
