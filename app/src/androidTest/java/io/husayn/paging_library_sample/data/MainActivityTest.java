@@ -91,7 +91,7 @@ public class MainActivityTest {
   public void validRecyclerViewItemCorrect() {
     onView(withText("a")).perform(ViewActions.click());
     onView(withRecyclerView(R.id.rv_pokemons).atPositionOnView(1, R.id.tv_pokemon))
-        .check(matches(withText("Ivysaur")));
+        .check(matches(withText("2:Ivysaur")));
   }
 
   @Ignore("Flaky")
@@ -100,7 +100,7 @@ public class MainActivityTest {
     onView(withText("a")).perform(ViewActions.click());
     onView(withText("total:70")).check(matches(isDisplayed()));
     onView(withRecyclerView(R.id.rv_pokemons).atPositionOnView(8, R.id.tv_pokemon))
-        .check(matches(withText("Caterpie")));
+        .check(matches(withText("10:Caterpie")));
   }
 
   @Test
@@ -108,6 +108,6 @@ public class MainActivityTest {
     onView(withText("a")).perform(ViewActions.click());
     onView(withId(R.id.rv_pokemons)).perform(actionOnItemAtPosition(6, click()));
     onView(withText("8")).check(matches(isDisplayed()));
-    onView(withText("Wartortle")).check(matches(isDisplayed()));
+    onView(withText("8:Wartortle")).check(matches(isDisplayed()));
   }
 }
