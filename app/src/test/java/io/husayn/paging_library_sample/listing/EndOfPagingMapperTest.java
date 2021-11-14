@@ -3,7 +3,6 @@ package io.husayn.paging_library_sample.listing;
 import static com.google.common.truth.Truth.assertThat;
 
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.husayn.paging_library_sample.listing.PagingQueryAction.LoadType;
 import java.util.Collections;
 import org.junit.Test;
@@ -15,17 +14,20 @@ public class EndOfPagingMapperTest {
 
   @Test
   public void whenEmpty_shouldReturnTrue() {
-    assertThat(EndOfPagingMapper.endOfPaging(Data.create(emptyResponse(), request(10)))).isTrue();
+    assertThat(EndOfPagingMapper.endOfPaging(PageActionResult.create(emptyResponse(), request(10))))
+        .isTrue();
   }
 
   @Test
   public void whenResponseLessThanRequestedShouldReturnTrue() {
-    assertThat(EndOfPagingMapper.endOfPaging((Data.create(single(), request(2))))).isTrue();
+    assertThat(EndOfPagingMapper.endOfPaging((PageActionResult.create(single(), request(2)))))
+        .isTrue();
   }
 
   @Test
   public void whenResponseEqualWithRequestedShouldReturnFalse() {
-    assertThat(EndOfPagingMapper.endOfPaging((Data.create(single(), request(1))))).isFalse();
+    assertThat(EndOfPagingMapper.endOfPaging((PageActionResult.create(single(), request(1)))))
+        .isFalse();
   }
 
   private PokemonDto emptyResponse() {

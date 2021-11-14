@@ -1,6 +1,5 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import java.util.concurrent.TimeUnit;
@@ -23,14 +22,14 @@ public class PokemonRemoteSource {
     this.workerScheduler = workerScheduler;
   }
 
-  public Single<Data> fetch(PagingRequest pagingRequest) {
+  public Single<PageActionResult> fetch(PagingRequest pagingRequest) {
     return PokemonBackendService.query(pagingRequest)
         .subscribeOn(workerScheduler.get())
         .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
         .timeout(timeout(), TimeUnit.MILLISECONDS, workerScheduler.get())
         .doOnSuccess(this::logOnSuccess)
         .doOnError(this::logOnError)
-        .map(response -> Data.create(response, pagingRequest));
+        .map(response -> PageActionResult.create(response, pagingRequest));
   }
 
   private void logOnError(Throwable throwable) {
