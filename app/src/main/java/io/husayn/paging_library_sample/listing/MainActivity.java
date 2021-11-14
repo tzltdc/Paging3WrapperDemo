@@ -11,8 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.paging.CombinedLoadStates;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
-import androidx.recyclerview.widget.ConcatAdapter;
-import androidx.recyclerview.widget.ConcatAdapter.Config;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +30,6 @@ import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Error.ErrorAction;
 import io.view.header.HeaderViewContract;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -46,7 +43,6 @@ public class MainActivity extends AppCompatActivity
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
   @Inject QueryAdapter queryAdapter;
-  private ConcatAdapter concatAdapter;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -82,12 +78,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(layout());
-    concatAdapter = new ConcatAdapter(config(), Collections.singletonList(pokemonAdapter));
-    recyclerView.setAdapter(concatAdapter);
-  }
-
-  private Config config() {
-    return new Config.Builder().setIsolateViewTypes(false).build();
+    recyclerView.setAdapter(pokemonAdapter);
   }
 
   private GridLayoutManager layout() {
@@ -96,11 +87,6 @@ public class MainActivity extends AppCompatActivity
     spanSizeLookup.setSpanIndexCacheEnabled(true);
     manager.setSpanSizeLookup(spanSizeLookup);
     return manager;
-  }
-
-  /** */
-  private void retry(View view) {
-    pokemonAdapter.retry();
   }
 
   private void bindPagingData() {
@@ -229,7 +215,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public int getSpanSize(int position) {
-      int itemViewType = concatAdapter.getItemViewType(position);
+      int itemViewType = pokemonAdapter.getItemViewType(position);
       return ItemViewType.map(itemViewType);
     }
   }
