@@ -27,13 +27,12 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.thread.MainScheduler;
-import io.view.header.FooterAdapter;
 import io.view.header.FooterEntity;
 import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Error.ErrorAction;
 import io.view.header.HeaderViewContract;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -47,7 +46,6 @@ public class MainActivity extends AppCompatActivity
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
   @Inject QueryAdapter queryAdapter;
-  @Inject FooterAdapter footerAdapter;
   private ConcatAdapter concatAdapter;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
@@ -84,7 +82,7 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(layout());
-    concatAdapter = new ConcatAdapter(config(), Arrays.asList(pokemonAdapter, footerAdapter));
+    concatAdapter = new ConcatAdapter(config(), Collections.singletonList(pokemonAdapter));
     recyclerView.setAdapter(concatAdapter);
   }
 
@@ -139,7 +137,7 @@ public class MainActivity extends AppCompatActivity
     Timber.i(
         "onStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     updateLayer(headerEntity);
-    footerAdapter.bind(footerEntity);
+    pokemonAdapter.bind(footerEntity);
     tv_summary.setText(summary);
     return Unit.INSTANCE;
   }

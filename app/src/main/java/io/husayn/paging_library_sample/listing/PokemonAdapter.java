@@ -14,6 +14,7 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.view.header.FooterEntity;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
@@ -43,7 +44,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     int viewType = getItemViewType(position);
     if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
       ((FooterViewHolder) viewHolder).bind(footerEntity);
-    } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
+    } else if (viewHolder instanceof PokemonViewHolder) {
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
       if (pokemon != null) {
@@ -75,7 +76,8 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     return footerEntity != null;
   }
 
-  public void update(@Nullable FooterEntity newFooterEntity) {
+  public void bind(@Nullable FooterEntity newFooterEntity) {
+    Timber.i("bindFooterEntity:%s", newFooterEntity);
     FooterEntity previousState = this.footerEntity;
     boolean showFooterViewBefore = showFooterView();
     this.footerEntity = newFooterEntity;
