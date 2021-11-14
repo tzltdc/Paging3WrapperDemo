@@ -65,7 +65,7 @@ public class PokemonRepo {
   }
 
   private void execute(PagingAction action) {
-    if (action.type() == PagingQueryAction.LoadType.REFRESH) {
+    if (action.data().request().type() == PagingQueryAction.LoadType.REFRESH) {
       Timber.w("tonny delete");
       delete(action.data().request().pagingQueryParam().searchKey());
     }

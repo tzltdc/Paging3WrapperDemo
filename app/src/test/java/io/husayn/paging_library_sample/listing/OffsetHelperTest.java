@@ -3,6 +3,7 @@ package io.husayn.paging_library_sample.listing;
 import com.google.common.truth.Truth;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
+import io.husayn.paging_library_sample.listing.PagingQueryAction.LoadType;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +41,10 @@ public class OffsetHelperTest {
     List<Pokemon> nextBatch =
         PokemonBackendService.query(
                 PagingRequest.create(
-                    offset, PagingQueryParam.create("ee"), PagingRemoteRequestConfig.create(4)))
+                    offset,
+                    LoadType.APPEND,
+                    PagingQueryParam.create("ee"),
+                    PagingRemoteRequestConfig.create(4)))
             .test()
             .values()
             .get(0)
