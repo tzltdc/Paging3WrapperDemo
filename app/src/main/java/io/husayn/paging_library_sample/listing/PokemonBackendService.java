@@ -12,7 +12,7 @@ public class PokemonBackendService {
   public static Single<PokemonDto> query(PagingRequest pagingRequest) {
     return Observable.fromIterable(RemoteDataServer.all())
         .doOnSubscribe(PokemonBackendService::logSubscribed)
-        .filter(item -> validItem(item, pagingRequest.pagingQuery()))
+        .filter(item -> validItem(item, pagingRequest.pagingQueryParam()))
         .skip(pagingRequest.offSet())
         .take(pagingRequest.queryConfig().countPerPage())
         .toList()
@@ -28,8 +28,8 @@ public class PokemonBackendService {
     Timber.i("[thread:%s]:tonny server receives the request.", Thread.currentThread().getName());
   }
 
-  public static boolean validItem(Pokemon pokemon, PagingQuery pagingQuery) {
-    String searchKey = pagingQuery.searchKey();
+  public static boolean validItem(Pokemon pokemon, PagingQueryParam pagingQueryParam) {
+    String searchKey = pagingQueryParam.searchKey();
     return searchKey == null || pokemon.name.contains(searchKey);
   }
 }

@@ -39,15 +39,15 @@ public class PagingPokemonRepo {
         .switchMap(PagingRx::getObservable);
   }
 
-  private PagerContext pagerContext(PagingQuery query) {
+  private PagerContext pagerContext(PagingQueryParam query) {
     return PagerContext.create(pagingSourceFunction(query), optionalRemoteMediator(query));
   }
 
-  private PokemonRemoteMediator optionalRemoteMediator(PagingQuery query) {
+  private PokemonRemoteMediator optionalRemoteMediator(PagingQueryParam query) {
     return pokemonRemoteMediatorFactory.create(query);
   }
 
-  private Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction(PagingQuery query) {
+  private Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction(PagingQueryParam query) {
     return () -> pokemonRepo.pokemonLocalPagingSource(query);
   }
 

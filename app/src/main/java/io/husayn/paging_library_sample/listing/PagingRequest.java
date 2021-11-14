@@ -7,12 +7,12 @@ abstract class PagingRequest {
 
   public abstract long offSet();
 
-  public abstract PagingQuery pagingQuery();
+  public abstract PagingQueryParam pagingQueryParam();
 
   public abstract PagingQueryConfig queryConfig();
 
   public static PagingRequest create(
-      long offSet, PagingQuery pagingQuery, PagingQueryConfig queryConfig) {
-    return new AutoValue_PagingRequest(offSet, pagingQuery, queryConfig);
+      long offSet, PagingQueryParam pagingQueryParam, PagingQueryConfig queryConfig) {
+    return new AutoValue_PagingRequest(offSet, pagingQueryParam, queryConfig);
   }
 }

@@ -43,7 +43,7 @@ public class PokemonRepo {
     return list.toArray(new Pokemon[0]);
   }
 
-  public PagingSource<Integer, Pokemon> pokemonLocalPagingSource(PagingQuery query) {
+  public PagingSource<Integer, Pokemon> pokemonLocalPagingSource(PagingQueryParam query) {
     String name = query.searchKey();
     return name == null ? pokemonDao.allByAsc() : pokemonDao.queryBy(name);
   }
@@ -68,7 +68,7 @@ public class PokemonRepo {
   private void execute(PagingAction action) {
     if (action.type() == LoadType.REFRESH) {
       Timber.w("tonny delete");
-      delete(action.data().request().pagingQuery().searchKey());
+      delete(action.data().request().pagingQueryParam().searchKey());
     }
     List<Pokemon> list = action.data().response().list();
     Timber.w("tonny insertAll :%s", list.size());
@@ -77,7 +77,7 @@ public class PokemonRepo {
 
   /** Inspired from https://stackoverflow.com/a/66814196/4068957 */
   @Nullable
-  public Pokemon lastItemOrNull(PagingQuery query) {
+  public Pokemon lastItemOrNull(PagingQueryParam query) {
     String name = query.searchKey();
     return name == null
         ? pokemonDao.lastItemOrNull()

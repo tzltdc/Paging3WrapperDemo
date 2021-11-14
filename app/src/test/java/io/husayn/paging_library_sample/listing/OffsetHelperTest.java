@@ -13,20 +13,22 @@ public class OffsetHelperTest {
 
   @Test
   public void whenQueryIsEmpty() {
-    long offset = OffsetHelper.offset(RemoteDataServer.all().get(10), PagingQuery.create(null));
+    long offset =
+        OffsetHelper.offset(RemoteDataServer.all().get(10), PagingQueryParam.create(null));
     Truth.assertThat(offset).isEqualTo(11);
   }
 
   @Test
   public void whenQueryIsNotEmpty() {
-    long offset = OffsetHelper.offset(RemoteDataServer.all().get(1), PagingQuery.create("Ivy"));
+    long offset =
+        OffsetHelper.offset(RemoteDataServer.all().get(1), PagingQueryParam.create("Ivy"));
     Truth.assertThat(offset).isEqualTo(1);
   }
 
   @Test
   public void whenQueryIsNotxxEmpty() {
     long offset =
-        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
+        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQueryParam.create("ee"));
     Truth.assertThat(offset).isEqualTo(4);
   }
 
@@ -34,10 +36,11 @@ public class OffsetHelperTest {
   public void e2e() {
 
     long offset =
-        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQuery.create("ee"));
+        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQueryParam.create("ee"));
     List<Pokemon> nextBatch =
         PokemonBackendService.query(
-                PagingRequest.create(offset, PagingQuery.create("ee"), PagingQueryConfig.create(4)))
+                PagingRequest.create(
+                    offset, PagingQueryParam.create("ee"), PagingQueryConfig.create(4)))
             .test()
             .values()
             .get(0)

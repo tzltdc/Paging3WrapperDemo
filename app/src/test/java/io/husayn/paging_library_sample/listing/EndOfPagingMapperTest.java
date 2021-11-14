@@ -37,6 +37,6 @@ public class EndOfPagingMapperTest {
 
   private PagingRequest request(int countPerPage) {
     return PagingRequest.create(
-        0, PagingQuery.create(null), PagingQueryConfig.create(countPerPage));
+        0, PagingQueryParam.create(null), PagingQueryConfig.create(countPerPage));
   }
 }

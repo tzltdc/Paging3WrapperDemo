@@ -4,12 +4,12 @@ import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class PagingQuery {
+abstract class PagingQueryParam {
 
   @Nullable
   public abstract String searchKey();
 
-  public static PagingQuery create(String newSearchKey) {
-    return new AutoValue_PagingQuery(newSearchKey);
+  public static PagingQueryParam create(String newSearchKey) {
+    return new AutoValue_PagingQueryParam(newSearchKey);
   }
 }
