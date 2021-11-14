@@ -3,7 +3,6 @@ package io.husayn.paging_library_sample.listing;
 import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.reactivex.Single;
-import io.thread.WorkerScheduler;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -14,9 +13,7 @@ public class PokemonMediatorResultRepo {
 
   @Inject
   public PokemonMediatorResultRepo(
-      WorkerScheduler workerScheduler,
-      PokemonRepo pokemonRepo,
-      PokemonRemoteSource pokemonRemoteSource) {
+      PokemonRepo pokemonRepo, PokemonRemoteSource pokemonRemoteSource) {
     this.pokemonRepo = pokemonRepo;
     this.pokemonRemoteSource = pokemonRemoteSource;
   }
