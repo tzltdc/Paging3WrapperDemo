@@ -71,7 +71,7 @@ public class PokemonRepo {
       delete(data.request().pagingQueryParam().searchKey());
     }
     List<Pokemon> list = data.response().list();
-    Timber.w("tonny insert new data :%s", list.size());
+    Timber.w("insert new data :%s", list.size());
     pokemonDao.insertAll(list);
   }
 

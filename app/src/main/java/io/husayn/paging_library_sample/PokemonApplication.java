@@ -26,7 +26,7 @@ public class PokemonApplication extends DaggerApplication {
 
   private void initLog() {
     Timber.plant(new ThreadTree("ttt"));
-    Timber.i("tonny App started:%s", this);
+    Timber.i("App started:%s", this);
   }
 
   @Override
