@@ -25,7 +25,7 @@ public class PokemonLoadMoreSource {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   public Single<MediatorResult> loadingMore(PagingQueryParam query) {
-    return showLoadMoreError(query) ? simulateError() : execute(query);
+    return showLoadMoreError(query) ? simulateError() : Single.defer(() -> execute(query));
   }
 
   private boolean showLoadMoreError(PagingQueryParam query) {
