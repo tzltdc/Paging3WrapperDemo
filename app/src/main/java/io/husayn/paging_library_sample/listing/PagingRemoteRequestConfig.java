@@ -6,7 +6,7 @@ import com.google.auto.value.AutoValue;
 public abstract class PagingRemoteRequestConfig {
 
   public static final PagingRemoteRequestConfig DEFAULT_QUERY_CONFIG =
-      PagingRemoteRequestConfig.create(10);
+      PagingRemoteRequestConfig.create(30);
   public static final PagingRemoteRequestConfig MAX_CONFIG = PagingRemoteRequestConfig.create(1000);
 
   public abstract int countPerPage();

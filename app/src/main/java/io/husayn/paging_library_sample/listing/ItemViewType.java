@@ -18,7 +18,7 @@ public class ItemViewType {
       case ITEM_VIEW_TYPE_HEADER:
         return SPAN_FULL;
       case ITEM_VIEW_TYPE_BODY:
-        return SPAN_ONE_THIRD;
+        return SPAN_FULL;
       case ITEM_VIEW_TYPE_FOOTER:
         return SPAN_HALF;
       default:
