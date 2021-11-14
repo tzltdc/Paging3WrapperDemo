@@ -21,6 +21,11 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, PokemonViewHolder
     this.pokemonViewHolderFactory = pokemonViewHolderFactory;
   }
 
+  @Override
+  public int getItemViewType(int position) {
+    return ItemViewType.ITEM_VIEW_TYPE_BODY;
+  }
+
   @NonNull
   @Override
   public PokemonViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
