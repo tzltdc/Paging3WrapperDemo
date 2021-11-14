@@ -3,4 +3,9 @@
     <string name="detail">Pokedex detail</string>
     <string name="iv_pokemon_cd">pokemon sprite</string>
     <string name="pokemon_id">#%1$s</string>
+  <string name="no_result">No results</string>
+  <string name="network_error">network_error</string>
+  <string name="click_retry">retry</string>
+  <string name="loading">loading</string>
+  <string name="no_more">No more</string>
 </resources>
