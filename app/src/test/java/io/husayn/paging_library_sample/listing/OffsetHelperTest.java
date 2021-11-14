@@ -40,7 +40,7 @@ public class OffsetHelperTest {
     List<Pokemon> nextBatch =
         PokemonBackendService.query(
                 PagingRequest.create(
-                    offset, PagingQueryParam.create("ee"), PagingQueryConfig.create(4)))
+                    offset, PagingQueryParam.create("ee"), PagingRemoteRequestConfig.create(4)))
             .test()
             .values()
             .get(0)

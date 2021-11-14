@@ -9,10 +9,10 @@ abstract class PagingRequest {
 
   public abstract PagingQueryParam pagingQueryParam();
 
-  public abstract PagingQueryConfig queryConfig();
+  public abstract PagingRemoteRequestConfig queryConfig();
 
   public static PagingRequest create(
-      long offSet, PagingQueryParam pagingQueryParam, PagingQueryConfig queryConfig) {
+      long offSet, PagingQueryParam pagingQueryParam, PagingRemoteRequestConfig queryConfig) {
     return new AutoValue_PagingRequest(offSet, pagingQueryParam, queryConfig);
   }
 }

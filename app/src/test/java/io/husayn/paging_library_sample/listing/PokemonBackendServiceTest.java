@@ -42,6 +42,6 @@ public class PokemonBackendServiceTest {
 
   private static PagingRequest firstRequest(@Nullable String searchKey) {
     return PagingRequest.create(
-        0, PagingQueryParam.create(searchKey), PagingQueryConfig.MAX_CONFIG);
+        0, PagingQueryParam.create(searchKey), PagingRemoteRequestConfig.MAX_CONFIG);
   }
 }
