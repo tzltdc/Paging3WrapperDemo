@@ -3,32 +3,27 @@ package io.husayn.paging_library_sample.listing;
 import androidx.annotation.NonNull;
 import androidx.paging.LoadType;
 import androidx.paging.PagingState;
-import androidx.paging.RemoteMediator.MediatorResult.Success;
 import androidx.paging.rxjava2.RxRemoteMediator;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.reactivex.Single;
-import io.thread.WorkerScheduler;
-import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
-  public static final boolean TEST_ERROR = false;
-  public static final int DELAY_IN_MS = 1500;
-  private static final long TIMEOUT_IN_MS = TEST_ERROR ? (DELAY_IN_MS / 2) : (DELAY_IN_MS * 2);
   private final PagingQuery query;
-  private final WorkerScheduler workerScheduler;
-  private final PokemonRepo pokemonRepo;
+  private final PokemonInitialLoadSource pokemonInitialLoadSource;
+  private final PokemonLoadMoreSource pokemonLoadMoreSource;
 
   @AssistedInject
   PokemonRemoteMediator(
-      @Assisted PagingQuery query, WorkerScheduler workerScheduler, PokemonRepo pokemonRepo) {
+      @Assisted PagingQuery query,
+      PokemonInitialLoadSource pokemonInitialLoadSource,
+      PokemonLoadMoreSource pokemonLoadMoreSource) {
     this.query = query;
-    this.workerScheduler = workerScheduler;
-    this.pokemonRepo = pokemonRepo;
+    this.pokemonInitialLoadSource = pokemonInitialLoadSource;
+    this.pokemonLoadMoreSource = pokemonLoadMoreSource;
   }
 
   @NonNull
@@ -67,9 +62,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * pass null to load the first page.
    */
   private Single<MediatorResult> refresh() {
-    Timber.i("tonny refresh with query :%s", query);
-    PagingRequest pagingRequest = PagingRequestMapper.defaultPagingRequest(query);
-    return execute(pagingRequest, LoadType.REFRESH);
+    return pokemonInitialLoadSource.load(query);
   }
 
   /**
@@ -78,53 +71,6 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   private Single<MediatorResult> append() {
-    return Single.defer(this::deferAppend).subscribeOn(workerScheduler.get());
-  }
-
-  private Single<MediatorResult> deferAppend() {
-    Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
-    Timber.i("tonny append with query:%s, last_item:%s", query, lastItem);
-    if (lastItem == null) {
-      return Single.just(new Success(true));
-    } else {
-      return execute(PagingRequestMapper.nextPagingRequest(query, lastItem), LoadType.APPEND);
-    }
-  }
-
-  private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
-    return PokemonBackendService.query(pagingRequest)
-        .subscribeOn(workerScheduler.get())
-        .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
-        .timeout(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
-        .doOnSuccess(this::logOnSuccess)
-        .map(response -> Data.create(response, pagingRequest))
-        .map(data -> pagingAction(data, loadType))
-        .map(this::success)
-        .onErrorResumeNext(this::error);
-  }
-
-  private PagingAction pagingAction(Data data, LoadType loadType) {
-    return PagingAction.create(loadType, data);
-  }
-
-  private void logOnSuccess(PokemonDto response) {
-    Timber.i(
-        "[thread:%s]:tonny fetched remote repo size :%s",
-        Thread.currentThread().getName(), response.list().size());
-  }
-
-  private Single<MediatorResult> error(Throwable e) {
-    Timber.e(e, "tonny error");
-
-    return Single.just(new MediatorResult.Error(e));
-  }
-
-  private MediatorResult success(PagingAction action) {
-    pokemonRepo.flushDbData(action);
-    return new Success(endOfPaging(action));
-  }
-
-  private boolean endOfPaging(PagingAction action) {
-    return EndOfPagingMapper.endOfPaging(action.data());
+    return pokemonLoadMoreSource.loadingMore(query);
   }
 }
