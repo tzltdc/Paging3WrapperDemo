@@ -1,7 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
-import androidx.paging.LoadType;
 import com.google.auto.value.AutoValue;
+import io.husayn.paging_library_sample.listing.PagingQueryAction.LoadType;
 
 @AutoValue
 abstract class PagingAction {
