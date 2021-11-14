@@ -28,7 +28,8 @@ public class OffsetHelperTest {
   @Test
   public void whenQueryIsNotxxEmpty() {
     long offset =
-        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQueryParam.create("ee"));
+        OffsetHelper.offset(
+            RemoteDataServer.indexBy("31:Nidoqueen"), PagingQueryParam.create("ee"));
     Truth.assertThat(offset).isEqualTo(4);
   }
 
@@ -36,7 +37,8 @@ public class OffsetHelperTest {
   public void e2e() {
 
     long offset =
-        OffsetHelper.offset(RemoteDataServer.indexBy("Nidoqueen"), PagingQueryParam.create("ee"));
+        OffsetHelper.offset(
+            RemoteDataServer.indexBy("31:Nidoqueen"), PagingQueryParam.create("ee"));
     List<Pokemon> nextBatch =
         PokemonBackendService.query(
                 PagingRequest.create(
@@ -46,9 +48,9 @@ public class OffsetHelperTest {
             .get(0)
             .list();
 
-    Truth.assertThat(nextBatch.get(0)).isEqualTo(RemoteDataServer.indexBy("Weepinbell"));
-    Truth.assertThat(nextBatch.get(1)).isEqualTo(RemoteDataServer.indexBy("Victreebel"));
-    Truth.assertThat(nextBatch.get(2)).isEqualTo(RemoteDataServer.indexBy("Seel"));
-    Truth.assertThat(nextBatch.get(3)).isEqualTo(RemoteDataServer.indexBy("Drowzee"));
+    Truth.assertThat(nextBatch.get(0)).isEqualTo(RemoteDataServer.indexBy("70:Weepinbell"));
+    Truth.assertThat(nextBatch.get(1)).isEqualTo(RemoteDataServer.indexBy("71:Victreebel"));
+    Truth.assertThat(nextBatch.get(2)).isEqualTo(RemoteDataServer.indexBy("86:Seel"));
+    Truth.assertThat(nextBatch.get(3)).isEqualTo(RemoteDataServer.indexBy("96:Drowzee"));
   }
 }
