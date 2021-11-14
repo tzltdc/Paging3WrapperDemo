@@ -24,12 +24,14 @@ public class PokemonLoadMoreSource {
    * networkService is only valid for initial load. If lastItem is null it means no items were
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
-  public Single<MediatorResult> loadingMore(PagingQueryParam query) {
-    return showLoadMoreError(query) ? simulateError() : Single.defer(() -> execute(query));
+  public Single<MediatorResult> loadingMore(PagingQueryContext context) {
+    return showLoadMoreError(context.description())
+        ? simulateError()
+        : Single.defer(() -> execute(context.param()));
   }
 
-  private boolean showLoadMoreError(PagingQueryParam query) {
-    return FilterOptionProvider.LOAD_MORE_ERROR.equals(query.searchKey());
+  private boolean showLoadMoreError(String desc) {
+    return FilterOptionProvider.LOAD_MORE_ERROR.equals(desc);
   }
 
   private Single<MediatorResult> simulateError() {

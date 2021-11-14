@@ -137,7 +137,8 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public void query(FilterBean query) {
-    queryStream.accept(PagingQueryMapper.map(query.value()));
+    queryStream.accept(
+        PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
   }
 
   @dagger.Module
