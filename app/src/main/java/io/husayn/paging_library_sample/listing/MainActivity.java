@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ConcatAdapter.Config;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.Binds;
 import dagger.Provides;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity
   @Inject FooterAdapter footerAdapter;
   private ConcatAdapter concatAdapter;
   private TextView tv_summary;
+  private SwipeRefreshLayout srl_refresh;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +60,16 @@ public class MainActivity extends AppCompatActivity
     bindPagingData();
     bindQuery();
     bindRecyclerView();
+    bindRefresh();
+  }
+
+  private void bindRefresh() {
+    srl_refresh.setOnRefreshListener(() -> pokemonAdapter.refresh());
   }
 
   private void initView() {
     tv_summary = findViewById(R.id.tv_count);
+    srl_refresh = findViewById(R.id.srl_refresh);
   }
 
   private void bindRecyclerView() {
@@ -108,6 +116,7 @@ public class MainActivity extends AppCompatActivity
 
   private void submitList(PagingData<Pokemon> pagingData) {
     Timber.i("onStateChanged submitList:%s", pagingData);
+    srl_refresh.setRefreshing(false);
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
 
