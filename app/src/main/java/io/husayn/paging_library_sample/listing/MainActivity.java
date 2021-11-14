@@ -26,8 +26,10 @@ import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.thread.MainScheduler;
 import io.view.header.FooterAdapter;
 import io.view.header.FooterEntity;
+import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderAdapter;
 import io.view.header.HeaderEntity;
+import io.view.header.HeaderEntity.Error.ErrorAction;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -113,10 +115,12 @@ public class MainActivity extends AppCompatActivity
     List<Pokemon> snapshot = pokemonAdapter.snapshot().getItems();
     String summary = content(snapshot);
     HeaderEntity headerEntity =
-        StateMapper.headerEntity(PagingViewModel.create(state.getRefresh(), snapshot));
+        StateMapper.headerEntity(
+            PagingViewModel.create(state.getRefresh(), snapshot), new HeaderErrorAction());
 
     FooterEntity footerEntity =
-        StateMapper.footerEntity(PagingViewModel.create(state.getAppend(), snapshot));
+        StateMapper.footerEntity(
+            PagingViewModel.create(state.getAppend(), snapshot), new FooterErrorAction());
     Timber.i(
         "onStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     headerAdapter.bind(headerEntity);
@@ -184,12 +188,38 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
   }
 
+  private class HeaderErrorAction extends ErrorAction {
+
+    @Override
+    public String text() {
+      return "Reload";
+    }
+
+    @Override
+    public Callback callback() {
+      return error -> MainActivity.this.pokemonAdapter.retry();
+    }
+  }
+
   private class MySpanSizeLookup extends SpanSizeLookup {
 
     @Override
     public int getSpanSize(int position) {
       int itemViewType = concatAdapter.getItemViewType(position);
       return ItemViewType.map(itemViewType);
+    }
+  }
+
+  private class FooterErrorAction extends Error.ErrorAction {
+
+    @Override
+    public String text() {
+      return "Retry";
+    }
+
+    @Override
+    public Callback callback() {
+      return error -> pokemonAdapter.retry();
     }
   }
 }
