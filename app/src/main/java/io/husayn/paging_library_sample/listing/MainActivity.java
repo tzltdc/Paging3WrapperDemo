@@ -24,6 +24,7 @@ import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
+import io.stream.footer_entity.FooterEntityModule;
 import io.stream.load_state.footer.FooterLoadStateModule;
 import io.thread.MainScheduler;
 import io.view.header.FooterEntity;
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity
         PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
   }
 
-  @dagger.Module(includes = {FooterLoadStateModule.class})
+  @dagger.Module(includes = {FooterLoadStateModule.class, FooterEntityModule.class})
   public abstract static class Module {
 
     private static final int PAGE_SIZE = 10;
