@@ -3,7 +3,6 @@ package io.husayn.paging_library_sample.listing;
 import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import javax.inject.Inject;
@@ -64,7 +63,7 @@ public class PokemonLoadMoreSource {
         .onErrorResumeNext(this::error);
   }
 
-  private PagingAction pagingAction(Data data) {
+  private PagingAction pagingAction(PageActionResult data) {
     return PagingAction.create(PagingQueryAction.LoadType.APPEND, data);
   }
 

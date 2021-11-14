@@ -8,21 +8,9 @@ abstract class PagingAction {
 
   public abstract LoadType type();
 
-  public abstract Data data();
+  public abstract PageActionResult data();
 
-  public static PagingAction create(LoadType loadType, Data data) {
+  public static PagingAction create(LoadType loadType, PageActionResult data) {
     return new AutoValue_PagingAction(loadType, data);
-  }
-
-  @AutoValue
-  abstract static class Data {
-
-    public abstract PagingRequest request();
-
-    public abstract PokemonDto response();
-
-    public static Data create(PokemonDto newResponse, PagingRequest newRequest) {
-      return new AutoValue_PagingAction_Data(newRequest, newResponse);
-    }
   }
 }
