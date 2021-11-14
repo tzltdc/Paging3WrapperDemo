@@ -134,8 +134,8 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  public void query(String query) {
-    queryStream.accept(PagingQueryMapper.map(query));
+  public void query(FilterBean query) {
+    queryStream.accept(PagingQueryMapper.map(query.value()));
   }
 
   @dagger.Module
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
 
     @ActivityScope
     @Provides
-    public static List<String> query() {
+    public static List<FilterBean> query() {
       return FilterOptionProvider.get();
     }
 

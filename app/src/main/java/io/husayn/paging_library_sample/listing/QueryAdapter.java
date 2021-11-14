@@ -14,10 +14,10 @@ import javax.inject.Inject;
 public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 
   private final QueryViewHolderFactory queryViewHolderFactory;
-  private final List<String> queryList;
+  private final List<FilterBean> queryList;
 
   @Inject
-  public QueryAdapter(QueryViewHolderFactory queryViewHolderFactory, List<String> queryList) {
+  public QueryAdapter(QueryViewHolderFactory queryViewHolderFactory, List<FilterBean> queryList) {
     this.queryViewHolderFactory = queryViewHolderFactory;
     this.queryList = queryList;
   }
@@ -31,7 +31,7 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull QueryViewHolder holder, int position) {
-    String query = queryList.get(position);
+    FilterBean query = queryList.get(position);
     holder.bindTo(query);
   }
 
