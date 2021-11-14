@@ -12,16 +12,16 @@ public class PokemonLoadMoreSource {
 
   private final WorkerScheduler workerScheduler;
   private final PokemonRepo pokemonRepo;
-  private final PokemonRemoteSource pokemonRemoteSource;
+  private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
 
   @Inject
   public PokemonLoadMoreSource(
       WorkerScheduler workerScheduler,
       PokemonRepo pokemonRepo,
-      PokemonRemoteSource pokemonRemoteSource) {
+      PokemonMediatorResultRepo pokemonMediatorResultRepo) {
     this.workerScheduler = workerScheduler;
     this.pokemonRepo = pokemonRepo;
-    this.pokemonRemoteSource = pokemonRemoteSource;
+    this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
   }
 
   /**
@@ -51,28 +51,8 @@ public class PokemonLoadMoreSource {
     if (lastItem == null) {
       return Single.just(new Success(true));
     } else {
-      return execute(PagingRequestMapper.nextPagingRequest(query, lastItem));
+      return pokemonMediatorResultRepo.request(
+          PagingRequestMapper.nextPagingRequest(query, lastItem));
     }
-  }
-
-  private Single<MediatorResult> execute(PagingRequest pagingRequest) {
-    return pokemonRemoteSource
-        .fetch(pagingRequest)
-        .map(this::success)
-        .onErrorResumeNext(this::error);
-  }
-
-  private Single<MediatorResult> error(Throwable e) {
-    Timber.e(e, "tonny error");
-    return Single.just(new MediatorResult.Error(e));
-  }
-
-  private MediatorResult success(PageActionResult result) {
-    pokemonRepo.flushDbData(result);
-    return new Success(endOfPaging(result));
-  }
-
-  private boolean endOfPaging(PageActionResult data) {
-    return EndOfPagingMapper.endOfPaging(data);
   }
 }
