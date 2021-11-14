@@ -5,5 +5,5 @@ import dagger.assisted.AssistedFactory;
 @AssistedFactory
 interface PokemonRemoteMediatorFactory {
 
-  PokemonRemoteMediator create(PagingQueryParam pagingQueryParam);
+  PokemonRemoteMediator create(PagingQueryContext context);
 }
