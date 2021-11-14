@@ -59,17 +59,17 @@ public class PokemonRepo {
    * Insert new Pokemons into database, which invalidates the current PagingData, allowing Paging to
    * present the updates in the DB.
    */
-  public void flushDbData(PagingAction action) {
+  public void flushDbData(PageActionResult data) {
     Timber.w("tonny flushDbData");
-    dataBase.runInTransaction(() -> execute(action));
+    dataBase.runInTransaction(() -> execute(data));
   }
 
-  private void execute(PagingAction action) {
-    if (action.data().request().type() == PagingQueryAction.LoadType.REFRESH) {
+  private void execute(PageActionResult data) {
+    if (data.request().type() == PagingQueryAction.LoadType.REFRESH) {
       Timber.w("tonny delete");
-      delete(action.data().request().pagingQueryParam().searchKey());
+      delete(data.request().pagingQueryParam().searchKey());
     }
-    List<Pokemon> list = action.data().response().list();
+    List<Pokemon> list = data.response().list();
     Timber.w("tonny insertAll :%s", list.size());
     pokemonDao.insertAll(list);
   }
