@@ -5,7 +5,7 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class AppConfig {
 
-  public static final AppConfig DEFAULT_CONFIG = builder().initializeDatabase(true).build();
+  public static final AppConfig DEFAULT_CONFIG = builder().initializeDatabase(false).build();
 
   public abstract boolean initializeDatabase();
 
