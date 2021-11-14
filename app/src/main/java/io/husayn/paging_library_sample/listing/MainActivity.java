@@ -141,8 +141,9 @@ public class MainActivity extends AppCompatActivity
   @dagger.Module
   public abstract static class Module {
 
-    private static final int PAGE_SIZE = 2;
-    private static final int PREFETCH_DISTANCE = 2;
+    private static final int PAGE_SIZE = 10;
+    private static final int INITIAL_SIZE = 20;
+    private static final int PREFETCH_DISTANCE = 10;
 
     @ActivityScope
     @Provides
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity
     @ActivityScope
     @Provides
     public static PagingConfig androidPagingConfig() {
-      return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true);
+      return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, false, INITIAL_SIZE);
     }
 
     @Binds
