@@ -58,13 +58,8 @@ public class PokemonLoadMoreSource {
   private Single<MediatorResult> execute(PagingRequest pagingRequest) {
     return pokemonRemoteSource
         .fetch(pagingRequest)
-        .map(this::pagingAction)
         .map(this::success)
         .onErrorResumeNext(this::error);
-  }
-
-  private PagingAction pagingAction(PageActionResult data) {
-    return PagingAction.create(PagingQueryAction.LoadType.APPEND, data);
   }
 
   private Single<MediatorResult> error(Throwable e) {
@@ -72,12 +67,12 @@ public class PokemonLoadMoreSource {
     return Single.just(new MediatorResult.Error(e));
   }
 
-  private MediatorResult success(PagingAction action) {
-    pokemonRepo.flushDbData(action);
-    return new Success(endOfPaging(action));
+  private MediatorResult success(PageActionResult result) {
+    pokemonRepo.flushDbData(result);
+    return new Success(endOfPaging(result));
   }
 
-  private boolean endOfPaging(PagingAction action) {
-    return EndOfPagingMapper.endOfPaging(action.data());
+  private boolean endOfPaging(PageActionResult data) {
+    return EndOfPagingMapper.endOfPaging(data);
   }
 }
