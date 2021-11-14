@@ -31,7 +31,7 @@ public class PokemonMediatorResultRepo {
   }
 
   private MediatorResult success(PageActionResult result) {
-    // TODO: Resolve the side effects here.
+    // FIXME: Resolve the side effects here.
     pokemonRepo.flushDbData(result);
     return new Success(endOfPaging(result));
   }
