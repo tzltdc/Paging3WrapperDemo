@@ -14,6 +14,7 @@ public class PokemonLoadMoreSource {
   private final PokemonRepo pokemonRepo;
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
   private final WorkerScheduler workerScheduler;
+  private int retryCount = 0;
 
   @Inject
   public PokemonLoadMoreSource(
@@ -23,6 +24,7 @@ public class PokemonLoadMoreSource {
     this.pokemonRepo = pokemonRepo;
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
     this.workerScheduler = workerScheduler;
+    Timber.i("created:%s", this);
   }
 
   /**
@@ -37,7 +39,7 @@ public class PokemonLoadMoreSource {
   }
 
   private boolean showLoadMoreError(String desc) {
-    return FilterOptionProvider.LOAD_MORE_ERROR.equals(desc);
+    return FilterOptionProvider.LOAD_MORE_ERROR.equals(desc) && retryCount++ % 2 == 0;
   }
 
   private Single<MediatorResult> simulateError() {
