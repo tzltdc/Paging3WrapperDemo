@@ -4,5 +4,5 @@ import io.reactivex.Observable;
 
 interface QueryStreaming {
 
-  Observable<PagingQuery> streaming();
+  Observable<PagingQueryParam> streaming();
 }

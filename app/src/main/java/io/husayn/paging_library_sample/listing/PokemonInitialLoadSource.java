@@ -29,14 +29,14 @@ public class PokemonInitialLoadSource {
    * the first, pass the last Pokemon ID to let it continue from where it left off. For REFRESH,
    * pass null to load the first page.
    */
-  public Single<MediatorResult> load(PagingQuery query) {
+  public Single<MediatorResult> load(PagingQueryParam query) {
     Timber.i("initial load with query :%s", query);
     return simulateError(query)
         ? simulateError()
         : execute(PagingRequestMapper.defaultPagingRequest(query));
   }
 
-  private boolean simulateError(PagingQuery query) {
+  private boolean simulateError(PagingQueryParam query) {
     return FilterOptionProvider.INITIAL_LOAD_ERROR.equals(query.searchKey());
   }
 

@@ -31,15 +31,15 @@ public class PokemonLoadMoreSource {
    * networkService is only valid for initial load. If lastItem is null it means no items were
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
-  public Single<MediatorResult> loadingMore(PagingQuery query) {
+  public Single<MediatorResult> loadingMore(PagingQueryParam query) {
     return Single.just(query).flatMap(this::deferAppend).subscribeOn(workerScheduler.get());
   }
 
-  private Single<MediatorResult> deferAppend(PagingQuery query) {
+  private Single<MediatorResult> deferAppend(PagingQueryParam query) {
     return showLoadMoreError(query) ? simulateError() : execute(query);
   }
 
-  private boolean showLoadMoreError(PagingQuery query) {
+  private boolean showLoadMoreError(PagingQueryParam query) {
     return FilterOptionProvider.LOAD_MORE_ERROR.equals(query.searchKey());
   }
 
@@ -47,7 +47,7 @@ public class PokemonLoadMoreSource {
     return Single.just(new MediatorResult.Error(new RuntimeException("loading more happened")));
   }
 
-  private Single<MediatorResult> execute(PagingQuery query) {
+  private Single<MediatorResult> execute(PagingQueryParam query) {
     Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
     Timber.i("tonny append with query:%s, last_item:%s", query, lastItem);
     if (lastItem == null) {

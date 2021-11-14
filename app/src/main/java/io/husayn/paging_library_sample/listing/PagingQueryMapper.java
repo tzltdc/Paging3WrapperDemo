@@ -4,7 +4,7 @@ import androidx.annotation.Nullable;
 
 class PagingQueryMapper {
 
-  public static PagingQuery map(@Nullable String query) {
-    return PagingQuery.create(query);
+  public static PagingQueryParam map(@Nullable String query) {
+    return PagingQueryParam.create(query);
   }
 }

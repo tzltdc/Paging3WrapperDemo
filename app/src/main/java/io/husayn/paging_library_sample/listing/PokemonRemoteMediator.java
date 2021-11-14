@@ -12,13 +12,13 @@ import timber.log.Timber;
 
 class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
-  private final PagingQuery query;
+  private final PagingQueryParam query;
   private final PokemonInitialLoadSource pokemonInitialLoadSource;
   private final PokemonLoadMoreSource pokemonLoadMoreSource;
 
   @AssistedInject
   PokemonRemoteMediator(
-      @Assisted PagingQuery query,
+      @Assisted PagingQueryParam query,
       PokemonInitialLoadSource pokemonInitialLoadSource,
       PokemonLoadMoreSource pokemonLoadMoreSource) {
     this.query = query;
