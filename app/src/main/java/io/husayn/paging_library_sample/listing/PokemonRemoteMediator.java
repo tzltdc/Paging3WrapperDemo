@@ -11,11 +11,14 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PagingAction.Data;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
-import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import timber.log.Timber;
 
 class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
+  public static final boolean TEST_ERROR = false;
+  public static final int DELAY_IN_MS = 1500;
+  private static final long TIMEOUT_IN_MS = TEST_ERROR ? (DELAY_IN_MS / 2) : (DELAY_IN_MS * 2);
   private final PagingQuery query;
   private final WorkerScheduler workerScheduler;
   private final PokemonRepo pokemonRepo;
@@ -91,6 +94,8 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   private Single<MediatorResult> execute(PagingRequest pagingRequest, LoadType loadType) {
     return PokemonBackendService.query(pagingRequest)
         .subscribeOn(workerScheduler.get())
+        .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
+        .timeout(TIMEOUT_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
         .doOnSuccess(this::logOnSuccess)
         .map(response -> Data.create(response, pagingRequest))
         .map(data -> pagingAction(data, loadType))
@@ -109,12 +114,9 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   }
 
   private Single<MediatorResult> error(Throwable e) {
-    Timber.e("tonny", e);
-    if (e instanceof IOException) {
-      return Single.just(new MediatorResult.Error(e));
-    } else {
-      return Single.error(e);
-    }
+    Timber.e(e, "tonny error");
+
+    return Single.just(new MediatorResult.Error(e));
   }
 
   private MediatorResult success(PagingAction action) {
