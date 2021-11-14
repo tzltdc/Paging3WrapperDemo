@@ -1,7 +1,6 @@
 package io.husayn.paging_library_sample.listing;
 
 import androidx.paging.RemoteMediator.MediatorResult;
-import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import java.util.concurrent.TimeUnit;
@@ -10,15 +9,13 @@ import timber.log.Timber;
 
 public class PokemonInitialLoadSource {
 
-  private final PokemonRepo pokemonRepo;
-  private final PokemonRemoteSource pokemonRemoteSource;
+  private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
   private final WorkerScheduler scheduler;
 
   @Inject
   public PokemonInitialLoadSource(
-      PokemonRemoteSource pokemonRemoteSource, PokemonRepo pokemonRepo, WorkerScheduler scheduler) {
-    this.pokemonRemoteSource = pokemonRemoteSource;
-    this.pokemonRepo = pokemonRepo;
+      PokemonMediatorResultRepo pokemonMediatorResultRepo, WorkerScheduler scheduler) {
+    this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
     this.scheduler = scheduler;
   }
 
@@ -29,9 +26,11 @@ public class PokemonInitialLoadSource {
    */
   public Single<MediatorResult> load(PagingQueryParam query) {
     Timber.i("initial load with query :%s", query);
-    return simulateError(query)
-        ? simulateError()
-        : execute(PagingRequestMapper.defaultPagingRequest(query));
+    return simulateError(query) ? simulateError() : execute(query);
+  }
+
+  private Single<MediatorResult> execute(PagingQueryParam query) {
+    return pokemonMediatorResultRepo.request(PagingRequestMapper.defaultPagingRequest(query));
   }
 
   private boolean simulateError(PagingQueryParam query) {
@@ -40,27 +39,6 @@ public class PokemonInitialLoadSource {
 
   private Single<MediatorResult> simulateError() {
     return Single.timer(1000, TimeUnit.MILLISECONDS, scheduler.get())
-        .map(ignored -> new MediatorResult.Error(new RuntimeException("Simulated error")));
-  }
-
-  private Single<MediatorResult> execute(PagingRequest pagingRequest) {
-    return pokemonRemoteSource
-        .fetch(pagingRequest)
-        .map(this::success)
-        .onErrorResumeNext(this::error);
-  }
-
-  private Single<MediatorResult> error(Throwable e) {
-    Timber.e(e, "initial load error");
-    return Single.just(new MediatorResult.Error(e));
-  }
-
-  private MediatorResult success(PageActionResult result) {
-    pokemonRepo.flushDbData(result);
-    return new Success(endOfPaging(result));
-  }
-
-  private boolean endOfPaging(PageActionResult result) {
-    return EndOfPagingMapper.endOfPaging(result);
+        .map(ignored -> new MediatorResult.Error(new RuntimeException("Simulated initial error")));
   }
 }

@@ -4,22 +4,17 @@ import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
-import io.thread.WorkerScheduler;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class PokemonLoadMoreSource {
 
-  private final WorkerScheduler workerScheduler;
   private final PokemonRepo pokemonRepo;
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
 
   @Inject
   public PokemonLoadMoreSource(
-      WorkerScheduler workerScheduler,
-      PokemonRepo pokemonRepo,
-      PokemonMediatorResultRepo pokemonMediatorResultRepo) {
-    this.workerScheduler = workerScheduler;
+      PokemonRepo pokemonRepo, PokemonMediatorResultRepo pokemonMediatorResultRepo) {
     this.pokemonRepo = pokemonRepo;
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
   }
@@ -30,10 +25,6 @@ public class PokemonLoadMoreSource {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   public Single<MediatorResult> loadingMore(PagingQueryParam query) {
-    return Single.just(query).flatMap(this::deferAppend).subscribeOn(workerScheduler.get());
-  }
-
-  private Single<MediatorResult> deferAppend(PagingQueryParam query) {
     return showLoadMoreError(query) ? simulateError() : execute(query);
   }
 
@@ -47,12 +38,12 @@ public class PokemonLoadMoreSource {
 
   private Single<MediatorResult> execute(PagingQueryParam query) {
     Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
-    Timber.i("tonny append with query:%s, last_item:%s", query, lastItem);
+    Timber.i("loading more with query:%s, last_item:%s", query, lastItem);
     if (lastItem == null) {
       return Single.just(new Success(true));
     } else {
-      return pokemonMediatorResultRepo.request(
-          PagingRequestMapper.nextPagingRequest(query, lastItem));
+      PagingRequest pagingRequest = PagingRequestMapper.nextPagingRequest(query, lastItem);
+      return pokemonMediatorResultRepo.request(pagingRequest);
     }
   }
 }
