@@ -8,20 +8,24 @@ import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
+import io.thread.WorkerScheduler;
 import timber.log.Timber;
 
 class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQueryParam query;
+  private final WorkerScheduler workerScheduler;
   private final PokemonInitialLoadSource pokemonInitialLoadSource;
   private final PokemonLoadMoreSource pokemonLoadMoreSource;
 
   @AssistedInject
   PokemonRemoteMediator(
       @Assisted PagingQueryParam query,
+      WorkerScheduler workerScheduler,
       PokemonInitialLoadSource pokemonInitialLoadSource,
       PokemonLoadMoreSource pokemonLoadMoreSource) {
     this.query = query;
+    this.workerScheduler = workerScheduler;
     this.pokemonInitialLoadSource = pokemonInitialLoadSource;
     this.pokemonLoadMoreSource = pokemonLoadMoreSource;
   }
@@ -38,9 +42,9 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
     switch (loadType) {
       case REFRESH:
-        return refresh();
+        return refresh().subscribeOn(workerScheduler.get());
       case APPEND:
-        return append();
+        return append().subscribeOn(workerScheduler.get());
       case PREPEND:
       default:
         return ignorePrepend();
