@@ -1,9 +1,11 @@
 package io.view.header;
 
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.listing.ItemViewType;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -18,7 +20,8 @@ public class HeaderAdapter extends RecyclerView.Adapter<HeaderViewHolder> {
   @NonNull
   @Override
   public HeaderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    return new HeaderViewHolder(parent);
+    return new HeaderViewHolder(
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.header, parent, false));
   }
 
   @Override
