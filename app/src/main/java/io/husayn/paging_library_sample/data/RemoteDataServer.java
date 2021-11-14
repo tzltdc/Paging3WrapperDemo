@@ -9,8 +9,14 @@ import java.util.List;
 
 public class RemoteDataServer {
 
+  private static final int MAX = 151;
+
   public static List<Pokemon> all() {
-    return Collections.unmodifiableList(insertInternal());
+    return Collections.unmodifiableList(trim(insertInternal()));
+  }
+
+  private static List<Pokemon> trim(List<Pokemon> rawList) {
+    return rawList.subList(0, MAX);
   }
 
   public static Pokemon indexBy(String name) {
