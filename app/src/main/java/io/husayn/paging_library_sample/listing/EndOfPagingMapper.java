@@ -8,7 +8,7 @@ class EndOfPagingMapper {
     int requested = data.request().queryConfig().countPerPage();
     int responded = data.response().list().size();
     boolean endOfPaging = requested > responded;
-    Timber.i("tonny endOfPaging:%s, requested:%s, responded:%s", endOfPaging, requested, responded);
+    Timber.i("endOfPaging:%s, requested:%s, responded:%s", endOfPaging, requested, responded);
     return endOfPaging;
   }
 }

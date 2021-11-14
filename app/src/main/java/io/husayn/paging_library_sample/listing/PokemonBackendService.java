@@ -21,11 +21,11 @@ public class PokemonBackendService {
   }
 
   private static void logOnDispose() {
-    Timber.i("[thread:%s]:tonny server returns the request.", Thread.currentThread().getName());
+    Timber.i("[thread:%s]:server returns the request.", Thread.currentThread().getName());
   }
 
   private static void logSubscribed(Disposable disposable) {
-    Timber.i("[thread:%s]:tonny server receives the request.", Thread.currentThread().getName());
+    Timber.i("[thread:%s]:server receives the request.", Thread.currentThread().getName());
   }
 
   public static boolean validItem(Pokemon pokemon, PagingQueryParam pagingQueryParam) {

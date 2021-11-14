@@ -56,7 +56,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * the list. Immediately return, reporting end of pagination.
    */
   private Single<MediatorResult> ignorePrepend() {
-    Timber.w("tonny Prepend LoadType ignored for query :%s", query);
+    Timber.w("Prepend LoadType ignored for query :%s", query);
     return Single.just(new MediatorResult.Success(true));
   }
 
