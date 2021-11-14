@@ -26,6 +26,9 @@ import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCall
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.stream.footer_entity.FooterEntityModule;
 import io.stream.load_state.footer.FooterLoadStateModule;
+import io.stream.paging.PagingDataModule;
+import io.stream.paging.PagingDataStreaming;
+import io.stream.paging.PagingDataWorker;
 import io.thread.MainScheduler;
 import io.view.header.FooterEntity;
 import io.view.header.FooterEntity.Error;
@@ -42,9 +45,11 @@ public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI {
 
   @Inject QueryStream queryStream;
+  @Inject PagingDataStreaming pagingDataStreaming;
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
   @Inject QueryAdapter queryAdapter;
+  @Inject PagingDataWorker pagingDataWorker;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -61,6 +66,11 @@ public class MainActivity extends AppCompatActivity
     bindQuery();
     bindRecyclerView();
     bindRefresh();
+    bindWorker();
+  }
+
+  private void bindWorker() {
+    pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
   }
 
   private void bindRefresh() {
@@ -92,8 +102,8 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindPagingData() {
-    pagingPokemonRepo
-        .rxPagingData()
+    pagingDataStreaming
+        .streaming()
         .observeOn(MainScheduler.get())
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::submitList);
@@ -157,7 +167,8 @@ public class MainActivity extends AppCompatActivity
         PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
   }
 
-  @dagger.Module(includes = {FooterLoadStateModule.class, FooterEntityModule.class})
+  @dagger.Module(
+      includes = {FooterLoadStateModule.class, FooterEntityModule.class, PagingDataModule.class})
   public abstract static class Module {
 
     private static final int PAGE_SIZE = 10;
