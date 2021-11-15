@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.stream.footer_entity.FooterModel;
 import io.view.header.FooterEntity;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
@@ -92,41 +91,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     return pokemonAdapterDelegate.getFooterEntity();
   }
 
-  public void bind(FooterModel model) {
-    Timber.i("bindFooterModel:%s", model);
-    switch (model.status()) {
-      case TO_BE_REMOVED:
-        removeFooter();
-        break;
-      case TO_BE_ADDED:
-        addFooter(model.toBeAdded());
-        break;
-      case TO_BE_REFRESHED:
-        refreshFooter(model.toBeRefreshed());
-        break;
-    }
-  }
-
-  private void removeFooter() {
-    setFooterEntity(null);
-    notifyItemRemoved(dataItemCount());
-  }
-
-  private void setFooterEntity(FooterEntity footerEntity) {
-    pokemonAdapterDelegate.setFooterEntity(footerEntity);
-  }
-
   public int dataItemCount() {
     return super.getItemCount();
-  }
-
-  private void addFooter(FooterEntity footerEntity) {
-    setFooterEntity(footerEntity);
-    notifyItemInserted(dataItemCount());
-  }
-
-  private void refreshFooter(FooterEntity footerEntity) {
-    setFooterEntity(footerEntity);
-    notifyItemChanged(dataItemCount());
   }
 }
