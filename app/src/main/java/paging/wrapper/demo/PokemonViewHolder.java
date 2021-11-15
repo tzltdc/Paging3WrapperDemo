@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.R;
+import java.util.Locale;
 import paging.wrapper.model.data.Pokemon;
 
 class PokemonViewHolder extends RecyclerView.ViewHolder {
@@ -34,14 +35,22 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
 
   void bindTo(Pokemon pokemon) {
     itemView.setTag(pokemon.id);
-    pokemonIdTextView.setText(
-        itemView.getContext().getString(R.string.pokemon_id, toThreeDigitNumber(pokemon.id)));
+    pokemonIdTextView.setText(format(pokemon));
     pokemonNameTextView.setText(pokemon.name);
     Glide.with(itemView.getContext())
         .load(pokemonSpriteUrl(pokemon.id))
         .into(pokemonSpriteImageView);
 
     itemView.setOnClickListener(v -> onItemClickCallback.onItemClick(pokemon));
+  }
+
+  private String format(Pokemon pokemon) {
+    return String.format(
+        Locale.getDefault(), "[%s]:%s", getBindingAdapterPosition() + 1, pokemonId(pokemon));
+  }
+
+  private String pokemonId(Pokemon pokemon) {
+    return itemView.getContext().getString(R.string.pokemon_id, toThreeDigitNumber(pokemon.id));
   }
 
   public interface OnItemClickCallback {
