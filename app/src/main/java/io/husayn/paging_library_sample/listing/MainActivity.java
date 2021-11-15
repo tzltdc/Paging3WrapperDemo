@@ -234,6 +234,9 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
 
     @Binds
+    public abstract PokemonAdapterCallback bindPokemonAdapterCallback(PokemonAdapter impl);
+
+    @Binds
     public abstract QueryStream bindQueryStream(QueryStreamImpl impl);
 
     @Binds

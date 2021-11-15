@@ -10,12 +10,12 @@ import timber.log.Timber;
 @ActivityScope
 public class PokemonAdapterManager {
 
-  private final PokemonAdapter pokemonAdapter;
+  private final PokemonAdapterCallback pokemonAdapter;
   private final FooterEntityDelegate footerEntityDelegate;
 
   @Inject
   public PokemonAdapterManager(
-      PokemonAdapter pokemonAdapter, FooterEntityDelegate footerEntityDelegate) {
+      PokemonAdapterCallback pokemonAdapter, FooterEntityDelegate footerEntityDelegate) {
     this.pokemonAdapter = pokemonAdapter;
     this.footerEntityDelegate = footerEntityDelegate;
     Timber.i("PokemonAdapterManager created:%s", this);
