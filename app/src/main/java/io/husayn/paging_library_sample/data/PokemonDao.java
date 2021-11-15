@@ -40,13 +40,13 @@ public interface PokemonDao {
   void insertAll(List<Pokemon> pokemons);
 
   @Query("DELETE FROM pokemon")
-  void deleteAll();
+  int deleteAll();
 
   @Query("DELETE FROM pokemon WHERE id = :id")
   void deleteById(long id);
 
   @Query("DELETE FROM pokemon WHERE name like '%' || :name || '%'")
-  void deleteByQuery(String name);
+  int deleteByQuery(String name);
 
   @Query("UPDATE pokemon set name = :name WHERE id = :id")
   int update(long id, String name);
