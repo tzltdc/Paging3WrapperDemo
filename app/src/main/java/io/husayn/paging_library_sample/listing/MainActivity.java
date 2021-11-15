@@ -25,6 +25,7 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.stream.footer_entity.FooterEntityModule;
+import io.stream.footer_entity.FooterEntityWorker;
 import io.stream.load_state.footer.CombinedLoadStatesStream;
 import io.stream.load_state.footer.FooterLoadStateModule;
 import io.stream.paging.PagingDataListSnapshotProvider;
@@ -43,6 +44,7 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import timber.log.Timber;
 
+@ActivityScope
 public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI, PagingDataListSnapshotProvider {
 
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity
   @Inject QueryAdapter queryAdapter;
   @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
+  @Inject FooterEntityWorker footerEntityWorker;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -74,6 +77,7 @@ public class MainActivity extends AppCompatActivity
 
   private void bindWorker() {
     pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
+    footerEntityWorker.attach(AndroidLifecycleScopeProvider.from(this));
   }
 
   private void bindRefresh() {
@@ -140,7 +144,8 @@ public class MainActivity extends AppCompatActivity
 
     FooterEntity footerEntity =
         StateMapper.footerEntity(
-            PagingViewModel.create(state.getAppend(), snapshot), new FooterErrorAction());
+            PagingViewModel.create(state.getAppend(), snapshot),
+            new FooterErrorAction(pokemonAdapter));
     Timber.i(
         "onLoadStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     updateLayer(headerEntity);
@@ -201,6 +206,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @ActivityScope
+    @Binds
+    public abstract Error.ErrorAction errorAction(FooterErrorAction footerErrorAction);
+
+    @ActivityScope
     @Provides
     public static PagingConfig androidPagingConfig() {
       return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, false, INITIAL_SIZE);
@@ -250,7 +259,14 @@ public class MainActivity extends AppCompatActivity
     }
   }
 
-  private class FooterErrorAction extends Error.ErrorAction {
+  public static class FooterErrorAction extends Error.ErrorAction {
+
+    private final PokemonAdapter pokemonAdapter;
+
+    @Inject
+    public FooterErrorAction(PokemonAdapter pokemonAdapter) {
+      this.pokemonAdapter = pokemonAdapter;
+    }
 
     @Override
     public String text() {
