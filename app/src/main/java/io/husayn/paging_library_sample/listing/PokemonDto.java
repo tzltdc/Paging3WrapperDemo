@@ -1,11 +1,11 @@
 package io.husayn.paging_library_sample.listing;
 
 import com.google.auto.value.AutoValue;
-import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.List;
+import paging.wrapper.model.data.Pokemon;
 
 @AutoValue
-abstract class PokemonDto {
+public abstract class PokemonDto {
 
   public abstract List<Pokemon> list();
 

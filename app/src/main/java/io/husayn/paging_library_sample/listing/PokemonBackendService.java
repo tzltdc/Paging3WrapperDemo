@@ -1,10 +1,12 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRequest;
+import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
 public class PokemonBackendService {

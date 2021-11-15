@@ -1,9 +1,9 @@
-package io.husayn.paging_library_sample.listing;
+package paging.wrapper.model.data;
 
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class PagingQueryContext {
+public abstract class PagingQueryContext {
 
   public abstract String description();
 

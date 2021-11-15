@@ -1,12 +1,15 @@
 package io.husayn.paging_library_sample.listing;
 
 import com.google.common.truth.Truth;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRemoteRequestConfig;
+import paging.wrapper.model.data.PagingRequest;
+import paging.wrapper.model.data.Pokemon;
 
 @RunWith(RobolectricTestRunner.class)
 public class OffsetHelperTest {

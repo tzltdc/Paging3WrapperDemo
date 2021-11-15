@@ -10,10 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.android.AndroidInjection;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.thread.MainScheduler;
 import io.thread.WorkerScheduler;
 import javax.inject.Inject;
+import paging.wrapper.model.data.Pokemon;
 
 public class DetailActivity extends AppCompatActivity {
 

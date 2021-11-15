@@ -2,9 +2,9 @@ package io.stream.paging;
 
 import androidx.paging.PagingData;
 import com.jakewharton.rxrelay2.BehaviorRelay;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Observable;
 import javax.inject.Inject;
+import paging.wrapper.model.data.Pokemon;
 
 public class PagingDataStreamImpl implements PagingDataStream, PagingDataStreaming {
 

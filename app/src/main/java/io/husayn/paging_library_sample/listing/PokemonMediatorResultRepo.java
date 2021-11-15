@@ -4,6 +4,8 @@ import androidx.paging.RemoteMediator.MediatorResult;
 import androidx.paging.RemoteMediator.MediatorResult.Success;
 import io.reactivex.Single;
 import javax.inject.Inject;
+import paging.wrapper.model.data.PageActionResult;
+import paging.wrapper.model.data.PagingRequest;
 import timber.log.Timber;
 
 public class PokemonMediatorResultRepo {

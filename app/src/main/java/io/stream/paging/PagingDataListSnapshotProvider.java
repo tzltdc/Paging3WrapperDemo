@@ -1,7 +1,7 @@
 package io.stream.paging;
 
-import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.List;
+import paging.wrapper.model.data.Pokemon;
 
 public interface PagingDataListSnapshotProvider {
 

@@ -4,13 +4,15 @@ import android.app.Application;
 import androidx.annotation.Nullable;
 import androidx.paging.PagingSource;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.PokemonDao;
 import io.husayn.paging_library_sample.data.PokemonDataBase;
 import io.reactivex.Flowable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import paging.wrapper.model.data.PageActionResult;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
 public class PokemonRepo {

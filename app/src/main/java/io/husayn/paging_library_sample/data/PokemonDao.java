@@ -8,6 +8,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import io.reactivex.Flowable;
 import java.util.List;
+import paging.wrapper.model.data.Pokemon;
 
 @Dao
 public interface PokemonDao {

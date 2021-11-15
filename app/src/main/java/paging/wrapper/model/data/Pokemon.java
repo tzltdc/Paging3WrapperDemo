@@ -1,4 +1,4 @@
-package io.husayn.paging_library_sample.data;
+package paging.wrapper.model.data;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.R;
+import paging.wrapper.model.data.FilterBean;
 
 class QueryViewHolder extends RecyclerView.ViewHolder {
 

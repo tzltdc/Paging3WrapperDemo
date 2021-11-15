@@ -5,11 +5,14 @@ import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.PagingSource;
 import androidx.paging.rxjava2.PagingRx;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Observable;
 import io.thread.WorkerScheduler;
 import javax.inject.Inject;
 import kotlin.jvm.functions.Function0;
+import paging.wrapper.model.data.PagerContext;
+import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
 public class PagingPokemonRepo {

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.husayn.paging_library_sample.R;
 import java.util.List;
 import javax.inject.Inject;
+import paging.wrapper.model.data.FilterBean;
 
 public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 

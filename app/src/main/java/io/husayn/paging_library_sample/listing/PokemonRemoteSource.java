@@ -4,6 +4,8 @@ import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import paging.wrapper.model.data.PageActionResult;
+import paging.wrapper.model.data.PagingRequest;
 import timber.log.Timber;
 
 public class PokemonRemoteSource {

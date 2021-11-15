@@ -10,9 +10,9 @@ import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
+import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.ui.FooterEntity;
 import timber.log.Timber;
 

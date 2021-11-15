@@ -21,7 +21,6 @@ import dagger.Provides;
 import dagger.android.AndroidInjection;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.paging.footer.ClickActionContract;
@@ -40,6 +39,9 @@ import io.view.header.HeaderViewContract;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import paging.wrapper.model.data.FilterBean;
+import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.ui.HeaderEntity;
 import timber.log.Timber;
 

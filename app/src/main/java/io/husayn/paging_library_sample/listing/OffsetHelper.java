@@ -1,9 +1,10 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.data.RemoteDataServer;
 import io.reactivex.Observable;
 import java.util.List;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
 class OffsetHelper {
