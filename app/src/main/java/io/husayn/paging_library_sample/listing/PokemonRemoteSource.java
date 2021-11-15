@@ -11,10 +11,6 @@ public class PokemonRemoteSource {
   private static final boolean ENFORCE_TIMEOUT_ERROR = false;
   private static final int DELAY_IN_MS = 1100;
 
-  private static int timeout() {
-    return ENFORCE_TIMEOUT_ERROR ? (DELAY_IN_MS / 2) : (DELAY_IN_MS * 2);
-  }
-
   private final WorkerScheduler workerScheduler;
 
   @Inject
@@ -33,10 +29,14 @@ public class PokemonRemoteSource {
   }
 
   private void logOnError(Throwable throwable) {
-    Timber.e(throwable, "remote data fetch error");
+    Timber.e(throwable, "[ttt]: Running error during fetching remote data source.");
+  }
+
+  private static int timeout() {
+    return ENFORCE_TIMEOUT_ERROR ? (DELAY_IN_MS / 2) : (DELAY_IN_MS * 2);
   }
 
   private void logOnSuccess(PokemonDto response) {
-    Timber.i("remote data fetch success with size:%s", response.list().size());
+    Timber.i("[ttt]:Succuessfully fetched remote data with record size:%s", response.list().size());
   }
 }
