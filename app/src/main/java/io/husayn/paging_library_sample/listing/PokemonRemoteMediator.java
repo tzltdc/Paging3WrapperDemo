@@ -40,6 +40,12 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   @Override
   public Single<MediatorResult> loadSingle(
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
+    Timber.i(
+        "[ttt]:PagingMediator action ignored PagingState:[anchorPosition:%s], [lastItemOrNull:%s]",
+        state.getAnchorPosition(), state.lastItemOrNull());
+    Timber.i(
+        "[ttt]:PagingMediator action triggered with loadSingle function with param: [loadType:%s] for [query:%s]",
+        loadType, query);
     switch (loadType) {
       case REFRESH:
         return refresh().subscribeOn(workerScheduler.get());
@@ -56,7 +62,9 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * the list. Immediately return, reporting end of pagination.
    */
   private Single<MediatorResult> ignorePrepend() {
-    Timber.w("Prepend LoadType ignored for query :%s", query);
+    Timber.w(
+        "[ttt]:PagingMediator ignored PREPEND LoadType for query :%s and return Success directly",
+        query);
     return Single.just(new MediatorResult.Success(true));
   }
 
@@ -66,6 +74,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * pass null to load the first page.
    */
   private Single<MediatorResult> refresh() {
+    Timber.i("[ttt]:PagingMediator is to conduct its first load for query:%s", query);
     return pokemonInitialLoadSource.load(query);
   }
 
@@ -75,6 +84,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
    * loaded after the initial ø REFRESH and there are no more items to load.
    */
   private Single<MediatorResult> append() {
+    Timber.i("[ttt]:PagingMediator is to load more data for query:%s", query);
     return pokemonLoadMoreSource.loadingMore(query);
   }
 }
