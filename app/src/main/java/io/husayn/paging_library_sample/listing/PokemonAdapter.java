@@ -48,7 +48,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
     int viewType = getItemViewType(position);
     if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
-      ((FooterViewHolder) viewHolder).bind(footerEntity);
+      ((FooterViewHolder) viewHolder).bind(getFooterEntity());
     } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
@@ -82,7 +82,11 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
   private boolean footerDataPresent() {
     // For now, always show the footer as long it is present.
-    return footerEntity != null;
+    return getFooterEntity() != null;
+  }
+
+  private FooterEntity getFooterEntity() {
+    return footerEntity;
   }
 
   public void bind(FooterModel model) {
@@ -101,8 +105,12 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private void removeFooter() {
-    this.footerEntity = null;
+    setFooterEntity(null);
     notifyItemRemoved(dataItemCount());
+  }
+
+  private void setFooterEntity(FooterEntity footerEntity) {
+    this.footerEntity = footerEntity;
   }
 
   public int dataItemCount() {
@@ -110,12 +118,12 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private void addFooter(FooterEntity footerEntity) {
-    this.footerEntity = footerEntity;
+    setFooterEntity(footerEntity);
     notifyItemInserted(dataItemCount());
   }
 
   private void refreshFooter(FooterEntity footerEntity) {
-    this.footerEntity = footerEntity;
+    setFooterEntity(footerEntity);
     notifyItemChanged(dataItemCount());
   }
 }
