@@ -6,8 +6,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
 import javax.inject.Inject;
 
-public class CombinedLoadStatesStreamImpl
-    implements CombinedLoadStatesStream, FooterLoadStateStreaming {
+public class CombinedLoadStatesStreamImpl implements CombinedLoadStatesStream, LoadStateStreaming {
 
   private final BehaviorRelay<CombinedLoadStates> behaviorRelay = BehaviorRelay.create();
 
@@ -20,7 +19,12 @@ public class CombinedLoadStatesStreamImpl
   }
 
   @Override
-  public Observable<LoadState> streaming() {
+  public Observable<LoadState> footer() {
     return behaviorRelay.hide().map(CombinedLoadStates::getAppend).distinctUntilChanged();
+  }
+
+  @Override
+  public Observable<LoadState> header() {
+    return behaviorRelay.hide().map(CombinedLoadStates::getRefresh).distinctUntilChanged();
   }
 }

@@ -20,6 +20,5 @@ public abstract class FooterLoadStateModule {
 
   @ActivityScope
   @Binds
-  public abstract FooterLoadStateStreaming footerLoadStateStreaming(
-      CombinedLoadStatesStreamImpl impl);
+  public abstract LoadStateStreaming footerLoadStateStreaming(CombinedLoadStatesStreamImpl impl);
 }
