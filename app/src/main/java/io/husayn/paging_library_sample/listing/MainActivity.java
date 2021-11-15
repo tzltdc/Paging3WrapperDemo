@@ -38,7 +38,6 @@ import io.stream.paging.PagingDataWorker;
 import io.thread.MainScheduler;
 import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderEntity;
-import io.view.header.HeaderEntity.Error.ErrorAction;
 import io.view.header.HeaderViewContract;
 import java.util.List;
 import java.util.Locale;
@@ -251,58 +250,12 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
   }
 
-  public static class HeaderErrorAction extends ErrorAction {
-
-    private final PokemonAdapter pokemonAdapter;
-
-    @Inject
-    public HeaderErrorAction(PokemonAdapter pokemonAdapter) {
-      this.pokemonAdapter = pokemonAdapter;
-    }
-
-    @Override
-    public String text() {
-      return "Reload";
-    }
-
-    @Override
-    public Callback callback() {
-      return error -> pokemonAdapter.retry();
-    }
-  }
-
   private class MySpanSizeLookup extends SpanSizeLookup {
 
     @Override
     public int getSpanSize(int position) {
       int itemViewType = pokemonAdapter.getItemViewType(position);
       return ItemViewType.map(itemViewType);
-    }
-  }
-
-  public static class FooterErrorAction extends Error.ErrorAction {
-
-    private final PokemonAdapter pokemonAdapter;
-
-    @Inject
-    public FooterErrorAction(PokemonAdapter pokemonAdapter) {
-      Timber.i("FooterErrorAction PokemonAdapter:%s", pokemonAdapter);
-      this.pokemonAdapter = pokemonAdapter;
-    }
-
-    @Override
-    public String text() {
-      return "Retry";
-    }
-
-    @Override
-    public Callback callback() {
-      return error -> executeRetry();
-    }
-
-    private void executeRetry() {
-      Timber.i("Retry to fetch the data");
-      pokemonAdapter.retry();
     }
   }
 }
