@@ -24,6 +24,7 @@ import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
+import io.paging.footer.FooterEntityContract;
 import io.stream.footer_entity.FooterEntityModule;
 import io.stream.footer_entity.FooterModel;
 import io.stream.load_state.footer.CombinedLoadStatesStream;
@@ -234,7 +235,7 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
 
     @Binds
-    public abstract PokemonAdapterCallback bindPokemonAdapterCallback(PokemonAdapter impl);
+    public abstract FooterEntityContract bindPokemonAdapterCallback(PokemonAdapter impl);
 
     @Binds
     public abstract QueryStream bindQueryStream(QueryStreamImpl impl);

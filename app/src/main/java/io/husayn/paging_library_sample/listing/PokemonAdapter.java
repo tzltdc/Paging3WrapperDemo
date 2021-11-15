@@ -11,24 +11,22 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.paging.footer.FooterEntityDelegate;
+import io.paging.footer.FooterEntityContract;
+import io.view.header.FooterEntity;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 @ActivityScope
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
-    implements PokemonAdapterCallback {
+    implements FooterEntityContract {
 
-  private final FooterEntityDelegate footerEntityDelegate;
+  private FooterEntity footerEntity = null;
   private final PokemonViewHolderFactory pokemonViewHolderFactory;
 
   @Inject
-  public PokemonAdapter(
-      FooterEntityDelegate footerEntityDelegate,
-      PokemonViewHolderFactory pokemonViewHolderFactory) {
+  public PokemonAdapter(PokemonViewHolderFactory pokemonViewHolderFactory) {
     super(Pokemon.DIFF_CALLBACK);
-    this.footerEntityDelegate = footerEntityDelegate;
     this.pokemonViewHolderFactory = pokemonViewHolderFactory;
     Timber.i("PokemonAdapter created:%s", this);
   }
@@ -51,7 +49,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
   public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
     int viewType = getItemViewType(position);
     if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
-      ((FooterViewHolder) viewHolder).bind(footerEntityDelegate.getFooterEntity());
+      ((FooterViewHolder) viewHolder).bind(footerEntity);
     } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
@@ -71,20 +69,41 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
   }
 
   private boolean footerViewType(int position) {
-    return footerEntityDelegate.footerDataPresent() && endPosition(position);
+    return footerDataPresent() && endPosition(position);
   }
 
   private boolean endPosition(int position) {
-    return position == dataItemCount();
+    return position == footEntityPosition();
   }
 
   @Override
   public int getItemCount() {
-    return dataItemCount() + (footerEntityDelegate.footerDataPresent() ? 1 : 0);
+    return super.getItemCount() + (footerDataPresent() ? 1 : 0);
+  }
+
+  private int footEntityPosition() {
+    return super.getItemCount();
+  }
+
+  private boolean footerDataPresent() {
+    return this.footerEntity != null;
   }
 
   @Override
-  public int dataItemCount() {
-    return super.getItemCount();
+  public void removeFooter() {
+    this.footerEntity = null;
+    notifyItemRemoved(footEntityPosition());
+  }
+
+  @Override
+  public void addFooter(FooterEntity footerEntity) {
+    this.footerEntity = footerEntity;
+    notifyItemInserted(footEntityPosition());
+  }
+
+  @Override
+  public void refreshFooter(FooterEntity footerEntity) {
+    this.footerEntity = footerEntity;
+    notifyItemChanged(footEntityPosition());
   }
 }
