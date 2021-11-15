@@ -1,9 +1,9 @@
-package io.view.header;
+package paging.wrapper.model.ui;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
-import io.view.header.FooterEntity.State;
+import paging.wrapper.model.ui.FooterEntity.State;
 
 @AutoOneOf(State.class)
 public abstract class FooterEntity {

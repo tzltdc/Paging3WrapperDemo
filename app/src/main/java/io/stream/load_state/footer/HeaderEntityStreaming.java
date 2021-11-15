@@ -2,12 +2,12 @@ package io.stream.load_state.footer;
 
 import androidx.paging.LoadState;
 import com.google.common.base.Optional;
-import io.husayn.paging_library_sample.listing.PagingViewModel;
 import io.husayn.paging_library_sample.listing.StateMapper;
 import io.reactivex.Observable;
 import io.stream.paging.PagingDataListSnapshotProvider;
-import io.view.header.HeaderEntity;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.HeaderEntity;
+import paging.wrapper.model.ui.PagingViewModel;
 
 public class HeaderEntityStreaming {
 

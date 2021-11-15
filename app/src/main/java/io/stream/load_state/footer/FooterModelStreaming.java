@@ -3,9 +3,9 @@ package io.stream.load_state.footer;
 import com.google.common.base.Optional;
 import io.reactivex.Observable;
 import io.stream.footer_entity.FooterEntityStreaming;
-import io.stream.footer_entity.FooterModel;
-import io.view.header.FooterEntity;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.FooterEntity;
+import paging.wrapper.model.ui.FooterModel;
 
 public class FooterModelStreaming {
 

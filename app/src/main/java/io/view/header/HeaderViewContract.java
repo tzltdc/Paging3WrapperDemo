@@ -6,8 +6,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
 import io.paging.footer.ClickActionContract;
-import io.view.header.HeaderEntity.Empty;
-import io.view.header.HeaderEntity.Loading;
+import paging.wrapper.model.ui.ErrorData;
+import paging.wrapper.model.ui.HeaderEntity;
+import paging.wrapper.model.ui.HeaderEntity.Empty;
+import paging.wrapper.model.ui.HeaderEntity.Loading;
 import timber.log.Timber;
 
 /**

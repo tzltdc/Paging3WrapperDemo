@@ -1,7 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
 import androidx.annotation.Nullable;
-import io.view.header.HeaderEntity;
+import paging.wrapper.model.ui.HeaderEntity;
 
 public interface HeaderContract {
 

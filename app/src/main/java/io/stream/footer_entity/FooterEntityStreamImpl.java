@@ -3,7 +3,7 @@ package io.stream.footer_entity;
 import com.google.common.base.Optional;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
-import io.view.header.FooterEntity;
+import paging.wrapper.model.ui.FooterEntity;
 
 public class FooterEntityStreamImpl implements FooterEntityStreaming, FooterEntityStream {
 

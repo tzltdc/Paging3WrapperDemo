@@ -36,11 +36,11 @@ import io.stream.paging.PagingDataModule;
 import io.stream.paging.PagingDataStreaming;
 import io.stream.paging.PagingDataWorker;
 import io.thread.MainScheduler;
-import io.view.header.HeaderEntity;
 import io.view.header.HeaderViewContract;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.HeaderEntity;
 import timber.log.Timber;
 
 @ActivityScope
