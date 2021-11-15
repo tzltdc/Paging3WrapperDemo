@@ -17,8 +17,8 @@ public class FooterEntityStreamImpl implements FooterEntityStreaming, FooterEnti
   }
 
   @Override
-  public Observable<Optional<FooterEntity>> currentFooterEntity() {
-    return current.hide();
+  public Optional<FooterEntity> currentFooterEntity() {
+    return current.getValue();
   }
 
   @Override

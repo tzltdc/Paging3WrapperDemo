@@ -1,4 +1,4 @@
-package io.stream.footer_entity;
+package io.stream.load_state.footer;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
@@ -8,13 +8,13 @@ import com.uber.autodispose.ScopeProvider;
 import io.husayn.paging_library_sample.AutoDisposeWorker;
 import io.husayn.paging_library_sample.listing.PagingViewModel;
 import io.husayn.paging_library_sample.listing.StateMapper;
-import io.stream.load_state.footer.FooterLoadStateStreaming;
+import io.stream.footer_entity.FooterEntityStream;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.view.header.FooterEntity;
 import io.view.header.FooterEntity.Error.ErrorAction;
 import javax.inject.Inject;
 
-public class FooterEntityWorker implements AutoDisposeWorker {
+public class FooterEntityGenerator implements AutoDisposeWorker {
 
   private final ErrorAction errorAction;
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
@@ -22,7 +22,7 @@ public class FooterEntityWorker implements AutoDisposeWorker {
   private final FooterLoadStateStreaming footerLoadStateStreaming;
 
   @Inject
-  public FooterEntityWorker(
+  public FooterEntityGenerator(
       FooterEntity.Error.ErrorAction errorAction,
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
       FooterEntityStream footerEntityStream,

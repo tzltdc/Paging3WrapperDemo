@@ -6,16 +6,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
+import io.stream.footer_entity.FooterModel;
 import io.view.header.FooterEntity;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+@ActivityScope
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
   private FooterEntity footerEntity = null;
@@ -25,6 +27,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   public PokemonAdapter(PokemonViewHolderFactory pokemonViewHolderFactory) {
     super(Pokemon.DIFF_CALLBACK);
     this.pokemonViewHolderFactory = pokemonViewHolderFactory;
+    Timber.i("PokemonAdapter created:%s", this);
   }
 
   @NonNull
@@ -82,32 +85,33 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     return footerEntity != null;
   }
 
-  public void bind(@Nullable FooterEntity newFooterEntity) {
-    Timber.i("bindFooterEntity:%s", newFooterEntity);
-    FooterEntity previousFooter = this.footerEntity;
-    boolean oldFooterVisible = footerDataPresent();
-    this.footerEntity = newFooterEntity;
-    boolean newFooterVisible = footerDataPresent();
-    if (oldFooterVisible != newFooterVisible) {
-      if (oldFooterVisible) {
+  public void bind(FooterModel model) {
+    Timber.i("bindFooterModel:%s", model);
+    switch (model.status()) {
+      case TO_BE_REMOVED:
         removeFooter();
-      } else {
-        showFooter();
-      }
-    } else if (newFooterVisible && !previousFooter.equals(newFooterEntity)) {
-      refreshFooter();
+        break;
+      case TO_BE_ADDED:
+        addFooter(model.toBeAdded());
+        break;
+      case TO_BE_REFRESHED:
+        refreshFooter(model.toBeRefreshed());
+        break;
     }
   }
 
   private void removeFooter() {
+    this.footerEntity = null;
     notifyItemRemoved(super.getItemCount());
   }
 
-  private void showFooter() {
+  private void addFooter(FooterEntity footerEntity) {
+    this.footerEntity = footerEntity;
     notifyItemInserted(super.getItemCount());
   }
 
-  private void refreshFooter() {
+  private void refreshFooter(FooterEntity footerEntity) {
+    this.footerEntity = footerEntity;
     notifyItemChanged(super.getItemCount());
   }
 }

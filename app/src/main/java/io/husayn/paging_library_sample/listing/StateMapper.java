@@ -34,9 +34,17 @@ public class StateMapper {
     } else if (footerState instanceof LoadState.Error) {
       return FooterEntity.ofError(FooterEntity.Error.create("Loading more Error", errorAction));
     } else {
-      return model.snapshot().size() > 2
+      return footerState.getEndOfPaginationReached() && hasEnoughData(model)
           ? FooterEntity.ofNoMore(NoMore.create("No more data"))
-          : null;
+          : emptyFooter();
     }
+  }
+
+  private static FooterEntity emptyFooter() {
+    return null;
+  }
+
+  private static boolean hasEnoughData(PagingViewModel model) {
+    return model.snapshot().size() >= 2;
   }
 }

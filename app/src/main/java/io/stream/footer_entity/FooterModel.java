@@ -15,6 +15,18 @@ public abstract class FooterModel {
 
   public abstract PendingStatus status();
 
+  public static FooterModel ofToBeRemoved() {
+    return AutoOneOf_FooterModel.toBeRemoved();
+  }
+
+  public static FooterModel ofToBeAdded(FooterEntity toBeAdded) {
+    return AutoOneOf_FooterModel.toBeAdded(toBeAdded);
+  }
+
+  public static FooterModel ofToBeRefreshed(FooterEntity toRefreshed) {
+    return AutoOneOf_FooterModel.toBeRefreshed(toRefreshed);
+  }
+
   public enum PendingStatus {
     TO_BE_REMOVED,
     TO_BE_ADDED,
