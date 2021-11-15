@@ -1,6 +1,6 @@
 package io.paging.footer;
 
-import io.view.header.FooterEntity;
+import paging.wrapper.model.ui.FooterEntity;
 
 public interface FooterEntityContract {
 

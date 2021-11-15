@@ -5,8 +5,8 @@ import static com.uber.autodispose.AutoDispose.autoDisposable;
 import com.uber.autodispose.ScopeProvider;
 import io.husayn.paging_library_sample.AutoDisposeWorker;
 import io.paging.footer.FooterEntityContract;
-import io.stream.footer_entity.FooterModel;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.FooterModel;
 import timber.log.Timber;
 
 public class FooterModelWorker implements AutoDisposeWorker {

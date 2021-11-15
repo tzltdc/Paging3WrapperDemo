@@ -1,8 +1,7 @@
-package io.stream.footer_entity;
+package paging.wrapper.model.ui;
 
 import com.google.auto.value.AutoOneOf;
-import io.stream.footer_entity.FooterModel.PendingStatus;
-import io.view.header.FooterEntity;
+import paging.wrapper.model.ui.FooterModel.PendingStatus;
 
 @AutoOneOf(PendingStatus.class)
 public abstract class FooterModel {

@@ -1,4 +1,4 @@
-package io.view.header;
+package paging.wrapper.model.ui;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;

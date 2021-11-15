@@ -1,9 +1,9 @@
-package io.view.header;
+package paging.wrapper.model.ui;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
-import io.view.header.HeaderEntity.State;
+import paging.wrapper.model.ui.HeaderEntity.State;
 
 @AutoOneOf(State.class)
 public abstract class HeaderEntity {

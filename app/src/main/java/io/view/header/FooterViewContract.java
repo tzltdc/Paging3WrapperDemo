@@ -5,7 +5,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
 import io.paging.footer.ClickActionContract;
-import io.view.header.FooterEntity.LoadingMore;
+import paging.wrapper.model.ui.ErrorData;
+import paging.wrapper.model.ui.FooterEntity;
+import paging.wrapper.model.ui.FooterEntity.LoadingMore;
 import timber.log.Timber;
 
 public class FooterViewContract {

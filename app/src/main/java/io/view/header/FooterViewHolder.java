@@ -3,6 +3,7 @@ package io.view.header;
 import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 import io.paging.footer.ClickActionContract;
+import paging.wrapper.model.ui.FooterEntity;
 
 public class FooterViewHolder extends RecyclerView.ViewHolder {
 

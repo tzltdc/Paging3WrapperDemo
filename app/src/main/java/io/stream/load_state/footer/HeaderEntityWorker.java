@@ -6,8 +6,8 @@ import com.google.common.base.Optional;
 import com.uber.autodispose.ScopeProvider;
 import io.husayn.paging_library_sample.AutoDisposeWorker;
 import io.husayn.paging_library_sample.listing.HeaderContract;
-import io.view.header.HeaderEntity;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.HeaderEntity;
 
 public class HeaderEntityWorker implements AutoDisposeWorker {
 

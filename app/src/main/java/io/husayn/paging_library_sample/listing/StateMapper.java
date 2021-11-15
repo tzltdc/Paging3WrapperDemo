@@ -3,13 +3,15 @@ package io.husayn.paging_library_sample.listing;
 import androidx.annotation.Nullable;
 import androidx.paging.LoadState;
 import androidx.paging.LoadState.Loading;
-import io.view.header.ErrorData;
-import io.view.header.FooterEntity;
-import io.view.header.FooterEntity.LoadingMore;
-import io.view.header.FooterEntity.NoMore;
-import io.view.header.HeaderEntity;
-import io.view.header.HeaderEntity.Empty;
 import javax.inject.Inject;
+import paging.wrapper.model.ui.ErrorData;
+import paging.wrapper.model.ui.FooterEntity;
+import paging.wrapper.model.ui.FooterEntity.LoadingMore;
+import paging.wrapper.model.ui.FooterEntity.NoMore;
+import paging.wrapper.model.ui.HeaderEntity;
+import paging.wrapper.model.ui.HeaderEntity.Empty;
+import paging.wrapper.model.ui.LoadingUIConfig;
+import paging.wrapper.model.ui.PagingViewModel;
 
 public class StateMapper {
 
