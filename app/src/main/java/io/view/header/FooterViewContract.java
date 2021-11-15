@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
 import io.paging.footer.ClickActionContract;
+import io.view.header.FooterEntity.LoadingMore;
 import timber.log.Timber;
 
 public class FooterViewContract {
@@ -35,8 +36,8 @@ public class FooterViewContract {
   public void bind(FooterEntity entity) {
     Timber.i("bind FooterEntity:%s", entity);
     switch (entity.state()) {
-      case LOADING:
-        bindLoading(entity.loading());
+      case LOADING_MORE:
+        bindLoading(entity.loadingMore());
         break;
       case ERROR:
         bindError(entity.error());
@@ -70,11 +71,11 @@ public class FooterViewContract {
     }
   }
 
-  private void bindLoading(FooterEntity.Loading loading) {
+  private void bindLoading(LoadingMore loadingMore) {
     fl_footer_error.setVisibility(View.GONE);
     fl_footer_loading.setVisibility(View.VISIBLE);
     fl_footer_no_more.setVisibility(View.GONE);
-    String message = loading.message();
+    String message = loadingMore.message();
     if (message == null) {
       tv_footer_loading_hint.setVisibility(View.GONE);
     } else {

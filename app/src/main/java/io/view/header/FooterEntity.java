@@ -10,14 +10,14 @@ public abstract class FooterEntity {
 
   public abstract State state();
 
-  public abstract Loading loading();
+  public abstract LoadingMore loadingMore();
 
   public abstract ErrorData error();
 
   public abstract NoMore noMore();
 
-  public static FooterEntity ofLoading(Loading data) {
-    return AutoOneOf_FooterEntity.loading(data);
+  public static FooterEntity ofLoading(LoadingMore data) {
+    return AutoOneOf_FooterEntity.loadingMore(data);
   }
 
   public static FooterEntity ofError(ErrorData data) {
@@ -29,19 +29,19 @@ public abstract class FooterEntity {
   }
 
   public enum State {
-    LOADING,
+    LOADING_MORE,
     ERROR,
     NO_MORE
   }
 
   @AutoValue
-  public abstract static class Loading {
+  public abstract static class LoadingMore {
 
     @Nullable
     public abstract String message();
 
-    public static Loading create(@Nullable String message) {
-      return new AutoValue_FooterEntity_Loading(message);
+    public static LoadingMore create(@Nullable String message) {
+      return new AutoValue_FooterEntity_LoadingMore(message);
     }
   }
 

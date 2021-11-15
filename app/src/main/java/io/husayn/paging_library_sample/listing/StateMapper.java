@@ -5,6 +5,7 @@ import androidx.paging.LoadState;
 import androidx.paging.LoadState.Loading;
 import io.view.header.ErrorData;
 import io.view.header.FooterEntity;
+import io.view.header.FooterEntity.LoadingMore;
 import io.view.header.FooterEntity.NoMore;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Empty;
@@ -29,7 +30,7 @@ public class StateMapper {
   public static FooterEntity footerEntity(PagingViewModel model) {
     LoadState footerState = model.loadState();
     if (footerState instanceof Loading) {
-      return FooterEntity.ofLoading(FooterEntity.Loading.create("Loading more"));
+      return FooterEntity.ofLoading(LoadingMore.create("Loading more"));
     } else if (footerState instanceof LoadState.Error) {
       return FooterEntity.ofError(ErrorData.create("Loading more Error", "Retry"));
     } else {
