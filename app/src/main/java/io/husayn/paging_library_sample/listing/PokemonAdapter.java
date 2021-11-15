@@ -20,12 +20,15 @@ import timber.log.Timber;
 @ActivityScope
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
-  private FooterEntity footerEntity = null;
+  private final PokemonAdapterDelegate pokemonAdapterDelegate;
   private final PokemonViewHolderFactory pokemonViewHolderFactory;
 
   @Inject
-  public PokemonAdapter(PokemonViewHolderFactory pokemonViewHolderFactory) {
+  public PokemonAdapter(
+      PokemonAdapterDelegate pokemonAdapterDelegate,
+      PokemonViewHolderFactory pokemonViewHolderFactory) {
     super(Pokemon.DIFF_CALLBACK);
+    this.pokemonAdapterDelegate = pokemonAdapterDelegate;
     this.pokemonViewHolderFactory = pokemonViewHolderFactory;
     Timber.i("PokemonAdapter created:%s", this);
   }
@@ -86,7 +89,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private FooterEntity getFooterEntity() {
-    return footerEntity;
+    return pokemonAdapterDelegate.getFooterEntity();
   }
 
   public void bind(FooterModel model) {
@@ -110,7 +113,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private void setFooterEntity(FooterEntity footerEntity) {
-    this.footerEntity = footerEntity;
+    pokemonAdapterDelegate.setFooterEntity(footerEntity);
   }
 
   public int dataItemCount() {
