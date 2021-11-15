@@ -13,13 +13,16 @@ public class RawFooterEntityStreaming {
 
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
   private final LoadStateStreaming loadStateStreaming;
+  private final StateMapper stateMapper;
 
   @Inject
   public RawFooterEntityStreaming(
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
-      LoadStateStreaming loadStateStreaming) {
+      LoadStateStreaming loadStateStreaming,
+      StateMapper stateMapper) {
     this.pagingDataListSnapshotProvider = pagingDataListSnapshotProvider;
     this.loadStateStreaming = loadStateStreaming;
+    this.stateMapper = stateMapper;
   }
 
   public Observable<Optional<FooterEntity>> streaming() {
@@ -27,7 +30,7 @@ public class RawFooterEntityStreaming {
   }
 
   private Optional<FooterEntity> asEntity(PagingViewModel model) {
-    return Optional.fromNullable(StateMapper.footerEntity(model));
+    return Optional.fromNullable(stateMapper.footerEntity(model));
   }
 
   private PagingViewModel buildModel(LoadState state) {

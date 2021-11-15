@@ -80,7 +80,7 @@ public class FooterViewContract {
       tv_footer_loading_hint.setVisibility(View.GONE);
     } else {
       tv_footer_loading_hint.setVisibility(View.VISIBLE);
-      tv_footer_error_hint.setText(message);
+      tv_footer_loading_hint.setText(message);
     }
   }
 }
