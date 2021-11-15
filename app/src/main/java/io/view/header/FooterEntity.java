@@ -72,15 +72,10 @@ public abstract class FooterEntity {
 
       public abstract String text();
 
-      public abstract Callback callback();
+      public abstract FooterErrorCallback callback();
 
-      public static ErrorAction create(String text, Callback callback) {
+      public static ErrorAction create(String text, FooterErrorCallback callback) {
         return new AutoValue_FooterEntity_Error_ErrorAction(text, callback);
-      }
-
-      public interface Callback {
-
-        void onClick(Error error);
       }
     }
   }
