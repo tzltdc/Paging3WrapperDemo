@@ -220,7 +220,9 @@ public class MainActivity extends AppCompatActivity
     @ActivityScope
     @Provides
     public static PagingConfig androidPagingConfig() {
-      return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, false, INITIAL_SIZE);
+      // Must enablePlaceholders to stop the recycler view from flinching when PagingData is
+      // submitted.
+      return new PagingConfig(PAGE_SIZE, PREFETCH_DISTANCE, true, INITIAL_SIZE);
     }
 
     @Binds
