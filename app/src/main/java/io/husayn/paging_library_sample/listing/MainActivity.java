@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity
   @Inject PagingDataStreaming pagingDataStreaming;
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
+  @Inject PokemonAdapterManager pokemonAdapterManager;
   @Inject QueryAdapter queryAdapter;
   @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public void bindFooterModel(FooterModel model) {
-    pokemonAdapter.bind(model);
+    pokemonAdapterManager.bind(model);
   }
 
   @dagger.Module(
