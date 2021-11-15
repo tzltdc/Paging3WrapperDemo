@@ -72,15 +72,10 @@ public abstract class HeaderEntity {
 
       public abstract String text();
 
-      public abstract Callback callback();
+      public abstract HeaderErrorCallback callback();
 
-      public static ErrorAction create(String text, Callback callback) {
+      public static ErrorAction create(String text, HeaderErrorCallback callback) {
         return new AutoValue_HeaderEntity_Error_ErrorAction(text, callback);
-      }
-
-      public interface Callback {
-
-        void onClick(Error error);
       }
     }
   }
