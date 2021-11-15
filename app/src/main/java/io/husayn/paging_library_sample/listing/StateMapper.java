@@ -4,8 +4,9 @@ import androidx.annotation.Nullable;
 import androidx.paging.LoadState;
 import androidx.paging.LoadState.Loading;
 import io.view.header.FooterEntity;
-import io.view.header.FooterEntity.Error.ErrorAction;
 import io.view.header.FooterEntity.NoMore;
+import io.view.header.FooterError;
+import io.view.header.FooterErrorAction;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Empty;
 import io.view.header.HeaderEntity.Error;
@@ -27,12 +28,12 @@ public class StateMapper {
   }
 
   @Nullable
-  public static FooterEntity footerEntity(PagingViewModel model, ErrorAction errorAction) {
+  public static FooterEntity footerEntity(PagingViewModel model, FooterErrorAction errorAction) {
     LoadState footerState = model.loadState();
     if (footerState instanceof Loading) {
       return FooterEntity.ofLoading(FooterEntity.Loading.create("Loading more"));
     } else if (footerState instanceof LoadState.Error) {
-      return FooterEntity.ofError(FooterEntity.Error.create("Loading more Error", errorAction));
+      return FooterEntity.ofError(FooterError.create("Loading more Error", errorAction));
     } else {
       return footerState.getEndOfPaginationReached() && hasEnoughData(model)
           ? FooterEntity.ofNoMore(NoMore.create("No more data"))

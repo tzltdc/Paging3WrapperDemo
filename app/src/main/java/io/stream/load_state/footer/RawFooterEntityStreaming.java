@@ -7,18 +7,18 @@ import io.husayn.paging_library_sample.listing.StateMapper;
 import io.reactivex.Observable;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.view.header.FooterEntity;
-import io.view.header.FooterEntity.Error.ErrorAction;
+import io.view.header.FooterErrorAction;
 import javax.inject.Inject;
 
 public class RawFooterEntityStreaming {
 
-  private final ErrorAction errorAction;
+  private final FooterErrorAction errorAction;
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
   private final LoadStateStreaming loadStateStreaming;
 
   @Inject
   public RawFooterEntityStreaming(
-      ErrorAction errorAction,
+      FooterErrorAction errorAction,
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
       LoadStateStreaming loadStateStreaming) {
     this.errorAction = errorAction;

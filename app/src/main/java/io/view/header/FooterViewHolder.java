@@ -55,12 +55,12 @@ public class FooterViewHolder extends RecyclerView.ViewHolder {
     tv_footer_no_more_hint.setText(noMore.message());
   }
 
-  private void bindError(FooterEntity.Error error) {
+  private void bindError(FooterError error) {
     fl_footer_loading.setVisibility(View.GONE);
     fl_footer_no_more.setVisibility(View.GONE);
     fl_footer_error.setVisibility(View.VISIBLE);
     tv_footer_error_hint.setText(error.message());
-    FooterEntity.Error.ErrorAction retryAction = error.action();
+    FooterErrorAction retryAction = error.action();
     if (retryAction != null) {
       btn_footer_retry.setVisibility(View.VISIBLE);
       btn_footer_retry.setText(retryAction.text());

@@ -36,7 +36,6 @@ import io.stream.paging.PagingDataModule;
 import io.stream.paging.PagingDataStreaming;
 import io.stream.paging.PagingDataWorker;
 import io.thread.MainScheduler;
-import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderViewContract;
 import java.util.List;
@@ -203,7 +202,8 @@ public class MainActivity extends AppCompatActivity
 
     @ActivityScope
     @Binds
-    public abstract Error.ErrorAction errorAction(FooterErrorAction footerErrorAction);
+    public abstract io.view.header.FooterErrorAction errorAction(
+        FooterErrorAction footerErrorAction);
 
     @ActivityScope
     @Binds

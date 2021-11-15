@@ -1,11 +1,10 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.view.header.FooterEntity.Error;
 import io.view.header.FooterErrorCallback;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class FooterErrorAction extends Error.ErrorAction {
+public class FooterErrorAction extends io.view.header.FooterErrorAction {
 
   private final PokemonAdapter pokemonAdapter;
 
