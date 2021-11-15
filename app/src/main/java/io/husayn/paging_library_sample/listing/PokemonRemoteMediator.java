@@ -41,7 +41,7 @@ class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
   public Single<MediatorResult> loadSingle(
       @NonNull LoadType loadType, @NonNull PagingState<Integer, Pokemon> state) {
     Timber.i(
-        "[ttt]:PagingMediator action ignored PagingState:[anchorPosition:%s], [lastItemOrNull:%s]",
+        "[ttt]:PagingMediator action ignored PagingState param:[anchorPosition:%s], [lastItemOrNull:%s]",
         state.getAnchorPosition(), state.lastItemOrNull());
     Timber.i(
         "[ttt]:PagingMediator action triggered with loadSingle function with param: [loadType:%s] for [query:%s]",
