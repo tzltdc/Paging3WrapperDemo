@@ -19,21 +19,34 @@ public class PokemonMediatorResultRepo {
   }
 
   public Single<MediatorResult> request(PagingRequest pagingRequest) {
+    Timber.i("[ttt]:MediatorResult Repo is receiving PagingRequest:%s", pagingRequest);
     return pokemonRemoteSource
         .fetch(pagingRequest)
-        .map(this::success)
+        .doOnSuccess(this::persistData)
+        .map(this::asSuccess)
         .onErrorResumeNext(this::error);
   }
 
+  // FIXME: Resolve the side effects here.
+  private void persistData(PageActionResult result) {
+    Timber.i(
+        "[ttt]:Writing remote data source for request:%s with response :%s into database.",
+        result.request(), result.response().list());
+    pokemonRepo.flushDbData(result);
+    Timber.i("[ttt]:Finished writing remote data source");
+  }
+
   private Single<MediatorResult> error(Throwable e) {
-    Timber.e(e, "PokemonMediatorResultRepo");
+    Timber.e(e, "[ttt]:error in fetching remote data");
     return Single.just(new MediatorResult.Error(e));
   }
 
-  private MediatorResult success(PageActionResult result) {
-    // FIXME: Resolve the side effects here.
-    pokemonRepo.flushDbData(result);
-    return new Success(endOfPaging(result));
+  private MediatorResult asSuccess(PageActionResult result) {
+    boolean endOfPaginationReached = endOfPaging(result);
+    Timber.i(
+        "[ttt]:Returning page request:[%s] with response :%s with endOfPaginationReached:%s",
+        result.request(), result.response().list(), endOfPaginationReached);
+    return new Success(endOfPaginationReached);
   }
 
   private boolean endOfPaging(PageActionResult data) {
