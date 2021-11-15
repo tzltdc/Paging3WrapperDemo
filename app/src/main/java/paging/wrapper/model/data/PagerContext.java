@@ -3,8 +3,8 @@ package paging.wrapper.model.data;
 import androidx.annotation.Nullable;
 import androidx.paging.PagingSource;
 import com.google.auto.value.AutoValue;
-import io.husayn.paging_library_sample.listing.PokemonRemoteMediator;
 import kotlin.jvm.functions.Function0;
+import paging.wrapper.data.PokemonRemoteMediator;
 
 @AutoValue
 public abstract class PagerContext {

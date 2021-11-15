@@ -6,7 +6,7 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   android:padding="2dp"
-  tools:context="io.husayn.paging_library_sample.listing.MainActivity">
+  tools:context="io.husayn.paging_library_sample.paging.wrapper.demo.MainActivity">
 
   <androidx.recyclerview.widget.RecyclerView
     android:id="@+id/rv_query"
