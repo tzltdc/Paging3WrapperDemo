@@ -27,6 +27,6 @@ public class HeaderEntityWorker implements AutoDisposeWorker {
   }
 
   private void bind(Optional<HeaderEntity> entityOptional) {
-    headerContract.updateLayer(entityOptional.orNull());
+    headerContract.bind(entityOptional.orNull());
   }
 }

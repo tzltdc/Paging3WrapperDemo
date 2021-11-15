@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
 
-  public void updateLayer(@Nullable HeaderEntity headerEntity) {
+  public void bind(@Nullable HeaderEntity headerEntity) {
     if (headerEntity == null) {
       fl_header_root_view.setVisibility(View.GONE);
       fl_page_data_list_root_view.setVisibility(View.VISIBLE);

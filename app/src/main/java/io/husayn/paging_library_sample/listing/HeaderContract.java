@@ -5,5 +5,5 @@ import io.view.header.HeaderEntity;
 
 public interface HeaderContract {
 
-  void updateLayer(@Nullable HeaderEntity headerEntity);
+  void bind(@Nullable HeaderEntity headerEntity);
 }
