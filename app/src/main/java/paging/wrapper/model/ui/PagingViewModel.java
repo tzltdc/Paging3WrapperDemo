@@ -2,8 +2,8 @@ package paging.wrapper.model.ui;
 
 import androidx.paging.LoadState;
 import com.google.auto.value.AutoValue;
-import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.List;
+import paging.wrapper.model.data.Pokemon;
 
 @AutoValue
 public abstract class PagingViewModel {

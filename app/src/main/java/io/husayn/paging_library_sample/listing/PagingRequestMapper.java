@@ -1,6 +1,9 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.husayn.paging_library_sample.data.Pokemon;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRemoteRequestConfig;
+import paging.wrapper.model.data.PagingRequest;
+import paging.wrapper.model.data.Pokemon;
 
 public class PagingRequestMapper {
 

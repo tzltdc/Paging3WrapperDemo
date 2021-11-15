@@ -1,4 +1,4 @@
-package io.husayn.paging_library_sample.listing;
+package paging.wrapper.model.data;
 
 import com.google.auto.value.AutoValue;
 

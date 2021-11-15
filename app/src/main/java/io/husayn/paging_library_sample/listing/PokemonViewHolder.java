@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.R;
-import io.husayn.paging_library_sample.data.Pokemon;
+import paging.wrapper.model.data.Pokemon;
 
 class PokemonViewHolder extends RecyclerView.ViewHolder {
 

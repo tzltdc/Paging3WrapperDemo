@@ -6,12 +6,13 @@ import androidx.paging.PagingState;
 import androidx.paging.rxjava2.RxRemoteMediator;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
-import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Single;
 import io.thread.WorkerScheduler;
+import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
-class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
+public class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQueryContext query;
   private final WorkerScheduler workerScheduler;

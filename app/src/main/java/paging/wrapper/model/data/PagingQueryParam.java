@@ -1,10 +1,10 @@
-package io.husayn.paging_library_sample.listing;
+package paging.wrapper.model.data;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-abstract class PagingQueryParam {
+public abstract class PagingQueryParam {
 
   @Nullable
   public abstract String searchKey();

@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import paging.wrapper.model.data.Pokemon;
 
 /** Created by husaynhakeem on 9/26/17. */
 @RunWith(AndroidJUnit4.class)

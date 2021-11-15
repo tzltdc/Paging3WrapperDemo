@@ -2,6 +2,7 @@ package io.husayn.paging_library_sample.listing;
 
 import java.util.Arrays;
 import java.util.List;
+import paging.wrapper.model.data.FilterBean;
 
 public class FilterOptionProvider {
 

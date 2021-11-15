@@ -6,6 +6,7 @@ import io.reactivex.Observable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import paging.wrapper.model.data.Pokemon;
 
 public class RemoteDataServer {
 

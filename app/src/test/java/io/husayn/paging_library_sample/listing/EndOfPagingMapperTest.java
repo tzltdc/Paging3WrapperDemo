@@ -2,11 +2,15 @@ package io.husayn.paging_library_sample.listing;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import io.husayn.paging_library_sample.data.Pokemon;
 import java.util.Collections;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import paging.wrapper.model.data.PageActionResult;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRemoteRequestConfig;
+import paging.wrapper.model.data.PagingRequest;
+import paging.wrapper.model.data.Pokemon;
 
 @RunWith(RobolectricTestRunner.class)
 public class EndOfPagingMapperTest {

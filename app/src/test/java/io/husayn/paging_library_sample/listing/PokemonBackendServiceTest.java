@@ -6,6 +6,9 @@ import androidx.annotation.Nullable;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRemoteRequestConfig;
+import paging.wrapper.model.data.PagingRequest;
 
 @RunWith(RobolectricTestRunner.class)
 public class PokemonBackendServiceTest {

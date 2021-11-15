@@ -2,6 +2,8 @@ package io.husayn.paging_library_sample.listing;
 
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
+import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.PagingQueryParam;
 
 class QueryStreamImpl implements QueryStreaming, QueryStream {
 

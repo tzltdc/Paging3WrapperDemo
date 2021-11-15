@@ -1,7 +1,7 @@
 package io.stream.paging;
 
 import androidx.paging.PagingData;
-import io.husayn.paging_library_sample.data.Pokemon;
+import paging.wrapper.model.data.Pokemon;
 
 public interface PagingDataStream {
 

@@ -1,5 +1,6 @@
 package io.husayn.paging_library_sample.listing;
 
+import paging.wrapper.model.data.PageActionResult;
 import timber.log.Timber;
 
 class EndOfPagingMapper {

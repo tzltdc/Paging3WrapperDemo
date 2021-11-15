@@ -1,9 +1,10 @@
-package io.husayn.paging_library_sample.listing;
+package paging.wrapper.model.data;
 
 import com.google.auto.value.AutoValue;
+import io.husayn.paging_library_sample.listing.PokemonDto;
 
 @AutoValue
-abstract class PageActionResult {
+public abstract class PageActionResult {
 
   public abstract PagingRequest request();
 

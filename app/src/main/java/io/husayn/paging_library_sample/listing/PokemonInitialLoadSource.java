@@ -6,6 +6,9 @@ import io.reactivex.Single;
 import io.thread.WorkerScheduler;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
+import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.PagingQueryParam;
+import paging.wrapper.model.data.PagingRequest;
 import timber.log.Timber;
 
 @ActivityScope
