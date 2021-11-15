@@ -7,8 +7,10 @@ import androidx.paging.PagingSource;
 import androidx.paging.rxjava2.PagingRx;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.reactivex.Observable;
+import io.thread.WorkerScheduler;
 import javax.inject.Inject;
 import kotlin.jvm.functions.Function0;
+import timber.log.Timber;
 
 public class PagingPokemonRepo {
 
@@ -18,25 +20,44 @@ public class PagingPokemonRepo {
   private final PagingConfig androidPagingConfig;
   private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
+  private final WorkerScheduler workerScheduler;
 
   @Inject
   public PagingPokemonRepo(
       PokemonRepo pokemonRepo,
       PagingConfig androidPagingConfig,
       PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory,
-      QueryStreaming queryStreaming) {
+      QueryStreaming queryStreaming,
+      WorkerScheduler workerScheduler) {
     this.pokemonRepo = pokemonRepo;
     this.androidPagingConfig = androidPagingConfig;
     this.pokemonRemoteMediatorFactory = pokemonRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
+    this.workerScheduler = workerScheduler;
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
     return queryStreaming
         .streaming()
+        .doOnNext(this::logOnQueryEmitted)
+        .observeOn(workerScheduler.get())
+        .doOnNext(this::logOnThreadSwitched)
         .map(this::pagerContext)
         .map(this::pager)
-        .switchMap(PagingRx::getObservable);
+        .switchMap(PagingRx::getObservable)
+        .doOnNext(this::logOnRepoEmitted);
+  }
+
+  private void logOnRepoEmitted(PagingData<Pokemon> pokemonPagingData) {
+    Timber.i("[ttt]:Returned user query with PagingData :%s", pokemonPagingData);
+  }
+
+  private void logOnThreadSwitched(PagingQueryContext context) {
+    Timber.i("[ttt]:user query context emitted after switch thread:%s", context);
+  }
+
+  private void logOnQueryEmitted(PagingQueryContext context) {
+    Timber.i("[ttt]:user query context emitted prior switch thread:%s", context);
   }
 
   private PagerContext pagerContext(PagingQueryContext query) {
