@@ -8,12 +8,12 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.paging.CombinedLoadStates;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.Binds;
@@ -26,16 +26,16 @@ import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCall
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.paging.footer.FooterEntityContract;
 import io.stream.footer_entity.FooterEntityModule;
-import io.stream.load_state.footer.CombinedLoadStatesStream;
 import io.stream.load_state.footer.FooterEntityGenerator;
 import io.stream.load_state.footer.FooterLoadStateModule;
 import io.stream.load_state.footer.FooterModelWorker;
+import io.stream.load_state.footer.HeaderEntityWorker;
+import io.stream.load_state.footer.LoadStateStreaming;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.stream.paging.PagingDataModule;
 import io.stream.paging.PagingDataStreaming;
 import io.stream.paging.PagingDataWorker;
 import io.thread.MainScheduler;
-import io.view.header.FooterEntity;
 import io.view.header.FooterEntity.Error;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Error.ErrorAction;
@@ -43,20 +43,24 @@ import io.view.header.HeaderViewContract;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
-import kotlin.Unit;
 import timber.log.Timber;
 
 @ActivityScope
 public class MainActivity extends AppCompatActivity
-    implements OnItemClickCallback, QueryCallback, MainUI, PagingDataListSnapshotProvider {
+    implements OnItemClickCallback,
+        QueryCallback,
+        MainUI,
+        PagingDataListSnapshotProvider,
+        HeaderContract {
 
   @Inject QueryStream queryStream;
   @Inject PagingDataStreaming pagingDataStreaming;
   @Inject PokemonAdapter pokemonAdapter;
+  @Inject CombinedLoadStatesCallback combinedLoadStatesCallback;
   @Inject QueryAdapter queryAdapter;
-  @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
   @Inject FooterModelWorker footerModelWorker;
+  @Inject HeaderEntityWorker headerEntityWorker;
   @Inject FooterEntityGenerator footerEntityGenerator;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
@@ -81,6 +85,7 @@ public class MainActivity extends AppCompatActivity
     pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
     footerEntityGenerator.attach(AndroidLifecycleScopeProvider.from(this));
     footerModelWorker.attach(AndroidLifecycleScopeProvider.from(this));
+    headerEntityWorker.attach(AndroidLifecycleScopeProvider.from(this));
   }
 
   private void bindRefresh() {
@@ -96,11 +101,24 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindRecyclerView() {
-    pokemonAdapter.addLoadStateListener(this::onLoadStateChanged);
+    pokemonAdapter.addLoadStateListener(combinedLoadStatesCallback);
+    observeSummary();
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(layout());
     recyclerView.setAdapter(pokemonAdapter);
+  }
+
+  private void observeSummary() {
+    // TODO: 11/14/21 This is not working
+    pokemonAdapter.registerAdapterDataObserver(
+        new AdapterDataObserver() {
+          @Override
+          public void onChanged() {
+            super.onChanged();
+            tv_summary.setText(content(pokemonAdapter.snapshot().getItems()));
+          }
+        });
   }
 
   private GridLayoutManager layout() {
@@ -132,30 +150,7 @@ public class MainActivity extends AppCompatActivity
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
 
-  private Unit onLoadStateChanged(CombinedLoadStates state) {
-    bind(state);
-    combinedLoadStatesStream.accept(state);
-    return Unit.INSTANCE;
-  }
-
-  private void bind(CombinedLoadStates state) {
-    List<Pokemon> snapshot = pokemonAdapter.snapshot().getItems();
-    String summary = content(snapshot);
-    HeaderEntity headerEntity =
-        StateMapper.headerEntity(
-            PagingViewModel.create(state.getRefresh(), snapshot), new HeaderErrorAction());
-
-    FooterEntity footerEntity =
-        StateMapper.footerEntity(
-            PagingViewModel.create(state.getAppend(), snapshot),
-            new FooterErrorAction(pokemonAdapter));
-    Timber.i(
-        "onLoadStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
-    updateLayer(headerEntity);
-    tv_summary.setText(summary);
-  }
-
-  private void updateLayer(@Nullable HeaderEntity headerEntity) {
+  public void updateLayer(@Nullable HeaderEntity headerEntity) {
     if (headerEntity == null) {
       fl_header_root_view.setVisibility(View.GONE);
       fl_page_data_list_root_view.setVisibility(View.VISIBLE);
@@ -212,6 +207,11 @@ public class MainActivity extends AppCompatActivity
     public abstract Error.ErrorAction errorAction(FooterErrorAction footerErrorAction);
 
     @ActivityScope
+    @Binds
+    public abstract HeaderEntity.Error.ErrorAction headerErrorAction(
+        HeaderErrorAction headerErrorAction);
+
+    @ActivityScope
     @Provides
     public static PagingConfig androidPagingConfig() {
       // Must enablePlaceholders to stop the recycler view from flinching when PagingData is
@@ -221,6 +221,13 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract MainUI mainUI(MainActivity mainActivity);
+
+    @Binds
+    public abstract LoadStateStreaming loadStateStreaming(
+        CombinedLoadStatesCallback combinedLoadStatesCallback);
+
+    @Binds
+    public abstract HeaderContract headerContract(MainActivity mainActivity);
 
     @Binds
     public abstract PagingDataListSnapshotProvider pagingDataListSnapshotProvider(
@@ -244,7 +251,14 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
   }
 
-  private class HeaderErrorAction extends ErrorAction {
+  public static class HeaderErrorAction extends ErrorAction {
+
+    private final PokemonAdapter pokemonAdapter;
+
+    @Inject
+    public HeaderErrorAction(PokemonAdapter pokemonAdapter) {
+      this.pokemonAdapter = pokemonAdapter;
+    }
 
     @Override
     public String text() {
@@ -253,7 +267,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Callback callback() {
-      return error -> MainActivity.this.pokemonAdapter.retry();
+      return error -> pokemonAdapter.retry();
     }
   }
 
