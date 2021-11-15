@@ -1,6 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
 import io.view.header.FooterEntity.Error;
+import io.view.header.FooterErrorCallback;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -20,7 +21,7 @@ public class FooterErrorAction extends Error.ErrorAction {
   }
 
   @Override
-  public Callback callback() {
+  public FooterErrorCallback callback() {
     return error -> executeRetry();
   }
 
