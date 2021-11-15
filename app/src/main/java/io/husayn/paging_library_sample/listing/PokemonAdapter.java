@@ -69,10 +69,10 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private boolean footerViewType(int position) {
-    return extraPosition(position) && pokemonAdapterDelegate.footerDataPresent();
+    return pokemonAdapterDelegate.footerDataPresent() && endPosition(position);
   }
 
-  private boolean extraPosition(int position) {
+  private boolean endPosition(int position) {
     return position == dataItemCount();
   }
 
