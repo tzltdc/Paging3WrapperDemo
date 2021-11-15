@@ -36,7 +36,7 @@ public class PokemonLoadMoreSource {
    */
   public Single<MediatorResult> loadingMore(PagingQueryContext context) {
     return showLoadMoreError(context.description())
-        ? simulateError()
+        ? simulateError(context.param())
         : Single.defer(() -> execute(context.param()));
   }
 
@@ -44,7 +44,10 @@ public class PokemonLoadMoreSource {
     return FilterOptionProvider.LOAD_MORE_ERROR.equals(desc) && retryCount++ % 2 == 0;
   }
 
-  private Single<MediatorResult> simulateError() {
+  private Single<MediatorResult> simulateError(PagingQueryParam param) {
+    Timber.i(
+        "[ttt]: PokemonLoadMoreSource will return a simulated loading more error for query :%s",
+        param);
     return Single.just(error()).delay(800, TimeUnit.MILLISECONDS, workerScheduler.get());
   }
 
@@ -54,12 +57,33 @@ public class PokemonLoadMoreSource {
 
   private Single<MediatorResult> execute(PagingQueryParam query) {
     Pokemon lastItem = pokemonRepo.lastItemOrNull(query);
-    Timber.i("loading more with query:%s, last_item:%s", query, lastItem);
+    Timber.i(
+        "[ttt]: PokemonLoadMoreSource is to executing with query:%s, last_item:%s",
+        query, lastItem);
     if (lastItem == null) {
-      return Single.just(new Success(true));
+      return skipLoadingMore(query);
     } else {
       PagingRequest pagingRequest = PagingRequestMapper.nextPagingRequest(query, lastItem);
-      return pokemonMediatorResultRepo.request(pagingRequest);
+      Timber.i(
+          "[ttt]:loading more with assembled paging request:%s based on last_item:%s",
+          pagingRequest, lastItem);
+      return pokemonMediatorResultRepo.request(pagingRequest).doOnSuccess(this::logResult);
     }
+  }
+
+  /**
+   * FIXME: 11/14/21 Just because last item is not available does not mean that it is 100% correct
+   * that we should return the Success result as true.
+   */
+  private Single<MediatorResult> skipLoadingMore(PagingQueryParam query) {
+    Timber.w(
+        "[ttt]: PokemonLoadMoreSource has been concluded as no existing item for query :%s", query);
+    return Single.just(new Success(true));
+  }
+
+  private void logResult(MediatorResult mediatorResult) {
+    Timber.i(
+        "[ttt]:PokemonLoadMoreSource concluded loading more action with mediatorResult success:%s",
+        mediatorResult instanceof Success);
   }
 }
