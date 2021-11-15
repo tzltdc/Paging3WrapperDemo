@@ -10,5 +10,5 @@ public interface FooterEntityStreaming {
   Observable<Optional<FooterEntity>> newFooterEntity();
 
   /** @return the current {@link FooterEntity} that has already been rendered into UI. */
-  Observable<Optional<FooterEntity>> currentFooterEntity();
+  Optional<FooterEntity> currentFooterEntity();
 }

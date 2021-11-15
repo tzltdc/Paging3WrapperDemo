@@ -1,3 +1,8 @@
 package io.husayn.paging_library_sample.listing;
 
-interface MainUI {}
+import io.stream.footer_entity.FooterModel;
+
+public interface MainUI {
+
+  void bindFooterModel(FooterModel model);
+}

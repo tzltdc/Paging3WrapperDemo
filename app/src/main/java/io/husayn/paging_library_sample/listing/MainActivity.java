@@ -25,9 +25,11 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.stream.footer_entity.FooterEntityModule;
-import io.stream.footer_entity.FooterEntityWorker;
+import io.stream.footer_entity.FooterModel;
 import io.stream.load_state.footer.CombinedLoadStatesStream;
+import io.stream.load_state.footer.FooterEntityGenerator;
 import io.stream.load_state.footer.FooterLoadStateModule;
+import io.stream.load_state.footer.FooterModelWorker;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.stream.paging.PagingDataModule;
 import io.stream.paging.PagingDataStreaming;
@@ -55,7 +57,8 @@ public class MainActivity extends AppCompatActivity
   @Inject QueryAdapter queryAdapter;
   @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
-  @Inject FooterEntityWorker footerEntityWorker;
+  @Inject FooterModelWorker footerModelWorker;
+  @Inject FooterEntityGenerator footerEntityGenerator;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -77,7 +80,8 @@ public class MainActivity extends AppCompatActivity
 
   private void bindWorker() {
     pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
-    footerEntityWorker.attach(AndroidLifecycleScopeProvider.from(this));
+    footerEntityGenerator.attach(AndroidLifecycleScopeProvider.from(this));
+    footerModelWorker.attach(AndroidLifecycleScopeProvider.from(this));
   }
 
   private void bindRefresh() {
@@ -149,7 +153,6 @@ public class MainActivity extends AppCompatActivity
     Timber.i(
         "onLoadStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     updateLayer(headerEntity);
-    pokemonAdapter.bind(footerEntity);
     tv_summary.setText(summary);
   }
 
@@ -183,6 +186,11 @@ public class MainActivity extends AppCompatActivity
   @Override
   public List<Pokemon> snapshot() {
     return pokemonAdapter.snapshot().getItems();
+  }
+
+  @Override
+  public void bindFooterModel(FooterModel model) {
+    pokemonAdapter.bind(model);
   }
 
   @dagger.Module(
@@ -265,6 +273,7 @@ public class MainActivity extends AppCompatActivity
 
     @Inject
     public FooterErrorAction(PokemonAdapter pokemonAdapter) {
+      Timber.i("FooterErrorAction PokemonAdapter:%s", pokemonAdapter);
       this.pokemonAdapter = pokemonAdapter;
     }
 
@@ -275,7 +284,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public Callback callback() {
-      return error -> pokemonAdapter.retry();
+      return error -> executeRetry();
+    }
+
+    private void executeRetry() {
+      Timber.i("Retry to fetch the data");
+      pokemonAdapter.retry();
     }
   }
 }
