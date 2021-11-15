@@ -12,7 +12,7 @@ public abstract class FooterEntity {
 
   public abstract Loading loading();
 
-  public abstract Error error();
+  public abstract FooterError error();
 
   public abstract NoMore noMore();
 
@@ -20,7 +20,7 @@ public abstract class FooterEntity {
     return AutoOneOf_FooterEntity.loading(data);
   }
 
-  public static FooterEntity ofError(Error data) {
+  public static FooterEntity ofError(FooterError data) {
     return AutoOneOf_FooterEntity.error(data);
   }
 
@@ -52,31 +52,6 @@ public abstract class FooterEntity {
 
     public static NoMore create(String message) {
       return new AutoValue_FooterEntity_NoMore(message);
-    }
-  }
-
-  @AutoValue
-  public abstract static class Error {
-
-    public abstract String message();
-
-    @Nullable
-    public abstract ErrorAction action();
-
-    public static Error create(String message, ErrorAction action) {
-      return new AutoValue_FooterEntity_Error(message, action);
-    }
-
-    @AutoValue
-    public abstract static class ErrorAction {
-
-      public abstract String text();
-
-      public abstract FooterErrorCallback callback();
-
-      public static ErrorAction create(String text, FooterErrorCallback callback) {
-        return new AutoValue_FooterEntity_Error_ErrorAction(text, callback);
-      }
     }
   }
 }
