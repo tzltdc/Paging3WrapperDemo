@@ -26,7 +26,6 @@ import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCall
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.paging.footer.FooterEntityContract;
 import io.stream.footer_entity.FooterEntityModule;
-import io.stream.footer_entity.FooterModel;
 import io.stream.load_state.footer.CombinedLoadStatesStream;
 import io.stream.load_state.footer.FooterEntityGenerator;
 import io.stream.load_state.footer.FooterLoadStateModule;
@@ -53,9 +52,7 @@ public class MainActivity extends AppCompatActivity
 
   @Inject QueryStream queryStream;
   @Inject PagingDataStreaming pagingDataStreaming;
-  @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
-  @Inject PokemonAdapterManager pokemonAdapterManager;
   @Inject QueryAdapter queryAdapter;
   @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
@@ -188,11 +185,6 @@ public class MainActivity extends AppCompatActivity
   @Override
   public List<Pokemon> snapshot() {
     return pokemonAdapter.snapshot().getItems();
-  }
-
-  @Override
-  public void bindFooterModel(FooterModel model) {
-    pokemonAdapterManager.bind(model);
   }
 
   @dagger.Module(

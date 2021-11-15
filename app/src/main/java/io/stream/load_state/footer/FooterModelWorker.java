@@ -5,21 +5,23 @@ import static com.uber.autodispose.AutoDispose.autoDisposable;
 import com.google.common.base.Optional;
 import com.uber.autodispose.ScopeProvider;
 import io.husayn.paging_library_sample.AutoDisposeWorker;
-import io.husayn.paging_library_sample.listing.MainUI;
+import io.paging.footer.FooterEntityContract;
 import io.stream.footer_entity.FooterEntityStreaming;
 import io.stream.footer_entity.FooterModel;
 import io.view.header.FooterEntity;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class FooterModelWorker implements AutoDisposeWorker {
 
-  private final MainUI mainUI;
   private final FooterEntityStreaming footerEntityStreaming;
+  private final FooterEntityContract footerEntityContract;
 
   @Inject
-  public FooterModelWorker(MainUI mainUI, FooterEntityStreaming footerEntityStreaming) {
-    this.mainUI = mainUI;
+  public FooterModelWorker(
+      FooterEntityStreaming footerEntityStreaming, FooterEntityContract footerEntityContract) {
     this.footerEntityStreaming = footerEntityStreaming;
+    this.footerEntityContract = footerEntityContract;
   }
 
   @Override
@@ -34,8 +36,19 @@ public class FooterModelWorker implements AutoDisposeWorker {
         .subscribe(this::bindFooterModel);
   }
 
-  private void bindFooterModel(FooterModel footerModel) {
-    mainUI.bindFooterModel(footerModel);
+  private void bindFooterModel(FooterModel model) {
+    Timber.i("bindFooterModel:%s", model);
+    switch (model.status()) {
+      case TO_BE_REMOVED:
+        footerEntityContract.removeFooter();
+        break;
+      case TO_BE_ADDED:
+        footerEntityContract.addFooter(model.toBeAdded());
+        break;
+      case TO_BE_REFRESHED:
+        footerEntityContract.refreshFooter(model.toBeRefreshed());
+        break;
+    }
   }
 
   private Optional<FooterModel> asFooterModel(Optional<FooterEntity> newFooterModel) {
