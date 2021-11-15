@@ -10,15 +10,16 @@ public abstract class FooterLoadStateModule {
 
   @ActivityScope
   @Provides
-  public static FooterLoadStateStreamImpl footerLoadStateStreamImpl() {
-    return new FooterLoadStateStreamImpl();
+  public static CombinedLoadStatesStreamImpl footerLoadStateStreamImpl() {
+    return new CombinedLoadStatesStreamImpl();
   }
 
   @ActivityScope
   @Binds
-  public abstract FooterLoadStateStream footerLoadStateStream(FooterLoadStateStreamImpl impl);
+  public abstract CombinedLoadStatesStream footerLoadStateStream(CombinedLoadStatesStreamImpl impl);
 
   @ActivityScope
   @Binds
-  public abstract FooterLoadStateStreaming footerLoadStateStreaming(FooterLoadStateStreamImpl impl);
+  public abstract FooterLoadStateStreaming footerLoadStateStreaming(
+      CombinedLoadStatesStreamImpl impl);
 }
