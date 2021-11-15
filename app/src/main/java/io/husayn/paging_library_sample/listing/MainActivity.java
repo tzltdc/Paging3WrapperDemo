@@ -24,10 +24,10 @@ import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
-import io.paging.footer.FooterEntityContract;
+import io.paging.footer.ClickActionContract;
+import io.stream.footer_entity.ContractModule;
 import io.stream.footer_entity.FooterEntityModule;
 import io.stream.load_state.footer.FooterEntityGenerator;
-import io.stream.load_state.footer.FooterLoadStateModule;
 import io.stream.load_state.footer.FooterModelWorker;
 import io.stream.load_state.footer.HeaderEntityWorker;
 import io.stream.load_state.footer.LoadStateStreaming;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
   @Inject FooterModelWorker footerModelWorker;
   @Inject HeaderEntityWorker headerEntityWorker;
   @Inject FooterEntityGenerator footerEntityGenerator;
+  @Inject ClickActionContract clickActionContract;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     srl_refresh = findViewById(R.id.srl_refresh);
     fl_header_root_view = findViewById(R.id.fl_header_root_view);
     fl_page_data_list_root_view = findViewById(R.id.fl_page_data_list_root_view);
-    headerViewContract = new HeaderViewContract(fl_header_root_view);
+    headerViewContract = new HeaderViewContract(fl_header_root_view, clickActionContract);
   }
 
   private void bindRecyclerView() {
@@ -181,7 +182,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   @dagger.Module(
-      includes = {FooterLoadStateModule.class, FooterEntityModule.class, PagingDataModule.class})
+      includes = {ContractModule.class, FooterEntityModule.class, PagingDataModule.class})
   public abstract static class Module {
 
     private static final int PAGE_SIZE = 10;
@@ -199,16 +200,6 @@ public class MainActivity extends AppCompatActivity
     public static QueryStreamImpl queryStreamImpl() {
       return new QueryStreamImpl();
     }
-
-    @ActivityScope
-    @Binds
-    public abstract io.view.header.FooterErrorAction errorAction(
-        FooterErrorAction footerErrorAction);
-
-    @ActivityScope
-    @Binds
-    public abstract io.view.header.HeaderErrorAction headerErrorAction(
-        HeaderErrorAction headerErrorAction);
 
     @ActivityScope
     @Provides
@@ -233,7 +224,7 @@ public class MainActivity extends AppCompatActivity
         MainActivity mainActivity);
 
     @Binds
-    public abstract FooterEntityContract bindPokemonAdapterCallback(PokemonAdapter impl);
+    public abstract PagingAdapterContract bindPokemonAdapterCallback(PokemonAdapter impl);
 
     @Binds
     public abstract QueryStream bindQueryStream(QueryStreamImpl impl);

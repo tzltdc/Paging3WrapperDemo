@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
+import io.paging.footer.ClickActionContract;
 import io.view.header.HeaderEntity.Empty;
 import timber.log.Timber;
 
@@ -21,8 +22,10 @@ public class HeaderViewContract {
   private final View fl_header_loading;
   private final View fl_header_error;
   private final View fl_header_empty;
+  private final ClickActionContract clickActionContract;
 
-  public HeaderViewContract(View headerView) {
+  public HeaderViewContract(View headerView, ClickActionContract clickActionContract) {
+    this.clickActionContract = clickActionContract;
     fl_header_loading = headerView.findViewById(R.id.fl_header_loading);
     fl_header_error = headerView.findViewById(R.id.fl_header_error);
     fl_header_empty = headerView.findViewById(R.id.fl_header_empty);
@@ -54,18 +57,19 @@ public class HeaderViewContract {
     tv_header_empty_hint.setText(empty.message());
   }
 
-  private void bindError(HeaderError error) {
+  private void bindError(ErrorData errorData) {
     fl_header_empty.setVisibility(View.GONE);
     fl_header_loading.setVisibility(View.GONE);
     fl_header_error.setVisibility(View.VISIBLE);
-    tv_header_error_hint.setText(error.message());
-    HeaderErrorAction action = error.action();
-    if (action == null) {
+    tv_header_error_hint.setText(errorData.message());
+    String buttonText = errorData.buttonText();
+    if (buttonText == null) {
       btn_header_retry.setVisibility(View.GONE);
       btn_header_retry.setOnClickListener(null);
     } else {
       btn_header_retry.setVisibility(View.VISIBLE);
-      btn_header_retry.setOnClickListener(view -> action.callback().onClick(error));
+      btn_header_retry.setText(buttonText);
+      btn_header_retry.setOnClickListener(view -> clickActionContract.retry());
     }
   }
 
