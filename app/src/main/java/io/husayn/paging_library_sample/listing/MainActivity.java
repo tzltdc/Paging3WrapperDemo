@@ -25,6 +25,7 @@ import io.husayn.paging_library_sample.data.Pokemon;
 import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCallback;
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.stream.footer_entity.FooterEntityModule;
+import io.stream.load_state.footer.CombinedLoadStatesStream;
 import io.stream.load_state.footer.FooterLoadStateModule;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.stream.paging.PagingDataModule;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity
   @Inject PagingPokemonRepo pagingPokemonRepo;
   @Inject PokemonAdapter pokemonAdapter;
   @Inject QueryAdapter queryAdapter;
+  @Inject CombinedLoadStatesStream combinedLoadStatesStream;
   @Inject PagingDataWorker pagingDataWorker;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindRecyclerView() {
-    pokemonAdapter.addLoadStateListener(this::onStateChanged);
+    pokemonAdapter.addLoadStateListener(this::onLoadStateChanged);
     RecyclerView recyclerView = findViewById(R.id.rv_pokemons);
     recyclerView.setHasFixedSize(true);
     recyclerView.setLayoutManager(layout());
@@ -118,12 +120,18 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void submitList(PagingData<Pokemon> pagingData) {
-    Timber.i("onStateChanged submitList:%s", pagingData);
+    Timber.i("onLoadStateChanged submitList:%s", pagingData);
     srl_refresh.setRefreshing(false);
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
 
-  private Unit onStateChanged(CombinedLoadStates state) {
+  private Unit onLoadStateChanged(CombinedLoadStates state) {
+    bind(state);
+    combinedLoadStatesStream.accept(state);
+    return Unit.INSTANCE;
+  }
+
+  private void bind(CombinedLoadStates state) {
     List<Pokemon> snapshot = pokemonAdapter.snapshot().getItems();
     String summary = content(snapshot);
     HeaderEntity headerEntity =
@@ -134,11 +142,10 @@ public class MainActivity extends AppCompatActivity
         StateMapper.footerEntity(
             PagingViewModel.create(state.getAppend(), snapshot), new FooterErrorAction());
     Timber.i(
-        "onStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
+        "onLoadStateChanged header:%s,footer:%s,snapshot:%s", headerEntity, footerEntity, snapshot);
     updateLayer(headerEntity);
     pokemonAdapter.bind(footerEntity);
     tv_summary.setText(summary);
-    return Unit.INSTANCE;
   }
 
   private void updateLayer(@Nullable HeaderEntity headerEntity) {
