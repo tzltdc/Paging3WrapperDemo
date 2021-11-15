@@ -44,14 +44,15 @@ public class PokemonRepo {
 
   public PagingSource<Integer, Pokemon> pokemonLocalPagingSource(PagingQueryParam query) {
     String name = query.searchKey();
+    Timber.i("[ttt]:Building pokemonLocalPagingSource with query :%s", name);
     return name == null ? pokemonDao.allByAsc() : pokemonDao.queryBy(name);
   }
 
-  public void delete(@Nullable String key) {
+  public int delete(@Nullable String key) {
     if (key == null) {
-      pokemonDao.deleteAll();
+      return pokemonDao.deleteAll();
     } else {
-      pokemonDao.deleteByQuery(key);
+      return pokemonDao.deleteByQuery(key);
     }
   }
 
@@ -60,19 +61,22 @@ public class PokemonRepo {
    * present the updates in the DB.
    */
   public void flushDbData(PageActionResult data) {
-    Timber.i("flushDbData");
+    Timber.i("[ttt]:Begin to persist the new fetched result as transaction.");
     dataBase.runInTransaction(() -> execute(data));
   }
 
   private void execute(PageActionResult data) {
-    Timber.i("execute flushDbData");
+    Timber.i("[ttt]:Begin to execute the transaction.");
     if (initialLoad(data)) {
-      Timber.w("clear flushDbData first");
-      delete(data.request().pagingQueryParam().searchKey());
+      String queryKey = data.request().pagingQueryParam().searchKey();
+      int count = delete(queryKey);
+      Timber.w("[ttt]:Deleted %s existing record by query param %s", count, queryKey);
     }
     List<Pokemon> list = data.response().list();
-    Timber.w("insert new data :%s", list.size());
+    Timber.i("[ttt]:Inserting new %s records", list.size());
     pokemonDao.insertAll(list);
+    Timber.i("[ttt]:Finished inserting all records :%s", list.size());
+    Timber.i("[ttt]:Committed the transaction.");
   }
 
   private boolean initialLoad(PageActionResult data) {
