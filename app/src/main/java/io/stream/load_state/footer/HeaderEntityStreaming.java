@@ -12,13 +12,16 @@ import javax.inject.Inject;
 public class HeaderEntityStreaming {
 
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
+  private final StateMapper stateMapper;
   private final LoadStateStreaming loadStateStreaming;
 
   @Inject
   public HeaderEntityStreaming(
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
+      StateMapper stateMapper,
       LoadStateStreaming loadStateStreaming) {
     this.pagingDataListSnapshotProvider = pagingDataListSnapshotProvider;
+    this.stateMapper = stateMapper;
     this.loadStateStreaming = loadStateStreaming;
   }
 
@@ -27,7 +30,7 @@ public class HeaderEntityStreaming {
   }
 
   private Optional<HeaderEntity> asEntity(PagingViewModel model) {
-    return Optional.fromNullable(StateMapper.headerEntity(model));
+    return Optional.fromNullable(stateMapper.headerEntity(model));
   }
 
   private PagingViewModel buildModel(LoadState headerState) {

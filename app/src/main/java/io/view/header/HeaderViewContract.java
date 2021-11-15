@@ -7,6 +7,7 @@ import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
 import io.paging.footer.ClickActionContract;
 import io.view.header.HeaderEntity.Empty;
+import io.view.header.HeaderEntity.Loading;
 import timber.log.Timber;
 
 /**
@@ -16,6 +17,7 @@ import timber.log.Timber;
 public class HeaderViewContract {
 
   private final ProgressBar pb_header;
+  private final TextView tv_header_loading_hint;
   private final TextView tv_header_error_hint;
   private final TextView tv_header_empty_hint;
   private final Button btn_header_retry;
@@ -31,6 +33,7 @@ public class HeaderViewContract {
     fl_header_empty = headerView.findViewById(R.id.fl_header_empty);
     pb_header = headerView.findViewById(R.id.pb_header);
     tv_header_error_hint = headerView.findViewById(R.id.tv_header_error_hint);
+    tv_header_loading_hint = headerView.findViewById(R.id.tv_header_loading_hint);
     tv_header_empty_hint = headerView.findViewById(R.id.tv_header_empty_hint);
     btn_header_retry = headerView.findViewById(R.id.btn_header_retry);
   }
@@ -39,7 +42,7 @@ public class HeaderViewContract {
     Timber.i("bind HeaderEntity:%s", entity);
     switch (entity.state()) {
       case LOADING:
-        bindLoading();
+        bindLoading(entity.loading());
         break;
       case ERROR:
         bindError(entity.error());
@@ -73,7 +76,8 @@ public class HeaderViewContract {
     }
   }
 
-  private void bindLoading() {
+  private void bindLoading(Loading loading) {
+    tv_header_loading_hint.setText(loading.message());
     pb_header.setVisibility(View.VISIBLE);
     fl_header_error.setVisibility(View.GONE);
     fl_header_loading.setVisibility(View.VISIBLE);
