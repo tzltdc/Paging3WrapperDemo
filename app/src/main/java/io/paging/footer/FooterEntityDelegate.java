@@ -1,4 +1,4 @@
-package io.husayn.paging_library_sample.listing;
+package io.paging.footer;
 
 import io.husayn.paging_library_sample.ActivityScope;
 import io.view.header.FooterEntity;
@@ -6,13 +6,13 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 @ActivityScope
-public class PokemonAdapterDelegate {
+public class FooterEntityDelegate {
 
   private FooterEntity footerEntity = null;
 
   @Inject
-  public PokemonAdapterDelegate() {
-    Timber.i("PokemonAdapterDelegate created:%s", this);
+  public FooterEntityDelegate() {
+    Timber.i("FooterEntityDelegate created:%s", this);
   }
 
   public FooterEntity getFooterEntity() {
