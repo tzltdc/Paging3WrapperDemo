@@ -72,12 +72,12 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private boolean extraPosition(int position) {
-    return position == super.getItemCount();
+    return position == dataItemCount();
   }
 
   @Override
   public int getItemCount() {
-    return super.getItemCount() + (footerDataPresent() ? 1 : 0);
+    return dataItemCount() + (footerDataPresent() ? 1 : 0);
   }
 
   private boolean footerDataPresent() {
@@ -102,16 +102,20 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
   private void removeFooter() {
     this.footerEntity = null;
-    notifyItemRemoved(super.getItemCount());
+    notifyItemRemoved(dataItemCount());
+  }
+
+  public int dataItemCount() {
+    return super.getItemCount();
   }
 
   private void addFooter(FooterEntity footerEntity) {
     this.footerEntity = footerEntity;
-    notifyItemInserted(super.getItemCount());
+    notifyItemInserted(dataItemCount());
   }
 
   private void refreshFooter(FooterEntity footerEntity) {
     this.footerEntity = footerEntity;
-    notifyItemChanged(super.getItemCount());
+    notifyItemChanged(dataItemCount());
   }
 }
