@@ -46,7 +46,7 @@ public class StateMapper {
       return HeaderEntity.ofError(
           ErrorData.create(config.loadingHeaderError(), config.loadingRetry()));
     } else {
-      return model.snapshot().isEmpty()
+      return model.snapshot().isEmpty() && headerState.getEndOfPaginationReached()
           ? HeaderEntity.ofEmpty(Empty.create(config.emptyData()))
           : null;
     }
