@@ -1,6 +1,7 @@
 package io.husayn.paging_library_sample.listing;
 
 import io.husayn.paging_library_sample.ActivityScope;
+import io.paging.footer.FooterEntityDelegate;
 import io.stream.footer_entity.FooterModel;
 import io.view.header.FooterEntity;
 import javax.inject.Inject;
@@ -10,13 +11,13 @@ import timber.log.Timber;
 public class PokemonAdapterManager {
 
   private final PokemonAdapter pokemonAdapter;
-  private final PokemonAdapterDelegate pokemonAdapterDelegate;
+  private final FooterEntityDelegate footerEntityDelegate;
 
   @Inject
   public PokemonAdapterManager(
-      PokemonAdapter pokemonAdapter, PokemonAdapterDelegate pokemonAdapterDelegate) {
+      PokemonAdapter pokemonAdapter, FooterEntityDelegate footerEntityDelegate) {
     this.pokemonAdapter = pokemonAdapter;
-    this.pokemonAdapterDelegate = pokemonAdapterDelegate;
+    this.footerEntityDelegate = footerEntityDelegate;
     Timber.i("PokemonAdapterManager created:%s", this);
   }
 
@@ -41,7 +42,7 @@ public class PokemonAdapterManager {
   }
 
   private void setFooterEntity(FooterEntity footerEntity) {
-    pokemonAdapterDelegate.setFooterEntity(footerEntity);
+    footerEntityDelegate.setFooterEntity(footerEntity);
   }
 
   private void addFooter(FooterEntity footerEntity) {

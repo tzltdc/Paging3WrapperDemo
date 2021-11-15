@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
+import io.paging.footer.FooterEntityDelegate;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -18,15 +19,15 @@ import timber.log.Timber;
 @ActivityScope
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
-  private final PokemonAdapterDelegate pokemonAdapterDelegate;
+  private final FooterEntityDelegate footerEntityDelegate;
   private final PokemonViewHolderFactory pokemonViewHolderFactory;
 
   @Inject
   public PokemonAdapter(
-      PokemonAdapterDelegate pokemonAdapterDelegate,
+      FooterEntityDelegate footerEntityDelegate,
       PokemonViewHolderFactory pokemonViewHolderFactory) {
     super(Pokemon.DIFF_CALLBACK);
-    this.pokemonAdapterDelegate = pokemonAdapterDelegate;
+    this.footerEntityDelegate = footerEntityDelegate;
     this.pokemonViewHolderFactory = pokemonViewHolderFactory;
     Timber.i("PokemonAdapter created:%s", this);
   }
@@ -49,7 +50,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
     int viewType = getItemViewType(position);
     if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
-      ((FooterViewHolder) viewHolder).bind(pokemonAdapterDelegate.getFooterEntity());
+      ((FooterViewHolder) viewHolder).bind(footerEntityDelegate.getFooterEntity());
     } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_BODY) {
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
@@ -69,7 +70,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
   }
 
   private boolean footerViewType(int position) {
-    return pokemonAdapterDelegate.footerDataPresent() && endPosition(position);
+    return footerEntityDelegate.footerDataPresent() && endPosition(position);
   }
 
   private boolean endPosition(int position) {
@@ -78,7 +79,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
 
   @Override
   public int getItemCount() {
-    return dataItemCount() + (pokemonAdapterDelegate.footerDataPresent() ? 1 : 0);
+    return dataItemCount() + (footerEntityDelegate.footerDataPresent() ? 1 : 0);
   }
 
   public int dataItemCount() {
