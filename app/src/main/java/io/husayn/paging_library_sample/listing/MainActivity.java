@@ -26,6 +26,7 @@ import io.husayn.paging_library_sample.listing.PokemonViewHolder.OnItemClickCall
 import io.husayn.paging_library_sample.listing.QueryViewHolder.QueryCallback;
 import io.stream.footer_entity.FooterEntityModule;
 import io.stream.load_state.footer.FooterLoadStateModule;
+import io.stream.paging.PagingDataListSnapshotProvider;
 import io.stream.paging.PagingDataModule;
 import io.stream.paging.PagingDataStreaming;
 import io.stream.paging.PagingDataWorker;
@@ -42,7 +43,7 @@ import kotlin.Unit;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity
-    implements OnItemClickCallback, QueryCallback, MainUI {
+    implements OnItemClickCallback, QueryCallback, MainUI, PagingDataListSnapshotProvider {
 
   @Inject QueryStream queryStream;
   @Inject PagingDataStreaming pagingDataStreaming;
@@ -167,6 +168,11 @@ public class MainActivity extends AppCompatActivity
         PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
   }
 
+  @Override
+  public List<Pokemon> snapshot() {
+    return pokemonAdapter.snapshot().getItems();
+  }
+
   @dagger.Module(
       includes = {FooterLoadStateModule.class, FooterEntityModule.class, PagingDataModule.class})
   public abstract static class Module {
@@ -195,6 +201,10 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract MainUI mainUI(MainActivity mainActivity);
+
+    @Binds
+    public abstract PagingDataListSnapshotProvider pagingDataListSnapshotProvider(
+        MainActivity mainActivity);
 
     @Binds
     public abstract QueryStream bindQueryStream(QueryStreamImpl impl);
