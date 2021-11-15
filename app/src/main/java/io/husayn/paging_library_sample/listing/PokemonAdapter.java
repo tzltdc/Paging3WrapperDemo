@@ -17,7 +17,8 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 @ActivityScope
-public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
+public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
+    implements PokemonAdapterCallback {
 
   private final FooterEntityDelegate footerEntityDelegate;
   private final PokemonViewHolderFactory pokemonViewHolderFactory;
@@ -82,6 +83,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder> {
     return dataItemCount() + (footerEntityDelegate.footerDataPresent() ? 1 : 0);
   }
 
+  @Override
   public int dataItemCount() {
     return super.getItemCount();
   }
