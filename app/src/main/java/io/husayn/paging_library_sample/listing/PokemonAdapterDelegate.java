@@ -19,6 +19,10 @@ public class PokemonAdapterDelegate {
     return footerEntity;
   }
 
+  public boolean footerDataPresent() {
+    return footerEntity != null;
+  }
+
   public void setFooterEntity(FooterEntity footerEntity) {
     this.footerEntity = footerEntity;
   }
