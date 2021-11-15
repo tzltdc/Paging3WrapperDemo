@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.ActivityScope;
 import io.husayn.paging_library_sample.R;
 import io.husayn.paging_library_sample.data.Pokemon;
-import io.paging.footer.FooterEntityContract;
 import io.view.header.FooterEntity;
 import io.view.header.FooterViewHolder;
 import javax.inject.Inject;
@@ -19,7 +18,7 @@ import timber.log.Timber;
 
 @ActivityScope
 public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
-    implements FooterEntityContract {
+    implements PagingAdapterContract {
 
   private FooterEntity footerEntity = null;
   private final PokemonViewHolderFactory pokemonViewHolderFactory;
@@ -39,7 +38,8 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
           LayoutInflater.from(getContext()).inflate(R.layout.item_pokemon, parent, false);
       return pokemonViewHolderFactory.create(itemView);
     } else if (viewType == ItemViewType.ITEM_VIEW_TYPE_FOOTER) {
-      return new FooterViewHolder(parent);
+      return new FooterViewHolder(
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.footer, parent, false), this);
     } else {
       throw new RuntimeException("Unsupported viewType:" + viewType);
     }

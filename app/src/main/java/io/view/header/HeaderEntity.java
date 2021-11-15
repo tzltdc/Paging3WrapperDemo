@@ -12,7 +12,7 @@ public abstract class HeaderEntity {
 
   public abstract Loading loading();
 
-  public abstract HeaderError error();
+  public abstract ErrorData error();
 
   public abstract Empty empty();
 
@@ -20,7 +20,7 @@ public abstract class HeaderEntity {
     return AutoOneOf_HeaderEntity.loading(data);
   }
 
-  public static HeaderEntity ofError(HeaderError data) {
+  public static HeaderEntity ofError(ErrorData data) {
     return AutoOneOf_HeaderEntity.error(data);
   }
 
