@@ -7,18 +7,18 @@ import io.husayn.paging_library_sample.listing.StateMapper;
 import io.reactivex.Observable;
 import io.stream.paging.PagingDataListSnapshotProvider;
 import io.view.header.HeaderEntity;
-import io.view.header.HeaderEntity.Error;
+import io.view.header.HeaderErrorAction;
 import javax.inject.Inject;
 
 public class HeaderEntityStreaming {
 
-  private final Error.ErrorAction errorAction;
+  private final HeaderErrorAction errorAction;
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
   private final LoadStateStreaming loadStateStreaming;
 
   @Inject
   public HeaderEntityStreaming(
-      Error.ErrorAction errorAction,
+      HeaderErrorAction errorAction,
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
       LoadStateStreaming loadStateStreaming) {
     this.errorAction = errorAction;

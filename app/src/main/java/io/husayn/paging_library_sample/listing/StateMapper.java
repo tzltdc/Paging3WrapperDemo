@@ -9,17 +9,18 @@ import io.view.header.FooterError;
 import io.view.header.FooterErrorAction;
 import io.view.header.HeaderEntity;
 import io.view.header.HeaderEntity.Empty;
-import io.view.header.HeaderEntity.Error;
+import io.view.header.HeaderError;
+import io.view.header.HeaderErrorAction;
 
 public class StateMapper {
 
   @Nullable
-  public static HeaderEntity headerEntity(PagingViewModel model, Error.ErrorAction errorAction) {
+  public static HeaderEntity headerEntity(PagingViewModel model, HeaderErrorAction errorAction) {
     LoadState headerState = model.loadState();
     if (headerState instanceof Loading) {
       return HeaderEntity.ofLoading(HeaderEntity.Loading.create("Initial Loading"));
     } else if (headerState instanceof LoadState.Error) {
-      return HeaderEntity.ofError(HeaderEntity.Error.create("Initial Loading Error", errorAction));
+      return HeaderEntity.ofError(HeaderError.create("Initial Loading Error", errorAction));
     } else {
       return model.snapshot().isEmpty()
           ? HeaderEntity.ofEmpty(Empty.create("No data at all"))
