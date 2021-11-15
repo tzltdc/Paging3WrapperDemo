@@ -3,7 +3,9 @@ package io.stream.load_state.footer;
 import androidx.paging.LoadState;
 import io.reactivex.Observable;
 
-public interface FooterLoadStateStreaming {
+public interface LoadStateStreaming {
 
-  Observable<LoadState> streaming();
+  Observable<LoadState> footer();
+
+  Observable<LoadState> header();
 }

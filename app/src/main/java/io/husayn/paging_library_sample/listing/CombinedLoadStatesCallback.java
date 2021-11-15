@@ -4,13 +4,13 @@ import androidx.paging.CombinedLoadStates;
 import androidx.paging.LoadState;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
-import io.stream.load_state.footer.FooterLoadStateStreaming;
+import io.stream.load_state.footer.LoadStateStreaming;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 
 public class CombinedLoadStatesCallback
-    implements Function1<CombinedLoadStates, Unit>, FooterLoadStateStreaming {
+    implements Function1<CombinedLoadStates, Unit>, LoadStateStreaming {
 
   private final BehaviorRelay<CombinedLoadStates> behaviorRelay = BehaviorRelay.create();
 
@@ -24,7 +24,12 @@ public class CombinedLoadStatesCallback
   }
 
   @Override
-  public Observable<LoadState> streaming() {
+  public Observable<LoadState> footer() {
     return behaviorRelay.hide().map(CombinedLoadStates::getAppend).distinctUntilChanged();
+  }
+
+  @Override
+  public Observable<LoadState> header() {
+    return behaviorRelay.hide().map(CombinedLoadStates::getRefresh).distinctUntilChanged();
   }
 }

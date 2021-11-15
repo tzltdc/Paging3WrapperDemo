@@ -14,20 +14,20 @@ public class RawFooterEntityStreaming {
 
   private final ErrorAction errorAction;
   private final PagingDataListSnapshotProvider pagingDataListSnapshotProvider;
-  private final FooterLoadStateStreaming footerLoadStateStreaming;
+  private final LoadStateStreaming loadStateStreaming;
 
   @Inject
   public RawFooterEntityStreaming(
       ErrorAction errorAction,
       PagingDataListSnapshotProvider pagingDataListSnapshotProvider,
-      FooterLoadStateStreaming footerLoadStateStreaming) {
+      LoadStateStreaming loadStateStreaming) {
     this.errorAction = errorAction;
     this.pagingDataListSnapshotProvider = pagingDataListSnapshotProvider;
-    this.footerLoadStateStreaming = footerLoadStateStreaming;
+    this.loadStateStreaming = loadStateStreaming;
   }
 
   public Observable<Optional<FooterEntity>> streaming() {
-    return footerLoadStateStreaming.streaming().map(this::buildModel).map(this::asEntity);
+    return loadStateStreaming.footer().map(this::buildModel).map(this::asEntity);
   }
 
   private Optional<FooterEntity> asEntity(PagingViewModel model) {
