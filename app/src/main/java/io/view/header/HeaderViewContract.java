@@ -6,7 +6,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import io.husayn.paging_library_sample.R;
 import io.view.header.HeaderEntity.Empty;
-import io.view.header.HeaderEntity.Error.ErrorAction;
 import timber.log.Timber;
 
 /**
@@ -55,12 +54,12 @@ public class HeaderViewContract {
     tv_header_empty_hint.setText(empty.message());
   }
 
-  private void bindError(HeaderEntity.Error error) {
+  private void bindError(HeaderError error) {
     fl_header_empty.setVisibility(View.GONE);
     fl_header_loading.setVisibility(View.GONE);
     fl_header_error.setVisibility(View.VISIBLE);
     tv_header_error_hint.setText(error.message());
-    ErrorAction action = error.action();
+    HeaderErrorAction action = error.action();
     if (action == null) {
       btn_header_retry.setVisibility(View.GONE);
       btn_header_retry.setOnClickListener(null);

@@ -1,10 +1,9 @@
 package io.husayn.paging_library_sample.listing;
 
-import io.view.header.HeaderEntity.Error.ErrorAction;
 import io.view.header.HeaderErrorCallback;
 import javax.inject.Inject;
 
-public class HeaderErrorAction extends ErrorAction {
+public class HeaderErrorAction extends io.view.header.HeaderErrorAction {
 
   private final PokemonAdapter pokemonAdapter;
 

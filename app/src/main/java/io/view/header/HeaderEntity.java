@@ -12,7 +12,7 @@ public abstract class HeaderEntity {
 
   public abstract Loading loading();
 
-  public abstract Error error();
+  public abstract HeaderError error();
 
   public abstract Empty empty();
 
@@ -20,7 +20,7 @@ public abstract class HeaderEntity {
     return AutoOneOf_HeaderEntity.loading(data);
   }
 
-  public static HeaderEntity ofError(Error data) {
+  public static HeaderEntity ofError(HeaderError data) {
     return AutoOneOf_HeaderEntity.error(data);
   }
 
@@ -52,31 +52,6 @@ public abstract class HeaderEntity {
 
     public static Empty create(String message) {
       return new AutoValue_HeaderEntity_Empty(message);
-    }
-  }
-
-  @AutoValue
-  public abstract static class Error {
-
-    public abstract String message();
-
-    @Nullable
-    public abstract ErrorAction action();
-
-    public static Error create(String message, ErrorAction action) {
-      return new AutoValue_HeaderEntity_Error(message, action);
-    }
-
-    @AutoValue
-    public abstract static class ErrorAction {
-
-      public abstract String text();
-
-      public abstract HeaderErrorCallback callback();
-
-      public static ErrorAction create(String text, HeaderErrorCallback callback) {
-        return new AutoValue_HeaderEntity_Error_ErrorAction(text, callback);
-      }
     }
   }
 }

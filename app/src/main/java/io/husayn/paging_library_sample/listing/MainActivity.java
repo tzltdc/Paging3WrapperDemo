@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
 
     @ActivityScope
     @Binds
-    public abstract HeaderEntity.Error.ErrorAction headerErrorAction(
+    public abstract io.view.header.HeaderErrorAction headerErrorAction(
         HeaderErrorAction headerErrorAction);
 
     @ActivityScope
