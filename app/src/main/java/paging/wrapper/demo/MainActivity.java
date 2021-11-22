@@ -27,7 +27,6 @@ import paging.wrapper.contract.ClickActionContract;
 import paging.wrapper.contract.HeaderContract;
 import paging.wrapper.contract.ItemViewType;
 import paging.wrapper.contract.PagingAdapterContract;
-import paging.wrapper.contract.PagingDataListSnapshotProvider;
 import paging.wrapper.contract.impl.HeaderViewContract;
 import paging.wrapper.demo.PokemonViewHolder.OnItemClickCallback;
 import paging.wrapper.demo.ui.query.FilterOptionProvider;
@@ -223,10 +222,6 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract HeaderContract headerContract(MainActivity mainActivity);
-
-    @Binds
-    public abstract PagingDataListSnapshotProvider pagingDataListSnapshotProvider(
-        PagingAdapterContract pagingAdapterContract);
 
     @Binds
     public abstract PagingAdapterContract bindPokemonAdapterCallback(PokemonAdapter impl);
