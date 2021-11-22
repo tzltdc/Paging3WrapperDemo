@@ -29,12 +29,9 @@ import paging.wrapper.contract.ItemViewType;
 import paging.wrapper.contract.PagingAdapterContract;
 import paging.wrapper.contract.impl.HeaderViewContract;
 import paging.wrapper.demo.PokemonViewHolder.OnItemClickCallback;
-import paging.wrapper.demo.ui.query.FilterOptionProvider;
+import paging.wrapper.demo.ui.query.FeatureQueryModule;
 import paging.wrapper.demo.ui.query.QueryAdapter;
 import paging.wrapper.demo.ui.query.QueryStream;
-import paging.wrapper.demo.ui.query.QueryStreamImpl;
-import paging.wrapper.demo.ui.query.QueryStreaming;
-import paging.wrapper.demo.ui.query.QueryViewHolder;
 import paging.wrapper.demo.ui.query.QueryViewHolder.QueryCallback;
 import paging.wrapper.di.ContractModule;
 import paging.wrapper.di.FooterEntityModule;
@@ -186,24 +183,17 @@ public class MainActivity extends AppCompatActivity
   }
 
   @dagger.Module(
-      includes = {ContractModule.class, FooterEntityModule.class, PagingDataModule.class})
+      includes = {
+        ContractModule.class,
+        FeatureQueryModule.class,
+        FooterEntityModule.class,
+        PagingDataModule.class
+      })
   public abstract static class Module {
 
     private static final int PAGE_SIZE = 10;
     private static final int INITIAL_SIZE = 20;
     private static final int PREFETCH_DISTANCE = 10;
-
-    @ActivityScope
-    @Provides
-    public static List<FilterBean> query() {
-      return FilterOptionProvider.get();
-    }
-
-    @ActivityScope
-    @Provides
-    public static QueryStreamImpl queryStreamImpl() {
-      return new QueryStreamImpl();
-    }
 
     @ActivityScope
     @Provides
@@ -225,16 +215,6 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract PagingAdapterContract bindPokemonAdapterCallback(PokemonAdapter impl);
-
-    @Binds
-    public abstract QueryStream bindQueryStream(QueryStreamImpl impl);
-
-    @Binds
-    public abstract QueryStreaming bindQueryStreaming(QueryStreamImpl impl);
-
-    @Binds
-    public abstract QueryViewHolder.QueryCallback queryViewHolderQueryCallback(
-        MainActivity mainActivity);
 
     @Binds
     public abstract PokemonViewHolder.OnItemClickCallback pokemonViewHolderOnItemClickCallback(
