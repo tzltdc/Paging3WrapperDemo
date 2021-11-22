@@ -34,6 +34,6 @@ public class RawFooterEntityStreaming {
   }
 
   private PagingViewModel buildModel(LoadState state) {
-    return PagingViewModel.create(state, pagingDataListSnapshotProvider.snapshot());
+    return PagingViewModel.create(state, pagingDataListSnapshotProvider.snapshotItemList());
   }
 }

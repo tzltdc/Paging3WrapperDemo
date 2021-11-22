@@ -5,5 +5,5 @@ import paging.wrapper.model.data.Pokemon;
 
 public interface PagingDataListSnapshotProvider {
 
-  List<Pokemon> snapshot();
+  List<Pokemon> snapshotItemList();
 }

@@ -34,6 +34,6 @@ public class HeaderEntityStreaming {
   }
 
   private PagingViewModel buildModel(LoadState headerState) {
-    return PagingViewModel.create(headerState, pagingDataListSnapshotProvider.snapshot());
+    return PagingViewModel.create(headerState, pagingDataListSnapshotProvider.snapshotItemList());
   }
 }

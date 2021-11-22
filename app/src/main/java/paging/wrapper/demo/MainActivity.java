@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  public List<Pokemon> snapshot() {
+  public List<Pokemon> snapshotItemList() {
     return pokemonAdapter.snapshot().getItems();
   }
 
