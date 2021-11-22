@@ -59,11 +59,7 @@ import timber.log.Timber;
 
 @ActivityScope
 public class MainActivity extends AppCompatActivity
-    implements OnItemClickCallback,
-        QueryCallback,
-        MainUI,
-        PagingDataListSnapshotProvider,
-        HeaderContract {
+    implements OnItemClickCallback, QueryCallback, MainUI, HeaderContract {
 
   @Inject QueryStream queryStream;
   @Inject PagingDataStreaming pagingDataStreaming;
@@ -190,11 +186,6 @@ public class MainActivity extends AppCompatActivity
         PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
   }
 
-  @Override
-  public List<Pokemon> snapshotItemList() {
-    return pokemonAdapter.snapshot().getItems();
-  }
-
   @dagger.Module(
       includes = {ContractModule.class, FooterEntityModule.class, PagingDataModule.class})
   public abstract static class Module {
@@ -235,7 +226,7 @@ public class MainActivity extends AppCompatActivity
 
     @Binds
     public abstract PagingDataListSnapshotProvider pagingDataListSnapshotProvider(
-        MainActivity mainActivity);
+        PagingAdapterContract pagingAdapterContract);
 
     @Binds
     public abstract PagingAdapterContract bindPokemonAdapterCallback(PokemonAdapter impl);

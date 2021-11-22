@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import io.husayn.paging_library_sample.R;
+import java.util.List;
 import javax.inject.Inject;
 import paging.wrapper.contract.FooterViewHolder;
 import paging.wrapper.contract.ItemViewType;
@@ -107,5 +108,10 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
   public void refreshFooter(FooterEntity footerEntity) {
     this.footerEntity = footerEntity;
     notifyItemChanged(footEntityPosition());
+  }
+
+  @Override
+  public List<Pokemon> snapshotItemList() {
+    return snapshot().getItems();
   }
 }
