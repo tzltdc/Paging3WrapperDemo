@@ -115,5 +115,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"
+    androidTestImplementation 'com.google.truth:truth:1.1.3'
 
 }

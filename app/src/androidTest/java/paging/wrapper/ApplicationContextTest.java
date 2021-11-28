@@ -1,6 +1,6 @@
 package paging.wrapper;
 
-import static org.junit.Assert.assertEquals;
+import static com.google.common.truth.Truth.*;
 
 import android.content.Context;
 import androidx.test.core.app.ApplicationProvider;
@@ -15,15 +15,15 @@ import org.junit.runner.RunWith;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class ApplicationContextTest {
 
   @Test
   public void useAppContext() {
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    assertEquals("io.husayn.paging_library_sample", appContext.getPackageName());
+    assertThat(appContext.getPackageName()).isEqualTo("io.husayn.paging_library_sample");
 
     Context applicationContext = ApplicationProvider.getApplicationContext();
-    assertEquals(applicationContext.getPackageName(), appContext.getPackageName());
+    assertThat(applicationContext.getPackageName()).isEqualTo(appContext.getPackageName());
   }
 }
