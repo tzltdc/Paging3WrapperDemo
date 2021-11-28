@@ -149,7 +149,10 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void submitList(PagingData<Pokemon> pagingData) {
-    Timber.i("onLoadStateChanged submitList:%s", pagingData);
+    Timber.v("onLoadStateChanged:");
+    Timber.v("onLoadStateChanged:");
+    Timber.v("onLoadStateChanged:");
+    Timber.i("onLoadStateChanged:submitList:%s", pagingData);
     srl_refresh.setRefreshing(false);
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
