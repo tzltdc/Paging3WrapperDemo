@@ -5,14 +5,14 @@ import dagger.Provides;
 import java.util.List;
 import paging.wrapper.demo.MainActivity;
 import paging.wrapper.di.app.ActivityScope;
-import paging.wrapper.model.data.FilterBean;
+import paging.wrapper.model.data.QueryModel;
 
 @dagger.Module
 public abstract class FeatureQueryModule {
 
   @ActivityScope
   @Provides
-  public static List<FilterBean> query() {
+  public static List<QueryModel> query() {
     return FilterOptionProvider.get();
   }
 
