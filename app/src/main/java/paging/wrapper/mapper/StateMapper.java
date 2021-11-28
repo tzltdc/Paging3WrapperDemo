@@ -12,6 +12,7 @@ import paging.wrapper.model.ui.HeaderEntity;
 import paging.wrapper.model.ui.HeaderEntity.Empty;
 import paging.wrapper.model.ui.LoadingUIConfig;
 import paging.wrapper.model.ui.PagingViewModel;
+import timber.log.Timber;
 
 public class StateMapper {
 
@@ -38,32 +39,32 @@ public class StateMapper {
 
   @Nullable
   public HeaderEntity headerEntity(PagingViewModel model) {
-    LoadingUIConfig config = loadingUIConfig;
+    Timber.i("headerEntity source model:%s", model);
     LoadState headerState = model.loadState();
     if (headerState instanceof Loading) {
-      return HeaderEntity.ofLoading(HeaderEntity.Loading.create(config.loadingHeader()));
+      return HeaderEntity.ofLoading(HeaderEntity.Loading.create(loadingUIConfig.loadingHeader()));
     } else if (headerState instanceof LoadState.Error) {
       return HeaderEntity.ofError(
-          ErrorData.create(config.loadingHeaderError(), config.loadingRetry()));
+          ErrorData.create(loadingUIConfig.loadingHeaderError(), loadingUIConfig.loadingRetry()));
     } else {
       return model.snapshot().isEmpty() && headerState.getEndOfPaginationReached()
-          ? HeaderEntity.ofEmpty(Empty.create(config.emptyData()))
+          ? HeaderEntity.ofEmpty(Empty.create(loadingUIConfig.emptyData()))
           : null;
     }
   }
 
   @Nullable
   public FooterEntity footerEntity(PagingViewModel model) {
-    LoadingUIConfig config = loadingUIConfig;
     LoadState footerState = model.loadState();
     if (footerState instanceof Loading) {
-      return FooterEntity.ofLoading(LoadingMore.create(config.loadingMore()));
+      return FooterEntity.ofLoading(LoadingMore.create(loadingUIConfig.loadingMore()));
     } else if (footerState instanceof LoadState.Error) {
       return FooterEntity.ofError(
-          ErrorData.create(config.loadingMoreError(), config.loadingMoreRetry()));
+          ErrorData.create(loadingUIConfig.loadingMoreError(), loadingUIConfig.loadingMoreRetry()));
     } else {
-      return footerState.getEndOfPaginationReached() && hasEnoughData(model, config.miniDataSize())
-          ? FooterEntity.ofNoMore(NoMore.create(config.noMoreData()))
+      return footerState.getEndOfPaginationReached()
+              && hasEnoughData(model, loadingUIConfig.miniDataSize())
+          ? FooterEntity.ofNoMore(NoMore.create(loadingUIConfig.noMoreData()))
           : emptyFooter();
     }
   }
