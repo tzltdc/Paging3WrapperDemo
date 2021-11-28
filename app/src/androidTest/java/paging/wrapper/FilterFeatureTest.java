@@ -2,10 +2,13 @@ package paging.wrapper;
 
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotExist;
+import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertTextColorIs;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
+import io.husayn.paging_library_sample.R;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,5 +43,16 @@ public class FilterFeatureTest {
     assertDisplayed("EMPTY");
     assertDisplayed("INITIAL_LOAD_ERROR");
     assertDisplayed("LOAD_MORE_ERROR");
+  }
+
+  @Test
+  public void case_4_1_colorCouldBeAsserted() {
+    assertTextColorIs(R.id.tv_query, R.color.colorAccent);
+  }
+
+  @Ignore
+  @Test
+  public void case_4_1_selectFilterColorShouldBeHighlighted() {
+    assertTextColorIs(R.id.tv_query, R.color.colorAccent);
   }
 }
