@@ -15,11 +15,14 @@ import paging.wrapper.model.data.QueryModel;
 public class QueryViewHolder extends RecyclerView.ViewHolder {
 
   private final TextView tv_query;
+  private final QueryStreaming queryStreaming;
   private final QueryCallback queryCallback;
 
   @AssistedInject
-  public QueryViewHolder(@Assisted View itemView, QueryCallback queryCallback) {
+  public QueryViewHolder(
+      @Assisted View itemView, QueryStreaming queryStreaming, QueryCallback queryCallback) {
     super(itemView);
+    this.queryStreaming = queryStreaming;
     this.queryCallback = queryCallback;
     this.tv_query = itemView.findViewById(R.id.tv_query);
   }
@@ -28,7 +31,7 @@ public class QueryViewHolder extends RecyclerView.ViewHolder {
     FilterBean query = model.filterBean();
     itemView.setTag(query);
     tv_query.setText(query.description());
-    tv_query.setTextColor(colorInt(colorRes(model.selected())));
+    tv_query.setTextColor(colorInt(colorRes(model.filterBean().equals(queryStreaming.peek()))));
     itemView.setOnClickListener(v -> queryCallback.query(model));
   }
 

@@ -38,9 +38,7 @@ import paging.wrapper.di.FooterEntityModule;
 import paging.wrapper.di.PagingDataModule;
 import paging.wrapper.di.app.ActivityScope;
 import paging.wrapper.di.thread.MainScheduler;
-import paging.wrapper.mapper.PagingQueryMapper;
 import paging.wrapper.model.data.FilterBean;
-import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
 import paging.wrapper.model.data.QueryModel;
@@ -180,8 +178,7 @@ public class MainActivity extends AppCompatActivity
   @Override
   public void query(QueryModel model) {
     FilterBean bean = model.filterBean();
-    queryStream.accept(
-        PagingQueryContext.create(bean.description(), PagingQueryMapper.map(bean.value())));
+    queryStream.accept(bean);
   }
 
   @dagger.Module(
