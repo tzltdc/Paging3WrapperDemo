@@ -1,13 +1,16 @@
 package paging.wrapper.stream;
 
+import androidx.annotation.NonNull;
 import androidx.paging.CombinedLoadStates;
 import androidx.paging.LoadState;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import paging.wrapper.di.app.ActivityScope;
+import timber.log.Timber;
 
 @ActivityScope
 public class CombinedLoadStatesCallback
@@ -18,10 +21,29 @@ public class CombinedLoadStatesCallback
   @Inject
   public CombinedLoadStatesCallback() {}
 
+  /**
+   * This method will be called excessively from paging internal library. And its behavior is quite
+   * chaotic(One could refer to the raw_log.md as references).
+   *
+   * <p>What is known is that
+   *
+   * <p>1, whenever the data loading action is concluded, there will be at least a
+   * [CombinedLoadStates] that all sub state are NotLoading. 2, Such state could be duplicated.
+   *
+   * <p>Based on these learnings, we are to introduce allIdle
+   */
   @Override
   public Unit invoke(CombinedLoadStates states) {
+    log(states);
     behaviorRelay.accept(states);
     return Unit.INSTANCE;
+  }
+
+  private void log(CombinedLoadStates states) {
+    Timber.v("onLoadStateChanged:combinedLoadStates:%s", states);
+    if (LoadingStateIdleMapper.allIdle(states)) {
+      logIdle(states);
+    }
   }
 
   @Override
@@ -32,5 +54,36 @@ public class CombinedLoadStatesCallback
   @Override
   public Observable<LoadState> header() {
     return behaviorRelay.hide().map(CombinedLoadStates::getRefresh).distinctUntilChanged();
+  }
+
+  @Override
+  public Observable<Unit> idle() {
+    return behaviorRelay
+        .hide()
+        .filter(LoadingStateIdleMapper::allIdle)
+        .compose(this::throttle)
+        .map(state -> Unit.INSTANCE)
+        .doOnNext(this::logIdle);
+  }
+
+  /**
+   * Two reasons to throttle the signals :
+   *
+   * <p>1, {@link #invoke} could be called with duplicated items. Throttling the signal to
+   * deduplicate the signal.
+   *
+   * <p>2, The espresso unit test could use a gap to wait the UI thread render the data.
+   */
+  @NonNull
+  private Observable<CombinedLoadStates> throttle(Observable<CombinedLoadStates> upstream) {
+    return upstream.throttleLast(200, TimeUnit.MILLISECONDS);
+  }
+
+  private void logIdle(Unit unit) {
+    Timber.i("onLoadStateChanged: IDLE signal emitted for consumers");
+  }
+
+  private void logIdle(CombinedLoadStates states) {
+    Timber.d("onLoadStateChanged:combinedLoadStates is becoming idle:%s", states);
   }
 }
