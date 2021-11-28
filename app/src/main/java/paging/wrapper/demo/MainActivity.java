@@ -46,6 +46,7 @@ import paging.wrapper.model.ui.HeaderEntity;
 import paging.wrapper.stream.CombinedLoadStatesCallback;
 import paging.wrapper.stream.LoadStateStreaming;
 import paging.wrapper.stream.PagingDataStreaming;
+import paging.wrapper.test.AppIdleStateSourceWorker;
 import paging.wrapper.worker.FooterEntityGenerator;
 import paging.wrapper.worker.FooterModelWorker;
 import paging.wrapper.worker.HeaderEntityWorker;
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity
   @Inject CombinedLoadStatesCallback combinedLoadStatesCallback;
   @Inject QueryAdapter queryAdapter;
   @Inject PagingDataWorker pagingDataWorker;
+  @Inject AppIdleStateSourceWorker appIdleStateSourceWorker;
   @Inject FooterModelWorker footerModelWorker;
   @Inject HeaderEntityWorker headerEntityWorker;
   @Inject FooterEntityGenerator footerEntityGenerator;
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindWorker() {
+    appIdleStateSourceWorker.attach(AndroidLifecycleScopeProvider.from(this));
     pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
     footerEntityGenerator.attach(AndroidLifecycleScopeProvider.from(this));
     footerModelWorker.attach(AndroidLifecycleScopeProvider.from(this));
