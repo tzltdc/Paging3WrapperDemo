@@ -3,13 +3,14 @@ apply plugin: 'com.android.application'
 android {
     compileSdk 31
     defaultConfig {
-        applicationId "io.husayn.paging_library_sample"
+        applicationId "io.paging"
         minSdk 22
         targetSdk 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        testInstrumentationRunner "paging.wrapper.DemoEspressoApplicationJunitRunner"
+
     }
     buildTypes {
         release {

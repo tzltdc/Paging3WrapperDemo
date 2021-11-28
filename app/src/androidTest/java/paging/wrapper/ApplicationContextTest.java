@@ -21,7 +21,7 @@ public class ApplicationContextTest {
   public void useAppContext() {
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-    assertThat(appContext.getPackageName()).isEqualTo("io.husayn.paging_library_sample");
+    assertThat(appContext.getPackageName()).isEqualTo("io.paging");
 
     Context applicationContext = ApplicationProvider.getApplicationContext();
     assertThat(applicationContext.getPackageName()).isEqualTo(appContext.getPackageName());

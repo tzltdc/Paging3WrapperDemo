@@ -1,6 +1,7 @@
 package paging.wrapper.app;
 
 import android.app.Application;
+import androidx.test.espresso.IdlingResource;
 import com.uber.autodispose.ScopeProvider;
 import dagger.android.AndroidInjector;
 import dagger.android.DaggerApplication;
@@ -15,6 +16,7 @@ public class PokemonApplication extends DaggerApplication {
 
   private static Application context;
 
+  @Inject IdlingResource pagingIdlingResource;
   @Inject AppWorkerBinder appWorkerBinder;
 
   @Override
@@ -46,5 +48,9 @@ public class PokemonApplication extends DaggerApplication {
 
   public static Application getContext() {
     return context;
+  }
+
+  public IdlingResource pagingIdlingResource() {
+    return pagingIdlingResource;
   }
 }
