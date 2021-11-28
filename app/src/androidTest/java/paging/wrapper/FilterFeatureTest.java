@@ -3,9 +3,9 @@ package paging.wrapper;
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotExist;
-import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertTextColorIs;
-import static paging.wrapper.ColorAssertionMatcher.*;
+import static paging.wrapper.ColorAssertionMatcher.withTextColorResId;
 
+import androidx.annotation.ColorRes;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -48,16 +48,13 @@ public class FilterFeatureTest {
   }
 
   @Test
-  public void case_4_1_colorCouldBeAsserted() {
-    assertTextColorIs(R.id.tv_query, android.R.color.black);
+  public void case_4_1_selectFilterColorShouldBeHighlighted() {
+    assertQueryTextColor(0, R.color.colorAccent);
+    assertQueryTextColor(1, android.R.color.black);
   }
 
-  @Test
-  public void case_4_1_selectFilterColorShouldBeHighlighted() {
+  private void assertQueryTextColor(int index, @ColorRes int color) {
     assertCustomAssertionAtPosition(
-        R.id.rv_query,
-        0,
-        R.id.tv_query,
-        ViewAssertions.matches(withTextColorResId((R.color.colorAccent))));
+        R.id.rv_query, index, R.id.tv_query, ViewAssertions.matches(withTextColorResId((color))));
   }
 }
