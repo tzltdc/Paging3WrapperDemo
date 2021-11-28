@@ -2,6 +2,7 @@ package paging.wrapper.demo;
 
 import static com.uber.autodispose.AutoDispose.autoDisposable;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -174,9 +175,11 @@ public class MainActivity extends AppCompatActivity
     startActivity(DetailActivity.construct(PokemonId.create(pokemon.id), this));
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   @Override
   public void query(FilterBean bean) {
     queryStream.accept(bean);
+    queryAdapter.notifyDataSetChanged();
   }
 
   @dagger.Module(
