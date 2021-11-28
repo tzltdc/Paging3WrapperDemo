@@ -117,4 +117,5 @@ dependencies {
     androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:${dagger_version}"
     androidTestImplementation 'com.google.truth:truth:1.1.3'
 
+    androidTestImplementation 'com.adevinta.android:barista:4.2.0'
 }
