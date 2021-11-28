@@ -3,6 +3,7 @@ package paging.wrapper;
 import static org.junit.Assert.assertEquals;
 
 import android.content.Context;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import org.junit.Test;
@@ -21,5 +22,8 @@ public class ExampleInstrumentedTest {
     // Context of the app under test.
     Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
     assertEquals("io.husayn.paging_library_sample", appContext.getPackageName());
+
+    Context applicationContext = ApplicationProvider.getApplicationContext();
+    assertEquals(applicationContext.getPackageName(), appContext.getPackageName());
   }
 }
