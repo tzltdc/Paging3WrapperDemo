@@ -9,8 +9,7 @@ import paging.wrapper.model.data.PagingQueryContext;
 
 public class QueryStreamImpl implements QueryStreaming, QueryStream {
 
-  private final BehaviorRelay<FilterBean> query =
-      BehaviorRelay.createDefault(FilterBean.create(FilterOptionProvider.ALL, null));
+  private final BehaviorRelay<FilterBean> query = BehaviorRelay.create();
 
   @Override
   public Observable<PagingQueryContext> streaming() {

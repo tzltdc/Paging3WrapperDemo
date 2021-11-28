@@ -1,12 +1,9 @@
 package paging.wrapper;
 
-import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertCustomAssertionAtPosition;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotExist;
-import static paging.wrapper.ColorAssertionMatcher.withTextColorResId;
+import static com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItemChild;
 
-import androidx.annotation.ColorRes;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
@@ -49,12 +46,8 @@ public class FilterFeatureTest {
 
   @Test
   public void case_4_1_selectFilterColorShouldBeHighlighted() {
-    assertQueryTextColor(0, R.color.colorAccent);
-    assertQueryTextColor(1, android.R.color.black);
-  }
-
-  private void assertQueryTextColor(int index, @ColorRes int color) {
-    assertCustomAssertionAtPosition(
-        R.id.rv_query, index, R.id.tv_query, ViewAssertions.matches(withTextColorResId((color))));
+    clickListItemChild(R.id.rv_query, 0, R.id.tv_query);
+    QueryStateAsserter.assertQueryTextColor(0, R.color.colorAccent);
+    QueryStateAsserter.assertQueryTextColor(1, android.R.color.black);
   }
 }
