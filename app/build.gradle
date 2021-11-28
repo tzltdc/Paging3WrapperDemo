@@ -39,7 +39,8 @@ android {
 
 dependencies {
     def room_version = "2.3.0"
-    def paging_version = "3.1.0"
+    //3.1.0 has breaking changes on endOfPaginationReached.
+    def paging_version = "3.0.1"
     def dagger_version = "2.40.1"
     def ribs_version = "0.12.1"
     def auto_dispose_version = "1.4.0"

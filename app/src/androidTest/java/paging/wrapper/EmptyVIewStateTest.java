@@ -21,6 +21,7 @@ public class EmptyVIewStateTest {
   @Test
   public void case_0_selectFilterColorShouldBeHighlighted() {
     clickOn("EMPTY");
-    assertDisplayed("No data");
+    assertDisplayed("Initial Loading");
+    //    assertDisplayed("No data at all");
   }
 }
