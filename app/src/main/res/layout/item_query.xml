@@ -2,6 +2,6 @@
 <Button xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/tv_query"
   style="@style/Widget.AppCompat.Button.Borderless.Colored"
-  android:textColor="@color/colorAccent"
+  android:textColor="@android:color/black"
   android:layout_width="match_parent"
   android:layout_height="72dp" />
