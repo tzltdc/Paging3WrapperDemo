@@ -10,15 +10,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import io.husayn.paging_library_sample.R;
 import java.util.List;
 import javax.inject.Inject;
-import paging.wrapper.model.data.QueryModel;
+import paging.wrapper.model.data.FilterBean;
 
 public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 
   private final QueryViewHolderFactory queryViewHolderFactory;
-  private final List<QueryModel> queryList;
+  private final List<FilterBean> queryList;
 
   @Inject
-  public QueryAdapter(QueryViewHolderFactory queryViewHolderFactory, List<QueryModel> queryList) {
+  public QueryAdapter(QueryViewHolderFactory queryViewHolderFactory, List<FilterBean> queryList) {
     this.queryViewHolderFactory = queryViewHolderFactory;
     this.queryList = queryList;
   }
@@ -32,7 +32,7 @@ public class QueryAdapter extends RecyclerView.Adapter<QueryViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull QueryViewHolder holder, int position) {
-    QueryModel query = queryList.get(position);
+    FilterBean query = queryList.get(position);
     holder.bindTo(query);
   }
 

@@ -41,7 +41,6 @@ import paging.wrapper.di.thread.MainScheduler;
 import paging.wrapper.model.data.FilterBean;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
-import paging.wrapper.model.data.QueryModel;
 import paging.wrapper.model.ui.HeaderEntity;
 import paging.wrapper.stream.CombinedLoadStatesCallback;
 import paging.wrapper.stream.LoadStateStreaming;
@@ -176,8 +175,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  public void query(QueryModel model) {
-    FilterBean bean = model.filterBean();
+  public void query(FilterBean bean) {
     queryStream.accept(bean);
   }
 

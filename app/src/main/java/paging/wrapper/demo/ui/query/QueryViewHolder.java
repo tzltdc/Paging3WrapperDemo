@@ -10,7 +10,6 @@ import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.husayn.paging_library_sample.R;
 import paging.wrapper.model.data.FilterBean;
-import paging.wrapper.model.data.QueryModel;
 
 public class QueryViewHolder extends RecyclerView.ViewHolder {
 
@@ -27,12 +26,11 @@ public class QueryViewHolder extends RecyclerView.ViewHolder {
     this.tv_query = itemView.findViewById(R.id.tv_query);
   }
 
-  public void bindTo(QueryModel model) {
-    FilterBean query = model.filterBean();
+  public void bindTo(FilterBean query) {
     itemView.setTag(query);
     tv_query.setText(query.description());
-    tv_query.setTextColor(colorInt(colorRes(model.filterBean().equals(queryStreaming.peek()))));
-    itemView.setOnClickListener(v -> queryCallback.query(model));
+    tv_query.setTextColor(colorInt(colorRes(query.equals(queryStreaming.peek()))));
+    itemView.setOnClickListener(v -> queryCallback.query(query));
   }
 
   @ColorInt
@@ -47,6 +45,6 @@ public class QueryViewHolder extends RecyclerView.ViewHolder {
 
   public interface QueryCallback {
 
-    void query(QueryModel query);
+    void query(FilterBean query);
   }
 }
