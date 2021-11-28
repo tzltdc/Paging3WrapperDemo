@@ -29,7 +29,7 @@ public class QueryViewHolder extends RecyclerView.ViewHolder {
     itemView.setTag(query);
     tv_query.setText(query.description());
     tv_query.setTextColor(colorInt(colorRes(model.selected())));
-    itemView.setOnClickListener(v -> queryCallback.query(query));
+    itemView.setOnClickListener(v -> queryCallback.query(model));
   }
 
   @ColorInt
@@ -44,6 +44,6 @@ public class QueryViewHolder extends RecyclerView.ViewHolder {
 
   public interface QueryCallback {
 
-    void query(FilterBean query);
+    void query(QueryModel query);
   }
 }

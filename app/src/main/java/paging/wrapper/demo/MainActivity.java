@@ -43,6 +43,7 @@ import paging.wrapper.model.data.FilterBean;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
+import paging.wrapper.model.data.QueryModel;
 import paging.wrapper.model.ui.HeaderEntity;
 import paging.wrapper.stream.CombinedLoadStatesCallback;
 import paging.wrapper.stream.LoadStateStreaming;
@@ -177,9 +178,10 @@ public class MainActivity extends AppCompatActivity
   }
 
   @Override
-  public void query(FilterBean query) {
+  public void query(QueryModel model) {
+    FilterBean bean = model.filterBean();
     queryStream.accept(
-        PagingQueryContext.create(query.description(), PagingQueryMapper.map(query.value())));
+        PagingQueryContext.create(bean.description(), PagingQueryMapper.map(bean.value())));
   }
 
   @dagger.Module(
