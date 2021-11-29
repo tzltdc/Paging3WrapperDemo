@@ -29,9 +29,6 @@ android {
         exclude 'META-INF/compiler_main.kotlin_module'
     }
 
-    dexOptions {
-        javaMaxHeapSize "6g"
-    }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8

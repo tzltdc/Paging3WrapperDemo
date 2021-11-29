@@ -10,7 +10,7 @@ public class User {
   public static final String TABLE_NAME = "user";
 
   @PrimaryKey
-  @ColumnInfo(name = ID)
+  @ColumnInfo(name = ID, index = true)
   public final int id;
 
   public final String login;
