@@ -57,7 +57,7 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
       PokemonViewHolder pokemonViewHolder = (PokemonViewHolder) viewHolder;
       Pokemon pokemon = getItem(position);
       if (pokemon != null) {
-        pokemonViewHolder.bindTo(pokemon);
+        pokemonViewHolder.bindTo(pokemon, position);
       } else {
         pokemonViewHolder.clear();
       }

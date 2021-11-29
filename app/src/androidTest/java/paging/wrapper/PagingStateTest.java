@@ -1,6 +1,7 @@
 package paging.wrapper;
 
 import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertDisplayedAtPosition;
+import static com.adevinta.android.barista.assertion.BaristaListAssertions.assertListItemCount;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed;
 import static com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotExist;
 import static com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn;
@@ -36,7 +37,7 @@ public class PagingStateTest {
     assertDisplayed("Idle");
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = 6)
   @Test
   public void case_1_whenNoMatchedQuery_shouldShowEmptyView() {
     clickListItemChild(R.id.rv_query, 5, R.id.tv_query);
@@ -51,7 +52,7 @@ public class PagingStateTest {
     IdlingRegistry.getInstance().register(activity.pagingIdlingResource());
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = 6)
   @Test
   public void case_2_whenOnlyOneResultReturns_shouldNotShowFooterView() {
     clickListItemChild(R.id.rv_query, 4, R.id.tv_query);
@@ -63,7 +64,7 @@ public class PagingStateTest {
     assertNotExist("No more data");
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = 6)
   @Test
   public void case_3_when12ResultsReturns_shouldLoadAllDataAndFooter() {
     clickOn("12 WITH EE");
@@ -75,5 +76,23 @@ public class PagingStateTest {
 
     assertDisplayedAtPosition(R.id.rv_pokemons, 11, R.id.tv_pokemon_id, "[12]:#133");
     assertDisplayedAtPosition(R.id.rv_pokemons, 12, R.id.tv_footer_no_more_hint, "No more data");
+
+    assertListItemCount(R.id.rv_pokemons, 13);
+  }
+
+  @AllowFlaky(attempts = 6)
+  @Test
+  public void case_4_when16ResultsReturns_shouldLoadAllDataAndFooter() {
+    clickOn("16 WITH B");
+
+    activityRule.getScenario().onActivity(this::register);
+
+    assertDisplayed("[1]:#001");
+    assertDisplayed("[9]:#071");
+
+    assertDisplayedAtPosition(R.id.rv_pokemons, 15, R.id.tv_pokemon_id, "[16]:#141");
+    assertDisplayedAtPosition(R.id.rv_pokemons, 16, R.id.tv_footer_no_more_hint, "No more data");
+
+    assertListItemCount(R.id.rv_pokemons, 17);
   }
 }
