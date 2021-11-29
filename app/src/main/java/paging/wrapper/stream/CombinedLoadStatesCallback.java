@@ -40,7 +40,7 @@ public class CombinedLoadStatesCallback
   }
 
   private void log(CombinedLoadStates states) {
-    Timber.v("onLoadStateChanged:combinedLoadStates:%s", states);
+    Timber.i("onLoadStateChanged:combinedLoadStates:%s", states);
     if (LoadingStateIdleMapper.allIdle(states)) {
       logIdle(states);
     }
@@ -84,6 +84,6 @@ public class CombinedLoadStatesCallback
   }
 
   private void logIdle(CombinedLoadStates states) {
-    Timber.d("onLoadStateChanged:combinedLoadStates is becoming idle:%s", states);
+    Timber.i("onLoadStateChanged:combinedLoadStates is becoming idle:%s", states);
   }
 }
