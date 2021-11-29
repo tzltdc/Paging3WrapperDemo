@@ -8,4 +8,5 @@
   <string name="click_retry">retry</string>
   <string name="loading">loading</string>
   <string name="no_more">No more</string>
+  <string name="idle">Idle</string>
 </resources>
