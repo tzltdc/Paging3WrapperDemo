@@ -3,22 +3,22 @@ package paging.wrapper.test;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import paging.wrapper.di.app.AppScope;
+import paging.wrapper.di.app.ActivityScope;
 
 @Module
 public abstract class AppIdleStateStreamModule {
 
-  @AppScope
+  @ActivityScope
   @Provides
-  public static AppIdleStateStreamImpl footerLoadStateStreamImpl() {
+  public static AppIdleStateStreamImpl appIdleStateStreamImpl() {
     return new AppIdleStateStreamImpl();
   }
 
-  @AppScope
+  @ActivityScope
   @Binds
-  public abstract AppIdleStateStream footerLoadStateStream(AppIdleStateStreamImpl impl);
+  public abstract AppIdleStateStream appIdleStateStream(AppIdleStateStreamImpl impl);
 
-  @AppScope
+  @ActivityScope
   @Binds
-  public abstract AppIdleStateStreaming footerLoadStateStreaming(AppIdleStateStreamImpl impl);
+  public abstract AppIdleStateStreaming appIdleStateStreaming(AppIdleStateStreamImpl impl);
 }

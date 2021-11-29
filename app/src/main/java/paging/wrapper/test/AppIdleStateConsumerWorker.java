@@ -7,10 +7,8 @@ import com.uber.autodispose.ScopeProvider;
 import javax.inject.Inject;
 import kotlin.Unit;
 import paging.wrapper.app.AutoDisposeWorker;
-import paging.wrapper.di.app.AppScope;
 import timber.log.Timber;
 
-@AppScope
 public class AppIdleStateConsumerWorker implements AutoDisposeWorker, IdlingResource {
 
   private final AppIdleStateStream appIdleStateStream;

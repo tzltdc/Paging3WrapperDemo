@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.test.espresso.IdlingResource;
 import com.uber.autodispose.android.lifecycle.AndroidLifecycleScopeProvider;
 import dagger.Binds;
 import dagger.Provides;
@@ -46,7 +47,9 @@ import paging.wrapper.model.ui.HeaderEntity;
 import paging.wrapper.stream.CombinedLoadStatesCallback;
 import paging.wrapper.stream.LoadStateStreaming;
 import paging.wrapper.stream.PagingDataStreaming;
+import paging.wrapper.test.AppIdleStateConsumerWorker;
 import paging.wrapper.test.AppIdleStateSourceWorker;
+import paging.wrapper.test.AppIdleStateStreamModule;
 import paging.wrapper.worker.FooterEntityGenerator;
 import paging.wrapper.worker.FooterModelWorker;
 import paging.wrapper.worker.HeaderEntityWorker;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity
   @Inject HeaderEntityWorker headerEntityWorker;
   @Inject FooterEntityGenerator footerEntityGenerator;
   @Inject ClickActionContract clickActionContract;
+  @Inject AppIdleStateConsumerWorker appIdleStateConsumerWorker;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void bindWorker() {
+    appIdleStateConsumerWorker.attach(AndroidLifecycleScopeProvider.from(this));
     appIdleStateSourceWorker.attach(AndroidLifecycleScopeProvider.from(this));
     pagingDataWorker.attach(AndroidLifecycleScopeProvider.from(this));
     footerEntityGenerator.attach(AndroidLifecycleScopeProvider.from(this));
@@ -188,8 +193,13 @@ public class MainActivity extends AppCompatActivity
     queryAdapter.notifyDataSetChanged();
   }
 
+  public IdlingResource pagingIdlingResource() {
+    return appIdleStateConsumerWorker;
+  }
+
   @dagger.Module(
       includes = {
+        AppIdleStateStreamModule.class,
         ContractModule.class,
         FeatureQueryModule.class,
         FooterEntityModule.class,
