@@ -66,7 +66,7 @@ public class PagingStateTest {
 
   @AllowFlaky(attempts = 6)
   @Test
-  public void case_3_when12ResultsReturns_shouldLoadAllDataAndFooter() {
+  public void case_3_1_when12ResultsReturns_shouldLoadAllDataAndFooter() {
     clickOn("12 WITH EE");
 
     activityRule.getScenario().onActivity(this::register);
@@ -82,7 +82,7 @@ public class PagingStateTest {
 
   @AllowFlaky(attempts = 6)
   @Test
-  public void case_4_when16ResultsReturns_shouldLoadAllDataAndFooter() {
+  public void case_3_2_when16ResultsReturns_shouldLoadAllDataAndFooter() {
     clickOn("16 WITH B");
 
     activityRule.getScenario().onActivity(this::register);
@@ -94,5 +94,18 @@ public class PagingStateTest {
     assertDisplayedAtPosition(R.id.rv_pokemons, 16, R.id.tv_footer_no_more_hint, "No more data");
 
     assertListItemCount(R.id.rv_pokemons, 17);
+  }
+
+  @AllowFlaky(attempts = 6)
+  @Test
+  public void case_4_when83ResultsReturns_shouldLoadPartialDataAndFooter() {
+    clickOn("83 WITH A");
+
+    activityRule.getScenario().onActivity(this::register);
+
+    assertDisplayed("[1]:#001");
+    assertDisplayed("[9]:#010");
+
+    assertDisplayed("Loading more");
   }
 }
