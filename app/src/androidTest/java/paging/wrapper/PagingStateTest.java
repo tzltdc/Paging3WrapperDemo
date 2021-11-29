@@ -16,13 +16,18 @@ import paging.wrapper.demo.MainActivity;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class EmptyVIewStateTest {
+public class PagingStateTest {
 
   @Rule
   public ActivityScenarioRule<MainActivity> rule = new ActivityScenarioRule<>(MainActivity.class);
 
   @Test
-  public void case_0_selectFilterColorShouldBeHighlighted() {
+  public void case_0_byDefaultItIsIdlingState() {
+    assertDisplayed("Idle");
+  }
+
+  @Test
+  public void case_1_whenNoMatchedQuery_shouldShowEmptyView() {
     clickListItemChild(R.id.rv_query, 5, R.id.tv_query);
 
     EspressoApp espressoApp = (EspressoApp) ApplicationProvider.getApplicationContext();
