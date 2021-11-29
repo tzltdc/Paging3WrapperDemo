@@ -10,7 +10,7 @@ public class Repo {
   public static final String ID = "_id";
 
   @PrimaryKey
-  @ColumnInfo(name = ID)
+  @ColumnInfo(name = ID, index = true)
   public final int id;
 
   public final String name;
