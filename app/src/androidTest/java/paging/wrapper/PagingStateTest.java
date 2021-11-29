@@ -105,6 +105,7 @@ public class PagingStateTest {
 
     assertDisplayed("[1]:#001");
     assertDisplayed("[9]:#010");
+    assertDisplayedAtPosition(R.id.rv_pokemons, 8, R.id.tv_pokemon_id, "[9]:#010");
 
     assertDisplayed("Loading more");
   }
