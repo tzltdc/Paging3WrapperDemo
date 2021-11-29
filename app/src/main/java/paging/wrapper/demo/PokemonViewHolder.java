@@ -33,9 +33,9 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
     pokemonSpriteImageView = itemView.findViewById(R.id.iv_pokemon);
   }
 
-  void bindTo(Pokemon pokemon) {
+  void bindTo(Pokemon pokemon, int position) {
     itemView.setTag(pokemon.id);
-    pokemonIdTextView.setText(format(pokemon));
+    pokemonIdTextView.setText(format(pokemon, position));
     pokemonNameTextView.setText(pokemon.name);
     Glide.with(itemView.getContext())
         .load(pokemonSpriteUrl(pokemon.id))
@@ -44,9 +44,8 @@ class PokemonViewHolder extends RecyclerView.ViewHolder {
     itemView.setOnClickListener(v -> onItemClickCallback.onItemClick(pokemon));
   }
 
-  private String format(Pokemon pokemon) {
-    return String.format(
-        Locale.getDefault(), "[%s]:%s", getBindingAdapterPosition() + 1, pokemonId(pokemon));
+  private String format(Pokemon pokemon, int position) {
+    return String.format(Locale.getDefault(), "[%s]:%s", position + 1, pokemonId(pokemon));
   }
 
   private String pokemonId(Pokemon pokemon) {
