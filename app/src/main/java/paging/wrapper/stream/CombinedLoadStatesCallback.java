@@ -76,7 +76,7 @@ public class CombinedLoadStatesCallback
    */
   @NonNull
   private Observable<CombinedLoadStates> throttle(Observable<CombinedLoadStates> upstream) {
-    return upstream.throttleLast(200, TimeUnit.MILLISECONDS);
+    return upstream.throttleLast(350, TimeUnit.MILLISECONDS);
   }
 
   private void logIdle(Unit unit) {
