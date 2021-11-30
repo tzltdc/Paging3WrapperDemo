@@ -1,0 +1,5 @@
+apply plugin: 'jacoco'
+//Enable RobolectricTestRunner  https://github.com/NeoTech-Software/Android-Root-Coverage-Plugin/issues/18#issuecomment-576630461
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
