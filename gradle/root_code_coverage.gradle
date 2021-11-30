@@ -29,6 +29,9 @@ rootCoverage {
         //Autofactory
         '**/*Factory.*',
 
+        //Room
+        '**/*Dao_Impl.*',
+
         //Classes I intentionally don't want to test
         '**/*Activity.*',
     ]
