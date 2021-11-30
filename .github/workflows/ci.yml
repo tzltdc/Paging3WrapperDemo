@@ -15,30 +15,6 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 8
-  unit-tests:
-    name: Unit tests
-    runs-on: Linux
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v2.4.0
-      - uses: actions/setup-java@v2.3.1
-        with:
-          distribution: 'zulu'
-          java-version: 8
-      - name: Unit tests
-        run: ./gradlew testDebugUnitTest
-
-  instrumentation-tests:
-    name: Instrumentation tests
-    runs-on: Linux
-    timeout-minutes: 60
-    steps:
-      - name: checkout
-        uses: actions/checkout@v2.4.0
-      - uses: actions/setup-java@v2.3.1
-        with:
-          distribution: 'zulu'
-          java-version: 8
       - name: Assembling app debug flavor
         run: ./gradlew :app:assembleDebug
       - name: run java unit tests
@@ -50,4 +26,4 @@ jobs:
           file: ./build/reports/jacoco.xml
           flags: unittests
           name: codecov-umbrella
-          fail_ci_if_error: false
+          fail_ci_if_error: true
