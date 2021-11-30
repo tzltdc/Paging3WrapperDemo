@@ -41,5 +41,4 @@ rootCoverage {
     generateHtml true
     includeUnitTestResults true
     includeAndroidTestResults "${enable_android_test}".toBoolean()
-    includeNoLocationClasses true
 }
