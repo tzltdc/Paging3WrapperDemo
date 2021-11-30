@@ -1,4 +1,6 @@
 # Pokedex - Paging Library Sample
+[![codecov](https://codecov.io/gh/tzltdc/paging3/branch/master/graph/badge.svg?token=Hdddtu17v7)](https://codecov.io/gh/tzltdc/paging3)
+
 ![alt text](https://github.com/Husaynhakeem/Paging-Library-Sample/blob/master/app/src/main/res/drawable/pokedex_mini.png)
 
 Sample Pokedex Android application used to practice [Android's paging library](https://developer.android.com/topic/libraries/architecture/paging.html#overview).
