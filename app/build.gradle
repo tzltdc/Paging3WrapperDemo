@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 31
+    compileSdkVersion 31
     defaultConfig {
         applicationId "io.paging"
-        minSdk 22
-        targetSdk 31
+        minSdkVersion 22
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
