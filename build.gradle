@@ -7,7 +7,6 @@ buildscript {
 
     }
     dependencies {
-        classpath 'org.jacoco:org.jacoco.core:0.8.6'
         classpath 'com.android.tools.build:gradle:4.2.2'
         classpath "nl.neotech.plugin:android-root-coverage-plugin:${neotech_coverage}"
     }
