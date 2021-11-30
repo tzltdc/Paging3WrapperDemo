@@ -7,7 +7,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.3'
+        classpath 'com.android.tools.build:gradle:4.2.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,11 +16,14 @@ buildscript {
 
 
 plugins {
-    id "com.github.sherter.google-java-format" version "0.9"
+    id "com.github.sherter.google-java-format" version "0.8"
 }
 
 apply from: "${rootDir}/gradle/google_java_format.gradle"
 
+if (project.hasProperty('coverage')){
+    apply from: "${rootDir}/gradle/root_code_coverage.gradle"
+}
 
 allprojects {
     repositories {
