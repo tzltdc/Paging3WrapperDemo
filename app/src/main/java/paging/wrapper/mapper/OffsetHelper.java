@@ -2,6 +2,7 @@ package paging.wrapper.mapper;
 
 import io.reactivex.Observable;
 import java.util.List;
+import javax.inject.Inject;
 import paging.wrapper.data.PokemonBackendService;
 import paging.wrapper.db.RemoteDataServer;
 import paging.wrapper.model.data.PagingQueryParam;
@@ -10,8 +11,15 @@ import timber.log.Timber;
 
 public class OffsetHelper {
 
+  private final RemoteDataServer remoteDataServer;
+
+  @Inject
+  public OffsetHelper(RemoteDataServer remoteDataServer) {
+    this.remoteDataServer = remoteDataServer;
+  }
+
   /** Temporarily using the remote service to identify the offset position */
-  public static long offset(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
+  public long offset(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
     long loaded = offSet(lastFetchedAsTarget, query);
     Timber.i(
         "offset loaded count:%s, query:%s, last item:%s",
@@ -19,9 +27,9 @@ public class OffsetHelper {
     return loaded;
   }
 
-  private static Long offSet(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
+  private Long offSet(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
     List<Pokemon> matched =
-        Observable.fromIterable(RemoteDataServer.all())
+        Observable.fromIterable(remoteDataServer.get())
             .filter(item -> PokemonBackendService.validItem(item, query))
             .toList()
             .blockingGet();

@@ -19,6 +19,7 @@ import timber.log.Timber;
 public class PokemonLoadMoreSource {
 
   private final PokemonRepo pokemonRepo;
+  private final PagingRequestMapper pagingRequestMapper;
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
   private final WorkerScheduler workerScheduler;
   private int retryCount = 0;
@@ -26,9 +27,11 @@ public class PokemonLoadMoreSource {
   @Inject
   public PokemonLoadMoreSource(
       PokemonRepo pokemonRepo,
+      PagingRequestMapper pagingRequestMapper,
       PokemonMediatorResultRepo pokemonMediatorResultRepo,
       WorkerScheduler workerScheduler) {
     this.pokemonRepo = pokemonRepo;
+    this.pagingRequestMapper = pagingRequestMapper;
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
     this.workerScheduler = workerScheduler;
     Timber.i("created:%s", this);
@@ -68,7 +71,7 @@ public class PokemonLoadMoreSource {
     if (lastItem == null) {
       return skipLoadingMore(query);
     } else {
-      PagingRequest pagingRequest = PagingRequestMapper.nextPagingRequest(query, lastItem);
+      PagingRequest pagingRequest = pagingRequestMapper.nextPagingRequest(query, lastItem);
       Timber.i(
           "[ttt]:loading more with assembled paging request:%s based on last_item:%s",
           pagingRequest, lastItem);

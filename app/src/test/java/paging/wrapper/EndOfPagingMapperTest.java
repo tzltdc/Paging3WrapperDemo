@@ -4,8 +4,6 @@ import static com.google.common.truth.Truth.assertThat;
 
 import java.util.Collections;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 import paging.wrapper.data.EndOfPagingMapper;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingQueryParam;
@@ -14,7 +12,6 @@ import paging.wrapper.model.data.PagingRequest;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonDto;
 
-@RunWith(RobolectricTestRunner.class)
 public class EndOfPagingMapperTest {
 
   @Test

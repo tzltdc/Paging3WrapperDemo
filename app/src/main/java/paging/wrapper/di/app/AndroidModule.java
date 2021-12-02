@@ -1,7 +1,16 @@
 package paging.wrapper.di.app;
 
 import dagger.Module;
-import dagger.android.support.AndroidSupportInjectionModule;
+import paging.wrapper.di.view_model.ViewModelMultiBindingModule;
+import paging.wrapper.di.view_model.ViewModelRegisterModule;
 
-@Module(includes = {AndroidSupportInjectionModule.class, ActivityInjectorModule.class})
+@Module(
+    includes = {
+      DaggerAndroidModule.class,
+      ApplicationDerivedModule.class,
+      DatabaseModule.class,
+      AppContextDerivedModule.class,
+      ViewModelMultiBindingModule.class,
+      ViewModelRegisterModule.class
+    })
 public abstract class AndroidModule {}

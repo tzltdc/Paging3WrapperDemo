@@ -2,5 +2,5 @@ package paging.wrapper.di.app;
 
 import dagger.Module;
 
-@Module(includes = {DatabaseModule.class})
+@Module
 public abstract class RepoModule {}

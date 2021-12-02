@@ -3,6 +3,7 @@ package paging.wrapper.data;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.disposables.Disposable;
+import javax.inject.Inject;
 import paging.wrapper.db.RemoteDataServer;
 import paging.wrapper.model.data.PagingQueryParam;
 import paging.wrapper.model.data.PagingRequest;
@@ -12,8 +13,15 @@ import timber.log.Timber;
 
 public class PokemonBackendService {
 
-  public static Single<PokemonDto> query(PagingRequest pagingRequest) {
-    return Observable.fromIterable(RemoteDataServer.all())
+  private final RemoteDataServer remoteDataServer;
+
+  @Inject
+  public PokemonBackendService(RemoteDataServer remoteDataServer) {
+    this.remoteDataServer = remoteDataServer;
+  }
+
+  public Single<PokemonDto> query(PagingRequest pagingRequest) {
+    return Observable.fromIterable(remoteDataServer.get())
         .doOnSubscribe(PokemonBackendService::logSubscribed)
         .filter(item -> validItem(item, pagingRequest.pagingQueryParam()))
         .skip(pagingRequest.offSet())

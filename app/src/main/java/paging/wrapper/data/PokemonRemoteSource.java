@@ -15,14 +15,18 @@ public class PokemonRemoteSource {
   private static final int DELAY_IN_MS = 1100;
 
   private final WorkerScheduler workerScheduler;
+  private final PokemonBackendService pokemonBackendService;
 
   @Inject
-  public PokemonRemoteSource(WorkerScheduler workerScheduler) {
+  public PokemonRemoteSource(
+      WorkerScheduler workerScheduler, PokemonBackendService pokemonBackendService) {
     this.workerScheduler = workerScheduler;
+    this.pokemonBackendService = pokemonBackendService;
   }
 
   public Single<PageActionResult> fetch(PagingRequest pagingRequest) {
-    return PokemonBackendService.query(pagingRequest)
+    return pokemonBackendService
+        .query(pagingRequest)
         .subscribeOn(workerScheduler.get())
         .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
         .timeout(timeout(), TimeUnit.MILLISECONDS, workerScheduler.get())
