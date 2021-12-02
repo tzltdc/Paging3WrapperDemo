@@ -2,13 +2,17 @@ package androidx.paging.wrapper;
 
 import com.google.auto.value.AutoValue;
 
+/** Collection of pagination LoadStates - refresh, prepend, and append. */
 @AutoValue
 public abstract class LoadStates {
 
+  /** LoadState corresponding to LoadType.REFRESH loads. */
   public abstract LoadState refresh();
 
+  /** LoadState corresponding to LoadType.PREPEND loads. */
   public abstract LoadState prepend();
 
+  /** LoadState corresponding to LoadType.APPEND loads. */
   public abstract LoadState append();
 
   public static Builder builder() {
