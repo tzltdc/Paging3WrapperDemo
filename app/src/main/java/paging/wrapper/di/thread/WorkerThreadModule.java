@@ -21,6 +21,12 @@ public abstract class WorkerThreadModule {
     return Schedulers.from(threadExecutor);
   }
 
+  @Provides
+  @AppScope
+  static AppScheduler appScheduler(ThreadExecutor threadExecutor) {
+    return new AppScheduler(threadExecutor);
+  }
+
   @AppScope
   @Provides
   public static ThreadConfig threadConfig(AppConfig appConfig) {
