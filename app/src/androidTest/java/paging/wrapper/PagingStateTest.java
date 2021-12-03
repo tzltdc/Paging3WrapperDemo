@@ -24,6 +24,7 @@ import paging.wrapper.demo.MainActivity;
 @LargeTest
 public class PagingStateTest {
 
+  private static final int REPEAT = 30;
   private final FlakyTestRule flakyRule = new FlakyTestRule();
 
   @Rule
@@ -37,7 +38,7 @@ public class PagingStateTest {
     assertDisplayed("Idle");
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = REPEAT)
   @Test
   public void case_1_whenNoMatchedQuery_shouldShowEmptyView() {
     clickListItemChild(R.id.rv_query, 5, R.id.tv_query);
@@ -52,7 +53,7 @@ public class PagingStateTest {
     IdlingRegistry.getInstance().register(activity.pagingIdlingResource());
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = REPEAT)
   @Test
   public void case_2_whenOnlyOneResultReturns_shouldNotShowFooterView() {
     clickListItemChild(R.id.rv_query, 4, R.id.tv_query);
@@ -64,7 +65,7 @@ public class PagingStateTest {
     assertNotExist("No more data");
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = REPEAT)
   @Test
   public void case_3_1_when12ResultsReturns_shouldLoadAllDataAndFooter() {
     clickOn("12 WITH EE");
@@ -80,7 +81,7 @@ public class PagingStateTest {
     assertListItemCount(R.id.rv_pokemons, 13);
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = REPEAT)
   @Test
   public void case_3_2_when16ResultsReturns_shouldLoadAllDataAndFooter() {
     clickOn("16 WITH B");
@@ -96,7 +97,7 @@ public class PagingStateTest {
     assertListItemCount(R.id.rv_pokemons, 17);
   }
 
-  @AllowFlaky(attempts = 30)
+  @AllowFlaky(attempts = REPEAT)
   @Test
   public void case_4_when83ResultsReturns_shouldLoadPartialDataAndFooter() {
     clickOn("83 WITH A");
