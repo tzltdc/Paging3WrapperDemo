@@ -13,7 +13,6 @@ import io.husayn.paging_library_sample.R;
 import javax.inject.Inject;
 import paging.wrapper.data.PokemonRepo;
 import paging.wrapper.di.thread.AppScheduler;
-import paging.wrapper.di.thread.WorkerScheduler;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
 
@@ -21,7 +20,6 @@ public class DetailActivity extends AppCompatActivity {
 
   @Inject PokemonRepo pokemonRepo;
   @Inject AppScheduler appScheduler;
-  @Inject WorkerScheduler workerScheduler;
   private TextView tv_pokemon_id;
   private TextView tv_pokemon_name;
 

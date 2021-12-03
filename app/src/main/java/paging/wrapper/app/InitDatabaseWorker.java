@@ -4,31 +4,31 @@ import com.uber.autodispose.ScopeProvider;
 import javax.inject.Inject;
 import paging.wrapper.app.config.AppConfig;
 import paging.wrapper.data.PokemonRepo;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 
 public class InitDatabaseWorker implements AutoDisposeWorker {
 
   private final AppConfig appConfig;
   private final AppStatusRepo appStatusRepo;
   private final PokemonRepo pokemonRepo;
-  private final WorkerScheduler workerScheduler;
+  private final AppScheduler appScheduler;
 
   @Inject
   public InitDatabaseWorker(
       AppConfig appConfig,
       AppStatusRepo appStatusRepo,
       PokemonRepo pokemonRepo,
-      WorkerScheduler workerScheduler) {
+      AppScheduler appScheduler) {
     this.appConfig = appConfig;
     this.appStatusRepo = appStatusRepo;
     this.pokemonRepo = pokemonRepo;
-    this.workerScheduler = workerScheduler;
+    this.appScheduler = appScheduler;
   }
 
   @Override
   public void attach(ScopeProvider scopeProvider) {
     if (appConfig.initializeDatabase()) {
-      workerScheduler.get().scheduleDirect(this::initIfNeeded);
+      appScheduler.worker().scheduleDirect(this::initIfNeeded);
     }
   }
 

@@ -7,7 +7,7 @@ import androidx.paging.rxjava2.RxRemoteMediator;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.reactivex.Single;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
@@ -15,18 +15,18 @@ import timber.log.Timber;
 public class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
 
   private final PagingQueryContext query;
-  private final WorkerScheduler workerScheduler;
+  private final AppScheduler appScheduler;
   private final PokemonInitialLoadSource pokemonInitialLoadSource;
   private final PokemonLoadMoreSource pokemonLoadMoreSource;
 
   @AssistedInject
   PokemonRemoteMediator(
       @Assisted PagingQueryContext query,
-      WorkerScheduler workerScheduler,
+      AppScheduler appScheduler,
       PokemonInitialLoadSource pokemonInitialLoadSource,
       PokemonLoadMoreSource pokemonLoadMoreSource) {
     this.query = query;
-    this.workerScheduler = workerScheduler;
+    this.appScheduler = appScheduler;
     this.pokemonInitialLoadSource = pokemonInitialLoadSource;
     this.pokemonLoadMoreSource = pokemonLoadMoreSource;
   }
@@ -49,9 +49,9 @@ public class PokemonRemoteMediator extends RxRemoteMediator<Integer, Pokemon> {
         loadType, query);
     switch (loadType) {
       case REFRESH:
-        return refresh().subscribeOn(workerScheduler.get());
+        return refresh().subscribeOn(appScheduler.worker());
       case APPEND:
-        return append().subscribeOn(workerScheduler.get());
+        return append().subscribeOn(appScheduler.worker());
       case PREPEND:
       default:
         return ignorePrepend();

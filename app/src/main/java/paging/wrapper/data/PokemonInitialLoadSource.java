@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import paging.wrapper.demo.ui.query.FilterOptionProvider;
 import paging.wrapper.di.app.ActivityScope;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.mapper.PagingRequestMapper;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.PagingQueryParam;
@@ -17,12 +17,12 @@ import timber.log.Timber;
 public class PokemonInitialLoadSource {
 
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
-  private final WorkerScheduler scheduler;
+  private final AppScheduler scheduler;
   private int retryCount = 0;
 
   @Inject
   public PokemonInitialLoadSource(
-      PokemonMediatorResultRepo pokemonMediatorResultRepo, WorkerScheduler scheduler) {
+      PokemonMediatorResultRepo pokemonMediatorResultRepo, AppScheduler scheduler) {
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
     this.scheduler = scheduler;
     Timber.i("PokemonInitialLoadSource created:%s", this);
@@ -51,7 +51,7 @@ public class PokemonInitialLoadSource {
 
   private Single<MediatorResult> simulateError(PagingQueryParam query) {
     Timber.i("[ttt]: PokemonInitialLoadSource is to return a simulated error with query:%s", query);
-    return Single.timer(1000, TimeUnit.MILLISECONDS, scheduler.get())
+    return Single.timer(1000, TimeUnit.MILLISECONDS, scheduler.worker())
         .map(ignored -> new MediatorResult.Error(new RuntimeException("Simulated initial error")));
   }
 }

@@ -9,7 +9,7 @@ import io.reactivex.Observable;
 import javax.inject.Inject;
 import kotlin.jvm.functions.Function0;
 import paging.wrapper.demo.ui.query.QueryStreaming;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.PagerContext;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.PagingQueryParam;
@@ -24,7 +24,7 @@ public class PagingPokemonRepo {
   private final PagingConfig androidPagingConfig;
   private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
-  private final WorkerScheduler workerScheduler;
+  private final AppScheduler appScheduler;
 
   @Inject
   public PagingPokemonRepo(
@@ -32,19 +32,19 @@ public class PagingPokemonRepo {
       PagingConfig androidPagingConfig,
       PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory,
       QueryStreaming queryStreaming,
-      WorkerScheduler workerScheduler) {
+      AppScheduler appScheduler) {
     this.pokemonRepo = pokemonRepo;
     this.androidPagingConfig = androidPagingConfig;
     this.pokemonRemoteMediatorFactory = pokemonRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
-    this.workerScheduler = workerScheduler;
+    this.appScheduler = appScheduler;
   }
 
   public Observable<PagingData<Pokemon>> rxPagingData() {
     return queryStreaming
         .streaming()
         .doOnNext(this::logOnQueryEmitted)
-        .observeOn(workerScheduler.get())
+        .observeOn(appScheduler.worker())
         .doOnNext(this::logOnThreadSwitched)
         .map(this::pagerContext)
         .map(this::pager)

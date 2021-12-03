@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import paging.wrapper.demo.ui.query.FilterOptionProvider;
 import paging.wrapper.di.app.ActivityScope;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.mapper.PagingRequestMapper;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.PagingQueryParam;
@@ -21,7 +21,7 @@ public class PokemonLoadMoreSource {
   private final PokemonRepo pokemonRepo;
   private final PagingRequestMapper pagingRequestMapper;
   private final PokemonMediatorResultRepo pokemonMediatorResultRepo;
-  private final WorkerScheduler workerScheduler;
+  private final AppScheduler appScheduler;
   private int retryCount = 0;
 
   @Inject
@@ -29,11 +29,11 @@ public class PokemonLoadMoreSource {
       PokemonRepo pokemonRepo,
       PagingRequestMapper pagingRequestMapper,
       PokemonMediatorResultRepo pokemonMediatorResultRepo,
-      WorkerScheduler workerScheduler) {
+      AppScheduler appScheduler) {
     this.pokemonRepo = pokemonRepo;
     this.pagingRequestMapper = pagingRequestMapper;
     this.pokemonMediatorResultRepo = pokemonMediatorResultRepo;
-    this.workerScheduler = workerScheduler;
+    this.appScheduler = appScheduler;
     Timber.i("created:%s", this);
   }
 
@@ -56,7 +56,7 @@ public class PokemonLoadMoreSource {
     Timber.i(
         "[ttt]: PokemonLoadMoreSource will return a simulated loading more error for query :%s",
         param);
-    return Single.just(error()).delay(800, TimeUnit.MILLISECONDS, workerScheduler.get());
+    return Single.just(error()).delay(800, TimeUnit.MILLISECONDS, appScheduler.worker());
   }
 
   private MediatorResult error() {
