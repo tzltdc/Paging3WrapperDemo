@@ -1,0 +1,15 @@
+gsgtCombinedLoadStates(
+  refresh=Loading(endOfPaginationReached=false),
+  prepend=NotLoading(endOfPaginationReached=false),
+  append=NotLoading(endOfPaginationReached=false),
+
+  source=LoadStates(
+    refresh=NotLoading(endOfPaginationReached=false),
+    prepend=NotLoading(endOfPaginationReached=true),
+    append=NotLoading(endOfPaginationReached=true)),
+
+  mediator=LoadStates(
+    refresh=Loading(endOfPaginationReached=false),
+    prepend=NotLoading(endOfPaginationReached=false),
+    append=NotLoading(endOfPaginationReached=false))
+)

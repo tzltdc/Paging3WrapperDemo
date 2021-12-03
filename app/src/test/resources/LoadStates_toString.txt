@@ -1,0 +1,4 @@
+
+  refresh=Loading(endOfPaginationReached=false),
+  prepend=NotLoading(endOfPaginationReached=false),
+  append=NotLoading(endOfPaginationReached=false),

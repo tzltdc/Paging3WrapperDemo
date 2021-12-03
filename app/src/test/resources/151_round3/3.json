@@ -1,0 +1,60 @@
+{
+  "refresh": {
+    "content": "NOT_LOADING",
+    "status": {
+      "endOfPaginationReached": false
+    }
+  },
+  "prepend": {
+    "content": "NOT_LOADING",
+    "status": {
+      "endOfPaginationReached": true
+    }
+  },
+  "append": {
+    "content": "LOADING",
+    "status": {
+      "endOfPaginationReached": false
+    }
+  },
+  "source": {
+    "refresh": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    },
+    "prepend": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    },
+    "append": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": true
+      }
+    }
+  },
+  "mediator": {
+    "refresh": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    },
+    "prepend": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": true
+      }
+    },
+    "append": {
+      "content": "LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    }
+  }
+}
