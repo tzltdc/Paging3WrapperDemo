@@ -39,7 +39,7 @@ import paging.wrapper.di.ContractModule;
 import paging.wrapper.di.FooterEntityModule;
 import paging.wrapper.di.PagingDataModule;
 import paging.wrapper.di.app.ActivityScope;
-import paging.wrapper.di.thread.MainScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.FilterBean;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     implements OnItemClickCallback, QueryCallback, MainUI, HeaderContract {
 
   @Inject QueryStream queryStream;
+  @Inject AppScheduler appScheduler;
   @Inject PagingDataStreaming pagingDataStreaming;
   @Inject PokemonAdapter pokemonAdapter;
   @Inject CombinedLoadStatesCallback combinedLoadStatesCallback;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity
   private void bindPagingData() {
     pagingDataStreaming
         .streaming()
-        .observeOn(MainScheduler.get())
+        .observeOn(appScheduler.ui())
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::submitList);
   }

@@ -12,7 +12,7 @@ import dagger.android.AndroidInjection;
 import io.husayn.paging_library_sample.R;
 import javax.inject.Inject;
 import paging.wrapper.data.PokemonRepo;
-import paging.wrapper.di.thread.MainScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.di.thread.WorkerScheduler;
 import paging.wrapper.model.data.Pokemon;
 import paging.wrapper.model.data.PokemonId;
@@ -20,6 +20,7 @@ import paging.wrapper.model.data.PokemonId;
 public class DetailActivity extends AppCompatActivity {
 
   @Inject PokemonRepo pokemonRepo;
+  @Inject AppScheduler appScheduler;
   @Inject WorkerScheduler workerScheduler;
   private TextView tv_pokemon_id;
   private TextView tv_pokemon_name;
@@ -46,8 +47,8 @@ public class DetailActivity extends AppCompatActivity {
   private void bindData(PokemonId pokemonId) {
     pokemonRepo
         .observe(pokemonId)
-        .observeOn(workerScheduler.get())
-        .observeOn(MainScheduler.get())
+        .observeOn(appScheduler.worker())
+        .observeOn(appScheduler.ui())
         .as(autoDisposable(AndroidLifecycleScopeProvider.from(this)))
         .subscribe(this::bindView);
   }

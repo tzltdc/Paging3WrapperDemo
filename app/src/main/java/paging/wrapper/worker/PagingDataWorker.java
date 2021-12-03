@@ -6,16 +6,21 @@ import com.uber.autodispose.ScopeProvider;
 import javax.inject.Inject;
 import paging.wrapper.app.AutoDisposeWorker;
 import paging.wrapper.data.PagingPokemonRepo;
-import paging.wrapper.di.thread.MainScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.stream.PagingDataStream;
 
 public class PagingDataWorker implements AutoDisposeWorker {
 
+  private final AppScheduler appScheduler;
   private final PagingPokemonRepo pagingPokemonRepo;
   private final PagingDataStream pagingDataStream;
 
   @Inject
-  public PagingDataWorker(PagingPokemonRepo pagingPokemonRepo, PagingDataStream pagingDataStream) {
+  public PagingDataWorker(
+      AppScheduler appScheduler,
+      PagingPokemonRepo pagingPokemonRepo,
+      PagingDataStream pagingDataStream) {
+    this.appScheduler = appScheduler;
     this.pagingPokemonRepo = pagingPokemonRepo;
     this.pagingDataStream = pagingDataStream;
   }
@@ -24,7 +29,7 @@ public class PagingDataWorker implements AutoDisposeWorker {
   public void attach(ScopeProvider scopeProvider) {
     pagingPokemonRepo
         .rxPagingData()
-        .observeOn(MainScheduler.get())
+        .observeOn(appScheduler.ui())
         .as(autoDisposable(scopeProvider))
         .subscribe(pagingDataStream::accept);
   }

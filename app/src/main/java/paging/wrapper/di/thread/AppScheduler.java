@@ -16,7 +16,7 @@ public class AppScheduler {
     return Schedulers.from(threadExecutor);
   }
 
-  public static Scheduler ui() {
+  public Scheduler ui() {
     return AndroidSchedulers.mainThread();
   }
 }
