@@ -8,7 +8,7 @@
   "prepend": {
     "content": "NOT_LOADING",
     "status": {
-      "endOfPaginationReached": false
+      "endOfPaginationReached": true
     }
   },
   "append": {
@@ -19,26 +19,6 @@
   },
   "source": {
     "refresh": {
-      "content": "NOT_LOADING",
-      "status": {
-        "endOfPaginationReached": false
-      }
-    },
-    "prepend": {
-      "content": "NOT_LOADING",
-      "status": {
-        "endOfPaginationReached": true
-      }
-    },
-    "append": {
-      "content": "NOT_LOADING",
-      "status": {
-        "endOfPaginationReached": true
-      }
-    }
-  },
-  "mediator": {
-    "refresh": {
       "content": "LOADING",
       "status": {
         "endOfPaginationReached": false
@@ -48,6 +28,26 @@
       "content": "NOT_LOADING",
       "status": {
         "endOfPaginationReached": false
+      }
+    },
+    "append": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    }
+  },
+  "mediator": {
+    "refresh": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": false
+      }
+    },
+    "prepend": {
+      "content": "NOT_LOADING",
+      "status": {
+        "endOfPaginationReached": true
       }
     },
     "append": {
