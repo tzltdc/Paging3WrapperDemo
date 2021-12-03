@@ -25,8 +25,8 @@ public class PagingStateWorker implements AutoDisposeWorker {
   public void attach(ScopeProvider scopeProvider) {
     loadStateStreaming
         .raw()
-        .throttleFirst(100, TimeUnit.MILLISECONDS)
         .distinctUntilChanged()
+        .throttleFirst(100, TimeUnit.MILLISECONDS)
         .map(this::asJson)
         .as(autoDisposable(scopeProvider))
         .subscribe(this::accept);
