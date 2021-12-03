@@ -20,7 +20,7 @@ public abstract class CombinedLoadStates {
    * network loads via mediator fail, LoadStates exposed via source and mediator should be used
    * directly.
    */
-  public abstract LoadState refresh();
+  public abstract LoadState getRefresh();
 
   /**
    * Convenience for combined behavior of PREPEND LoadState, which generally defers to mediator if
@@ -30,7 +30,7 @@ public abstract class CombinedLoadStates {
    * network loads via mediator fail, LoadStates exposed via source and mediator should be used
    * directly.
    */
-  public abstract LoadState prepend();
+  public abstract LoadState getPrepend();
 
   /**
    * Convenience for combined behavior of APPEND LoadState, which generally defers to mediator if it
@@ -39,16 +39,16 @@ public abstract class CombinedLoadStates {
    * to LoadState of source and mediator specifically, e.g., showing cached data when network loads
    * via mediator fail, LoadStates exposed via source and mediator should be used directly.
    */
-  public abstract LoadState append();
+  public abstract LoadState getAppend();
 
   /** LoadStates corresponding to loads from a PagingSource. */
-  public abstract LoadStates source();
+  public abstract LoadStates getSource();
 
   /**
    * LoadStates corresponding to loads from a RemoteMediator, or null if RemoteMediator not present.
    */
   @Nullable
-  public abstract LoadStates mediator();
+  public abstract LoadStates getMediator();
 
   public static Builder builder() {
     return new AutoValue_CombinedLoadStates.Builder();

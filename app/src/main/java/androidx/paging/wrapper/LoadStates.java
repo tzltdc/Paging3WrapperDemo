@@ -16,22 +16,22 @@ public abstract class LoadStates {
           .build();
 
   /** LoadState corresponding to LoadType.REFRESH loads. */
-  public abstract LoadState refresh();
+  public abstract LoadState getRefresh();
 
   /** LoadState corresponding to LoadType.PREPEND loads. */
-  public abstract LoadState prepend();
+  public abstract LoadState getPrepend();
 
   /** LoadState corresponding to LoadType.APPEND loads. */
-  public abstract LoadState append();
+  public abstract LoadState getAppend();
 
   public LoadState get(LoadType loadType) {
     switch (loadType) {
       case REFRESH:
-        return refresh();
+        return getRefresh();
       case PREPEND:
-        return prepend();
+        return getPrepend();
       case APPEND:
-        return append();
+        return getAppend();
       default:
         throw new IllegalStateException("Unknown LoadType:" + loadType);
     }
