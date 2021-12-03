@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import kotlin.jvm.functions.Function1;
 import paging.wrapper.di.app.ActivityScope;
+import paging.wrapper.di.thread.AppScheduler;
 import timber.log.Timber;
 
 @ActivityScope
@@ -18,9 +19,12 @@ public class CombinedLoadStatesCallback
     implements Function1<androidx.paging.CombinedLoadStates, Unit>, LoadStateStreaming {
 
   private final BehaviorRelay<CombinedLoadStates> behaviorRelay = BehaviorRelay.create();
+  private AppScheduler appScheduler;
 
   @Inject
-  public CombinedLoadStatesCallback() {}
+  public CombinedLoadStatesCallback(AppScheduler appScheduler) {
+    this.appScheduler = appScheduler;
+  }
 
   /**
    * This method will be called excessively from paging internal library. And its behavior is quite
@@ -83,7 +87,7 @@ public class CombinedLoadStatesCallback
    */
   @NonNull
   private Observable<CombinedLoadStates> throttle(Observable<CombinedLoadStates> upstream) {
-    return upstream.throttleLast(350, TimeUnit.MILLISECONDS);
+    return upstream.throttleLast(350, TimeUnit.MILLISECONDS, appScheduler.worker());
   }
 
   private void logIdle(Unit unit) {

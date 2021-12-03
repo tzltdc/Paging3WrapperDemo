@@ -3,7 +3,7 @@ package paging.wrapper.data;
 import io.reactivex.Single;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import paging.wrapper.di.thread.WorkerScheduler;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingRequest;
 import paging.wrapper.model.data.PokemonDto;
@@ -14,22 +14,22 @@ public class PokemonRemoteSource {
   private static final boolean ENFORCE_TIMEOUT_ERROR = false;
   private static final int DELAY_IN_MS = 1100;
 
-  private final WorkerScheduler workerScheduler;
+  private final AppScheduler appScheduler;
   private final PokemonBackendService pokemonBackendService;
 
   @Inject
   public PokemonRemoteSource(
-      WorkerScheduler workerScheduler, PokemonBackendService pokemonBackendService) {
-    this.workerScheduler = workerScheduler;
+      AppScheduler appScheduler, PokemonBackendService pokemonBackendService) {
+    this.appScheduler = appScheduler;
     this.pokemonBackendService = pokemonBackendService;
   }
 
   public Single<PageActionResult> fetch(PagingRequest pagingRequest) {
     return pokemonBackendService
         .query(pagingRequest)
-        .subscribeOn(workerScheduler.get())
-        .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, workerScheduler.get())
-        .timeout(timeout(), TimeUnit.MILLISECONDS, workerScheduler.get())
+        .subscribeOn(appScheduler.worker())
+        .delay(DELAY_IN_MS, TimeUnit.MILLISECONDS, appScheduler.worker())
+        .timeout(timeout(), TimeUnit.MILLISECONDS, appScheduler.worker())
         .doOnSuccess(this::logOnSuccess)
         .doOnError(this::logOnError)
         .map(response -> PageActionResult.create(response, pagingRequest));

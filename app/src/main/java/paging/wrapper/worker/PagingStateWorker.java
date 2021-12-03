@@ -9,16 +9,20 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import paging.wrapper.app.AutoDisposeWorker;
 import paging.wrapper.di.app.AppGson;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.stream.LoadStateStreaming;
 
 public class PagingStateWorker implements AutoDisposeWorker {
 
   private final AppGson appGson;
+  private final AppScheduler appScheduler;
   private final LoadStateStreaming loadStateStreaming;
 
   @Inject
-  public PagingStateWorker(AppGson appGson, LoadStateStreaming loadStateStreaming) {
+  public PagingStateWorker(
+      AppGson appGson, AppScheduler appScheduler, LoadStateStreaming loadStateStreaming) {
     this.appGson = appGson;
+    this.appScheduler = appScheduler;
     this.loadStateStreaming = loadStateStreaming;
   }
 
@@ -42,7 +46,7 @@ public class PagingStateWorker implements AutoDisposeWorker {
     return loadStateStreaming
         .raw()
         .distinctUntilChanged()
-        .throttleFirst(100, TimeUnit.MILLISECONDS)
+        .throttleFirst(100, TimeUnit.MILLISECONDS, appScheduler.worker())
         .distinctUntilChanged();
   }
 
