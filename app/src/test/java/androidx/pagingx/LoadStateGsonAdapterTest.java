@@ -1,10 +1,10 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import androidx.paging.wrapper.LoadState.LoadError;
-import androidx.paging.wrapper.LoadState.Loading;
-import androidx.paging.wrapper.LoadState.NotLoading;
+import androidx.pagingx.LoadState.LoadError;
+import androidx.pagingx.LoadState.Loading;
+import androidx.pagingx.LoadState.NotLoading;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;

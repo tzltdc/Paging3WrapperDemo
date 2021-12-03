@@ -1,4 +1,4 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;

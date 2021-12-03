@@ -1,9 +1,9 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
-import androidx.paging.wrapper.LoadState.LoadError;
-import androidx.paging.wrapper.LoadState.Loading;
-import androidx.paging.wrapper.LoadState.NotLoading;
-import androidx.paging.wrapper.LoadState.Status;
+import androidx.pagingx.LoadState.LoadError;
+import androidx.pagingx.LoadState.Loading;
+import androidx.pagingx.LoadState.NotLoading;
+import androidx.pagingx.LoadState.Status;
 import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

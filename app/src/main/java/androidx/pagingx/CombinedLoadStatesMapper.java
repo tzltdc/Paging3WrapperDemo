@@ -1,4 +1,4 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
 import androidx.annotation.NonNull;
 import androidx.paging.LoadState.Error;

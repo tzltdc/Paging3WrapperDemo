@@ -1,6 +1,6 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
-import androidx.paging.wrapper.LoadState.Status;
+import androidx.pagingx.LoadState.Status;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;

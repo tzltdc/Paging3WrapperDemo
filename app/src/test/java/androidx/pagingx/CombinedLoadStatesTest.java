@@ -1,8 +1,7 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import androidx.paging.CombinedLoadStatesData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;

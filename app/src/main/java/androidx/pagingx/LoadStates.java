@@ -1,4 +1,4 @@
-package androidx.paging.wrapper;
+package androidx.pagingx;
 
 import com.google.auto.value.AutoValue;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
