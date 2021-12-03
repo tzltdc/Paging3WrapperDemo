@@ -8,7 +8,6 @@ import androidx.pagingx.LoadStateGsonAdapter;
 import com.google.gson.GsonBuilder;
 import dagger.Module;
 import dagger.Provides;
-import io.husayn.paging_library_sample.BuildConfig;
 
 @Module
 public abstract class GsonModule {
@@ -21,8 +20,7 @@ public abstract class GsonModule {
 
   @NonNull
   private static GsonBuilder create() {
-    GsonBuilder gsonBuilder = new GsonBuilder().registerTypeAdapterFactory(FACTORY);
-    return BuildConfig.DEBUG ? gsonBuilder.setPrettyPrinting() : gsonBuilder;
+    return new GsonBuilder().registerTypeAdapterFactory(FACTORY);
   }
 
   @Provides
