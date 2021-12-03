@@ -7,6 +7,7 @@ import paging.wrapper.di.thread.WorkerThreadModule;
     includes = {
       AppWorkerModule.class,
       RepoModule.class,
+      GsonModule.class,
       WorkerThreadModule.class,
     })
 public abstract class JavaModule {}
