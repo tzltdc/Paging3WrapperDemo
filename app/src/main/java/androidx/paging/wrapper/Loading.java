@@ -3,7 +3,7 @@ package androidx.paging.wrapper;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class Loading implements LoadStateBase {
+public abstract class Loading {
 
   public abstract boolean endOfPaginationReached();
 

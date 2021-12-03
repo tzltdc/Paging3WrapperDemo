@@ -3,7 +3,7 @@ package androidx.paging.wrapper;
 import com.google.auto.value.AutoValue;
 
 @AutoValue
-public abstract class LoadError implements LoadStateBase {
+public abstract class LoadError {
 
   public abstract Throwable error();
 
