@@ -24,7 +24,7 @@ import paging.wrapper.demo.MainActivity;
 @LargeTest
 public class PagingStateTest {
 
-  private static final int REPEAT = 30;
+  private static final int REPEAT = 1;
   private final FlakyTestRule flakyRule = new FlakyTestRule();
 
   @Rule
