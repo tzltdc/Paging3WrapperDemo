@@ -47,7 +47,7 @@ public class QueryFeatureTest {
   @Test
   public void case_4_1_selectFilterColorShouldBeHighlighted() {
     clickListItemChild(R.id.rv_query, 0, R.id.tv_query);
-    //    QueryStateAsserter.assertQueryTextColor(0, R.color.colorAccent);
-    //    QueryStateAsserter.assertQueryTextColor(1, android.R.color.black);
+    QueryStateAsserter.assertQueryTextColor(0, R.color.colorAccent);
+    QueryStateAsserter.assertQueryTextColor(1, android.R.color.black);
   }
 }
