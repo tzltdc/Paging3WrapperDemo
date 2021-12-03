@@ -1,6 +1,6 @@
 package paging.wrapper.stream;
 
-import androidx.paging.LoadState;
+import androidx.pagingx.LoadState;
 import io.reactivex.Observable;
 import kotlin.Unit;
 

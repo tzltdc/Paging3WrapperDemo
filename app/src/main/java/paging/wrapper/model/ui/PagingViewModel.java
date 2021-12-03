@@ -1,6 +1,6 @@
 package paging.wrapper.model.ui;
 
-import androidx.paging.LoadState;
+import androidx.pagingx.LoadState;
 import com.google.auto.value.AutoValue;
 import java.util.List;
 import paging.wrapper.model.data.Pokemon;

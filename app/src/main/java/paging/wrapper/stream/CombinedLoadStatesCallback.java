@@ -1,8 +1,9 @@
 package paging.wrapper.stream;
 
 import androidx.annotation.NonNull;
-import androidx.paging.CombinedLoadStates;
-import androidx.paging.LoadState;
+import androidx.pagingx.CombinedLoadStates;
+import androidx.pagingx.CombinedLoadStatesMapper;
+import androidx.pagingx.LoadState;
 import com.jakewharton.rxrelay2.BehaviorRelay;
 import io.reactivex.Observable;
 import java.util.concurrent.TimeUnit;
@@ -14,7 +15,7 @@ import timber.log.Timber;
 
 @ActivityScope
 public class CombinedLoadStatesCallback
-    implements Function1<CombinedLoadStates, Unit>, LoadStateStreaming {
+    implements Function1<androidx.paging.CombinedLoadStates, Unit>, LoadStateStreaming {
 
   private final BehaviorRelay<CombinedLoadStates> behaviorRelay = BehaviorRelay.create();
 
@@ -33,9 +34,10 @@ public class CombinedLoadStatesCallback
    * <p>Based on these learnings, we are to introduce allIdle
    */
   @Override
-  public Unit invoke(CombinedLoadStates states) {
-    log(states);
-    behaviorRelay.accept(states);
+  public Unit invoke(androidx.paging.CombinedLoadStates states) {
+    CombinedLoadStates wrap = CombinedLoadStatesMapper.wrap(states);
+    log(wrap);
+    behaviorRelay.accept(wrap);
     return Unit.INSTANCE;
   }
 

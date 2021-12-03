@@ -2,7 +2,8 @@ package paging.wrapper.mapper;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import androidx.paging.LoadState.NotLoading;
+import androidx.pagingx.LoadState;
+import androidx.pagingx.LoadState.NotLoading;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +28,8 @@ public class StateMapperTest {
         .isEqualTo(null);
   }
 
-  private NotLoading notLoading() {
-    return new NotLoading(false);
+  private LoadState notLoading() {
+    return LoadState.ofNotLoading(NotLoading.create(false));
   }
 
   @Test

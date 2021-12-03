@@ -1,6 +1,6 @@
 package paging.wrapper.stream;
 
-import androidx.paging.LoadState;
+import androidx.pagingx.LoadState;
 import com.google.common.base.Optional;
 import io.reactivex.Observable;
 import javax.inject.Inject;

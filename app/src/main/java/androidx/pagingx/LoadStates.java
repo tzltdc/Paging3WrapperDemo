@@ -1,5 +1,6 @@
 package androidx.pagingx;
 
+import androidx.annotation.NonNull;
 import com.google.auto.value.AutoValue;
 import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
@@ -14,6 +15,15 @@ public abstract class LoadStates {
           .prepend(LoadState.INCOMPLETE)
           .append(LoadState.INCOMPLETE)
           .build();
+
+  @NonNull
+  public static LoadStates fromCombinedLoadStates(CombinedLoadStates combined) {
+    return LoadStates.builder()
+        .refresh(combined.getRefresh())
+        .prepend(combined.getPrepend())
+        .append(combined.getAppend())
+        .build();
+  }
 
   /** LoadState corresponding to LoadType.REFRESH loads. */
   public abstract LoadState getRefresh();

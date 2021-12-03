@@ -1,8 +1,8 @@
 package paging.wrapper.stream;
 
-import androidx.paging.CombinedLoadStates;
-import androidx.paging.LoadState.NotLoading;
-import androidx.paging.LoadStates;
+import androidx.pagingx.CombinedLoadStates;
+import androidx.pagingx.LoadState.Status;
+import androidx.pagingx.LoadStates;
 import javax.annotation.Nullable;
 
 public class LoadingStateIdleMapper {
@@ -27,8 +27,7 @@ public class LoadingStateIdleMapper {
   }
 
   private static boolean combinedStatusNotLoading(CombinedLoadStates combined) {
-    return notLoading(
-        new LoadStates(combined.getRefresh(), combined.getPrepend(), combined.getAppend()));
+    return notLoading(LoadStates.fromCombinedLoadStates(combined));
   }
 
   private static boolean loadStatesNotLoading(@Nullable LoadStates loadStates) {
@@ -36,8 +35,8 @@ public class LoadingStateIdleMapper {
   }
 
   private static boolean notLoading(LoadStates states) {
-    return states.getAppend() instanceof NotLoading
-        && states.getPrepend() instanceof NotLoading
-        && states.getRefresh() instanceof NotLoading;
+    return states.getAppend().status().equals(Status.NOT_LOADING)
+        && states.getPrepend().status().equals(Status.NOT_LOADING)
+        && states.getRefresh().status().equals(Status.NOT_LOADING);
   }
 }
