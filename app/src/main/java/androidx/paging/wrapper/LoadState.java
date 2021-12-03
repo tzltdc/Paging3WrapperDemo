@@ -1,6 +1,7 @@
 package androidx.paging.wrapper;
 
 import com.google.auto.value.AutoOneOf;
+import com.google.auto.value.AutoValue;
 
 /**
  * LoadState of a PagedList load - associated with a LoadType.
@@ -15,7 +16,7 @@ import com.google.auto.value.AutoOneOf;
  * dataset has been reached. Note: The LoadTypeLoadType.REFRESH always has
  * LoadState.endOfPaginationReached set to false.
  */
-@AutoOneOf(LoadStatus.class)
+@AutoOneOf(LoadState.LoadStatus.class)
 public abstract class LoadState {
 
   public static final LoadState INCOMPLETE = LoadState.ofNotLoading(NotLoading.INCOMPLETE);
@@ -50,5 +51,46 @@ public abstract class LoadState {
 
   public static LoadState ofError(LoadError loadError) {
     return AutoOneOf_LoadState.error(loadError);
+  }
+
+  public enum LoadStatus {
+    NOT_LOADING,
+    LOADING,
+    ERROR
+  }
+
+  @AutoValue
+  public abstract static class NotLoading {
+
+    public static final NotLoading COMPLETE = NotLoading.create(true);
+    public static final NotLoading INCOMPLETE = NotLoading.create(false);
+
+    public abstract boolean endOfPaginationReached();
+
+    public static NotLoading create(boolean endOfPaginationReached) {
+      return new AutoValue_LoadState_NotLoading(endOfPaginationReached);
+    }
+  }
+
+  @AutoValue
+  public abstract static class LoadError {
+
+    public abstract Throwable error();
+
+    public abstract boolean endOfPaginationReached();
+
+    public static LoadError create(Throwable error, boolean endOfPaginationReached) {
+      return new AutoValue_LoadState_LoadError(error, endOfPaginationReached);
+    }
+  }
+
+  @AutoValue
+  public abstract static class Loading {
+
+    public abstract boolean endOfPaginationReached();
+
+    public static Loading create(boolean endOfPaginationReached) {
+      return new AutoValue_LoadState_Loading(endOfPaginationReached);
+    }
   }
 }
