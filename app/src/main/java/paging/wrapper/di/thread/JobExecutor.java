@@ -2,7 +2,6 @@ package paging.wrapper.di.thread;
 
 import io.reactivex.annotations.NonNull;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -19,12 +18,8 @@ class JobExecutor implements ThreadExecutor {
   private final ExecutorService executorService;
 
   @Inject
-  public JobExecutor(ThreadConfig threadConfig) {
-    executorService = executorService(threadConfig);
-  }
-
-  private static ExecutorService executorService(ThreadConfig threadConfig) {
-    return threadConfig.alwaysOnMainThread() ? mainThreadExecutor() : prodThreadPoolExecutor();
+  public JobExecutor() {
+    executorService = prodThreadPoolExecutor();
   }
 
   @androidx.annotation.NonNull
@@ -36,10 +31,6 @@ class JobExecutor implements ThreadExecutor {
         KEEP_ALIVE_TIME_UNIT,
         new LinkedBlockingQueue<>(),
         new JobThreadFactory());
-  }
-
-  private static ExecutorService mainThreadExecutor() {
-    return Executors.newSingleThreadExecutor();
   }
 
   @Override

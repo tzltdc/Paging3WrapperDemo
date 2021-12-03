@@ -6,14 +6,16 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AppScheduler {
 
+  private ThreadConfig threadConfig;
   private final ThreadExecutor threadExecutor;
 
-  public AppScheduler(ThreadExecutor threadExecutor) {
+  public AppScheduler(ThreadConfig threadConfig, ThreadExecutor threadExecutor) {
+    this.threadConfig = threadConfig;
     this.threadExecutor = threadExecutor;
   }
 
   public Scheduler worker() {
-    return Schedulers.from(threadExecutor);
+    return threadConfig.alwaysOnMainThread() ? ui() : Schedulers.from(threadExecutor);
   }
 
   public Scheduler ui() {

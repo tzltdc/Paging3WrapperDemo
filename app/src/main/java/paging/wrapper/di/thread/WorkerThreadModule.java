@@ -23,8 +23,8 @@ public abstract class WorkerThreadModule {
 
   @Provides
   @AppScope
-  static AppScheduler appScheduler(ThreadExecutor threadExecutor) {
-    return new AppScheduler(threadExecutor);
+  static AppScheduler appScheduler(ThreadConfig threadConfig, ThreadExecutor threadExecutor) {
+    return new AppScheduler(threadConfig, threadExecutor);
   }
 
   @AppScope
