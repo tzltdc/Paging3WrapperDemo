@@ -54,6 +54,7 @@ import paging.wrapper.worker.FooterEntityGenerator;
 import paging.wrapper.worker.FooterModelWorker;
 import paging.wrapper.worker.HeaderEntityWorker;
 import paging.wrapper.worker.PagingDataWorker;
+import paging.wrapper.worker.PagingStateWorker;
 import timber.log.Timber;
 
 @ActivityScope
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
   @Inject FooterEntityGenerator footerEntityGenerator;
   @Inject ClickActionContract clickActionContract;
   @Inject AppIdleStateConsumerWorker appIdleStateConsumerWorker;
+  @Inject PagingStateWorker pagingStateWorker;
   private TextView tv_summary;
   private FrameLayout fl_header_root_view;
   private FrameLayout fl_page_data_list_root_view;
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity
     footerEntityGenerator.attach(AndroidLifecycleScopeProvider.from(this));
     footerModelWorker.attach(AndroidLifecycleScopeProvider.from(this));
     headerEntityWorker.attach(AndroidLifecycleScopeProvider.from(this));
+    pagingStateWorker.attach(AndroidLifecycleScopeProvider.from(this));
   }
 
   private void bindRefresh() {

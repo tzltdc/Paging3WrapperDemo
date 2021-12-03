@@ -68,6 +68,11 @@ public class CombinedLoadStatesCallback
         .doOnNext(this::logIdle);
   }
 
+  @Override
+  public Observable<CombinedLoadStates> raw() {
+    return behaviorRelay.hide();
+  }
+
   /**
    * Two reasons to throttle the signals :
    *
