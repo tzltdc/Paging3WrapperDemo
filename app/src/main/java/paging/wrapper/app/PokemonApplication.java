@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import paging.wrapper.app.config.AppConfig;
 import paging.wrapper.app.config.AppContext;
 import paging.wrapper.di.app.DaggerAppComponent;
+import paging.wrapper.di.thread.ThreadConfig;
 import timber.log.ThreadTree;
 import timber.log.Timber;
 
@@ -33,7 +34,15 @@ public class PokemonApplication extends DaggerApplication {
   @Override
   protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
 
-    return DaggerAppComponent.factory().create(AppContext.create(AppConfig.DEFAULT_CONFIG, this));
+    return DaggerAppComponent.factory()
+        .create(
+            AppContext.create(
+                AppConfig.builder().initializeDatabase(false).threadConfig(threadConfig()).build(),
+                this));
+  }
+
+  protected ThreadConfig threadConfig() {
+    return ThreadConfig.create(false);
   }
 
   public static void init(Application context) {

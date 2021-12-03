@@ -1,7 +1,8 @@
 package paging.wrapper.di.thread;
 
 import io.reactivex.annotations.NonNull;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -15,24 +16,35 @@ class JobExecutor implements ThreadExecutor {
   static final int KEEP_ALIVE_TIME = 10;
   static final TimeUnit KEEP_ALIVE_TIME_UNIT = TimeUnit.SECONDS;
 
-  ThreadPoolExecutor threadPoolExecutor;
+  private final ExecutorService executorService;
 
   @Inject
-  public JobExecutor() {
-    BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<>();
-    this.threadPoolExecutor =
-        new ThreadPoolExecutor(
-            INITIAL_POOL_SIZE,
-            MAX_POOL_SIZE,
-            KEEP_ALIVE_TIME,
-            KEEP_ALIVE_TIME_UNIT,
-            workQueue,
-            new JobThreadFactory());
+  public JobExecutor(ThreadConfig threadConfig) {
+    executorService = executorService(threadConfig);
+  }
+
+  private static ExecutorService executorService(ThreadConfig threadConfig) {
+    return threadConfig.alwaysOnMainThread() ? mainThreadExecutor() : prodThreadPoolExecutor();
+  }
+
+  @androidx.annotation.NonNull
+  private static ThreadPoolExecutor prodThreadPoolExecutor() {
+    return new ThreadPoolExecutor(
+        INITIAL_POOL_SIZE,
+        MAX_POOL_SIZE,
+        KEEP_ALIVE_TIME,
+        KEEP_ALIVE_TIME_UNIT,
+        new LinkedBlockingQueue<>(),
+        new JobThreadFactory());
+  }
+
+  private static ExecutorService mainThreadExecutor() {
+    return Executors.newSingleThreadExecutor();
   }
 
   @Override
   public void execute(@NonNull Runnable runnable) {
-    this.threadPoolExecutor.execute(runnable);
+    this.executorService.execute(runnable);
   }
 
   static class JobThreadFactory implements ThreadFactory {
