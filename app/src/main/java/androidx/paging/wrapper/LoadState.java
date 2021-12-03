@@ -3,6 +3,7 @@ package androidx.paging.wrapper;
 import androidx.paging.wrapper.LoadState.Status;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
 /**
  * LoadState of a PagedList load - associated with a LoadType.
@@ -18,6 +19,7 @@ import com.google.auto.value.AutoValue;
  * LoadState.endOfPaginationReached set to false.
  */
 @AutoOneOf(Status.class)
+@GenerateTypeAdapter
 public abstract class LoadState {
 
   public static final LoadState INCOMPLETE = LoadState.ofNotLoading(NotLoading.INCOMPLETE);
@@ -60,6 +62,7 @@ public abstract class LoadState {
     ERROR
   }
 
+  @GenerateTypeAdapter
   @AutoValue
   public abstract static class NotLoading {
 
@@ -73,18 +76,20 @@ public abstract class LoadState {
     }
   }
 
+  @GenerateTypeAdapter
   @AutoValue
   public abstract static class LoadError {
 
-    public abstract Throwable error();
+    public abstract String error();
 
     public abstract boolean endOfPaginationReached();
 
-    public static LoadError create(Throwable error, boolean endOfPaginationReached) {
+    public static LoadError create(String error, boolean endOfPaginationReached) {
       return new AutoValue_LoadState_LoadError(error, endOfPaginationReached);
     }
   }
 
+  @GenerateTypeAdapter
   @AutoValue
   public abstract static class Loading {
 
