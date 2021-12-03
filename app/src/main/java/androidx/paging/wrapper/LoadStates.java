@@ -1,9 +1,11 @@
 package androidx.paging.wrapper;
 
 import com.google.auto.value.AutoValue;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
 /** Collection of pagination LoadStates - refresh, prepend, and append. */
 @AutoValue
+@GenerateTypeAdapter
 public abstract class LoadStates {
 
   public static LoadStates IDLE =

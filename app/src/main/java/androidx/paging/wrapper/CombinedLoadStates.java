@@ -2,11 +2,13 @@ package androidx.paging.wrapper;
 
 import androidx.annotation.Nullable;
 import com.google.auto.value.AutoValue;
+import com.ryanharter.auto.value.gson.GenerateTypeAdapter;
 
 /**
  * Collection of pagination LoadStates for both a PagingSource, and RemoteMediator. Note: The
  * LoadTypeLoadType.REFRESH always has LoadState.endOfPaginationReached set to false.
  */
+@GenerateTypeAdapter
 @AutoValue
 public abstract class CombinedLoadStates {
 
