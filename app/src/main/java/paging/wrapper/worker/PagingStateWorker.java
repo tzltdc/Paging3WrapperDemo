@@ -4,6 +4,7 @@ import static com.uber.autodispose.AutoDispose.autoDisposable;
 
 import androidx.pagingx.CombinedLoadStates;
 import com.uber.autodispose.ScopeProvider;
+import io.reactivex.Observable;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import paging.wrapper.app.AutoDisposeWorker;
@@ -23,13 +24,26 @@ public class PagingStateWorker implements AutoDisposeWorker {
 
   @Override
   public void attach(ScopeProvider scopeProvider) {
-    loadStateStreaming
+    streaming().map(this::asJson).as(autoDisposable(scopeProvider)).subscribe(this::accept);
+  }
+
+  /**
+   * Why we have two distinctUntilChanged here? Here is the theory:
+   *
+   * <p>In the first distinctUntilChanged, it guarantee different items to be emitted, the series
+   * could be A, B, A, B, A, B
+   *
+   * <p>After going through throttleFirst, it could be A, A, A, A if B is always emitted immediately
+   * after A. And then A is emitted 100 milliseconds later after B.
+   *
+   * <p>Hence, two distinctUntilChanged make the item deterministic.
+   */
+  private Observable<CombinedLoadStates> streaming() {
+    return loadStateStreaming
         .raw()
         .distinctUntilChanged()
         .throttleFirst(100, TimeUnit.MILLISECONDS)
-        .map(this::asJson)
-        .as(autoDisposable(scopeProvider))
-        .subscribe(this::accept);
+        .distinctUntilChanged();
   }
 
   private void accept(String json) {
