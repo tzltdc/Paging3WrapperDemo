@@ -1,5 +1,6 @@
 package androidx.paging.wrapper;
 
+import androidx.paging.wrapper.LoadState.Status;
 import com.google.auto.value.AutoOneOf;
 import com.google.auto.value.AutoValue;
 
@@ -16,7 +17,7 @@ import com.google.auto.value.AutoValue;
  * dataset has been reached. Note: The LoadTypeLoadType.REFRESH always has
  * LoadState.endOfPaginationReached set to false.
  */
-@AutoOneOf(LoadState.LoadStatus.class)
+@AutoOneOf(Status.class)
 public abstract class LoadState {
 
   public static final LoadState INCOMPLETE = LoadState.ofNotLoading(NotLoading.INCOMPLETE);
@@ -39,7 +40,7 @@ public abstract class LoadState {
    */
   public abstract LoadError error();
 
-  public abstract LoadStatus status();
+  public abstract Status status();
 
   public static LoadState ofNotLoading(NotLoading notLoading) {
     return AutoOneOf_LoadState.notLoading(notLoading);
@@ -53,7 +54,7 @@ public abstract class LoadState {
     return AutoOneOf_LoadState.error(loadError);
   }
 
-  public enum LoadStatus {
+  public enum Status {
     NOT_LOADING,
     LOADING,
     ERROR
