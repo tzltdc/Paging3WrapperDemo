@@ -17,7 +17,7 @@ import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
-class BothRemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon>
+class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon>
     implements Function0<PagingSource<Integer, Pokemon>> {
 
   private final PagingQueryContext query;
@@ -27,7 +27,7 @@ class BothRemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon>
   private int retryMoreCount = 0;
 
   @AssistedInject
-  BothRemotePokenmonPagingSource(
+  RemotePokenmonPagingSource(
       @Assisted PagingQueryContext query,
       AppScheduler appScheduler,
       PurePokenmonPagingSource purePokenmonPagingSource) {
