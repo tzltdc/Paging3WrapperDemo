@@ -3,12 +3,10 @@ package paging.wrapper;
 import static com.google.common.truth.Truth.assertThat;
 
 import androidx.annotation.Nullable;
-import io.github.android.tang.tony.test.util.GsonTestUtil;
 import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 import paging.wrapper.data.PokemonBackendService;
-import paging.wrapper.db.ServerDto;
 import paging.wrapper.model.data.PagingQueryParam;
 import paging.wrapper.model.data.PagingRemoteRequestConfig;
 import paging.wrapper.model.data.PagingRequest;
@@ -20,9 +18,7 @@ public class PokemonBackendServiceTest {
   @Before
   public void setup() {
 
-    DaggerTestComponent.factory()
-        .create(GsonTestUtil.from("dto.json", ServerDto.class))
-        .inject(this);
+    DaggerTestUtil.testComponent().inject(this);
   }
 
   @Test

@@ -6,7 +6,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AppScheduler {
 
-  private ThreadConfig threadConfig;
+  private final ThreadConfig threadConfig;
   private final ThreadExecutor threadExecutor;
 
   public AppScheduler(ThreadConfig threadConfig, ThreadExecutor threadExecutor) {
