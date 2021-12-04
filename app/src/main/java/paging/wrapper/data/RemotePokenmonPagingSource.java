@@ -1,5 +1,7 @@
 package paging.wrapper.data;
 
+import static paging.wrapper.data.NextTargetCountMapper.nextTargetCount;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.paging.PagingState;
@@ -7,61 +9,34 @@ import androidx.paging.rxjava2.RxPagingSource;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.reactivex.Single;
-import paging.wrapper.mapper.PagingRequestMapper;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
-import timber.log.Timber;
 
 class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
 
   private final PagingQueryContext query;
   private final PokemonRemoteSource pokemonRemoteSource;
-  private final PagingRequestMapper pagingRequestMapper;
 
   @AssistedInject
   RemotePokenmonPagingSource(
-      @Assisted PagingQueryContext query,
-      PokemonRemoteSource pokemonRemoteSource,
-      PagingRequestMapper pagingRequestMapper) {
+      @Assisted PagingQueryContext query, PokemonRemoteSource pokemonRemoteSource) {
     this.query = query;
     this.pokemonRemoteSource = pokemonRemoteSource;
-    this.pagingRequestMapper = pagingRequestMapper;
   }
 
   @NonNull
   @Override
   public Single<LoadResult<Integer, Pokemon>> loadSingle(@NonNull LoadParams<Integer> params) {
     return pokemonRemoteSource
-        .fetch(pagingRequestMapper.nextPagingRequest(loadedCount(params), query.param()))
+        .fetch(RemoteLoadRequestMapper.getPagingRequest(params, query))
         .map(this::remotePagingResponse)
-        .map(this::asLoadResult)
+        .map(RemoteLoadResultMapper::asLoadResult)
         .onErrorReturn(LoadResult.Error::new);
   }
 
   private RemotePagingResponse remotePagingResponse(PageActionResult response) {
-    return RemotePagingResponse.create(
-        response.response(), NextTargetCountMapper.nextTargetCount(response));
-  }
-
-  private Integer loadedCount(LoadParams<Integer> params) {
-    Integer targetLoadCount = params.getKey();
-    if (targetLoadCount == null) {
-      targetLoadCount = 0;
-      Timber.i("default loaded count 0 applied:%s", targetLoadCount);
-    } else {
-      Timber.i("dynamic loaded count applied:%s", targetLoadCount);
-    }
-    return targetLoadCount;
-  }
-
-  private LoadResult<Integer, Pokemon> asLoadResult(RemotePagingResponse remotePagingResponse) {
-    return new LoadResult.Page<>(
-        remotePagingResponse.response().list(),
-        null,
-        remotePagingResponse.nextTargetCount(),
-        LoadResult.Page.COUNT_UNDEFINED,
-        LoadResult.Page.COUNT_UNDEFINED);
+    return RemotePagingResponse.create(response.response(), nextTargetCount(response));
   }
 
   @Nullable

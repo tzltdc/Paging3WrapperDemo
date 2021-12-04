@@ -22,10 +22,6 @@ public class PagingRequestMapper {
         PagingRemoteRequestConfig.DEFAULT_QUERY_CONFIG);
   }
 
-  public PagingRequest nextPagingRequest(int loadedCount, PagingQueryParam query) {
-    return PagingRequest.create(loadedCount, query, PagingRemoteRequestConfig.DEFAULT_QUERY_CONFIG);
-  }
-
   public static PagingRequest defaultPagingRequest(PagingQueryParam query) {
     return PagingRequest.create(0, query, PagingRemoteRequestConfig.DEFAULT_QUERY_CONFIG);
   }
