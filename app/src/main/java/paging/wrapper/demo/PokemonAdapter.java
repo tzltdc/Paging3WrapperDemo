@@ -94,18 +94,21 @@ public class PokemonAdapter extends PagingDataAdapter<Pokemon, ViewHolder>
 
   @Override
   public void removeFooter() {
+    Timber.i("[88][ui][footer]:Footer Removed:%s", footerEntity);
     this.footerEntity = null;
     notifyItemRemoved(footEntityPosition());
   }
 
   @Override
   public void addFooter(FooterEntity footerEntity) {
+    Timber.i("[88][ui][footer]:Footer Added:%s", footerEntity);
     this.footerEntity = footerEntity;
     notifyItemInserted(footEntityPosition());
   }
 
   @Override
   public void refreshFooter(FooterEntity footerEntity) {
+    Timber.i("[88][ui][footer]:Footer Refreshed:%s", footerEntity);
     this.footerEntity = footerEntity;
     notifyItemChanged(footEntityPosition());
   }

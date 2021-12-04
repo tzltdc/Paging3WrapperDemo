@@ -31,10 +31,10 @@ public class AppIdleStateConsumerWorker implements AutoDisposeWorker, IdlingReso
 
   private void accept(Unit unit) {
     if (resourceCallback != null) {
-      Timber.i("IdlingResource onTransitionToIdle:%s", this);
+      Timber.i("[33][ui][idle]:Idle state honored");
       resourceCallback.onTransitionToIdle();
     } else {
-      Timber.w("IdlingResource skipped onTransitionToIdle:%s", this);
+      Timber.i("[33][ui][idle]:Idle state ignored");
     }
   }
 
@@ -46,14 +46,14 @@ public class AppIdleStateConsumerWorker implements AutoDisposeWorker, IdlingReso
   @Override
   public boolean isIdleNow() {
     boolean idle = appIdleStateStreaming.peek();
-    Timber.i("IdlingResource isIdleNow:%s", idle);
+    Timber.i("[33][ui][idle]:Idle state:%s checked", idle);
     return idle;
   }
 
   @Override
   public void registerIdleTransitionCallback(ResourceCallback callback) {
     appIdleStateStream.clear();
-    Timber.i("IdlingResource registerIdleTransitionCallback:%s", callback);
+    Timber.i("[33][ui][idle]:Idle state cleared");
     this.resourceCallback = callback;
   }
 }

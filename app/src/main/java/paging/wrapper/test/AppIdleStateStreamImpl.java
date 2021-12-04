@@ -11,7 +11,7 @@ public class AppIdleStateStreamImpl implements AppIdleStateStreaming, AppIdleSta
 
   @Override
   public void accept(Unit unit) {
-    Timber.i("IdlingResource AppIdleStateStreamImpl accept:%s", unit);
+    Timber.i("[22][ui][idle]:Idle state reached");
     relay.accept(unit);
   }
 

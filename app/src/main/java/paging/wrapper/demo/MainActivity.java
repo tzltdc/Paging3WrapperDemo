@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     AndroidInjection.inject(this);
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    Timber.i("[00][ui][IdlingResource]:Activity started:%s", this);
     initView();
     bindPagingData();
     bindQuery();
@@ -161,16 +162,13 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void submitList(PagingData<Pokemon> pagingData) {
-    Timber.v("onLoadStateChanged:");
-    Timber.v("onLoadStateChanged:");
-    Timber.v("onLoadStateChanged:");
-    Timber.i("onLoadStateChanged:submitList:%s", pagingData);
+    Timber.i("[99][ui][paging_data]:paging_data submitted:%s", pagingData);
     srl_refresh.setRefreshing(false);
     pokemonAdapter.submitData(getLifecycle(), pagingData);
   }
 
   public void bind(@Nullable HeaderEntity headerEntity) {
-    Timber.i("logOnHeader bind:%s", headerEntity);
+    Timber.i("[99][ui][header]:HeaderEntity to be bound:%s", headerEntity);
     if (headerEntity == null) {
       fl_header_root_view.setVisibility(View.GONE);
       fl_page_data_list_root_view.setVisibility(View.VISIBLE);
@@ -194,11 +192,13 @@ public class MainActivity extends AppCompatActivity
   @SuppressLint("NotifyDataSetChanged")
   @Override
   public void query(FilterBean bean) {
+    Timber.i("[01][ui][query]:Query Received:%s", bean);
     queryStream.accept(bean);
     queryAdapter.notifyDataSetChanged();
   }
 
   public IdlingResource pagingIdlingResource() {
+    Timber.i("[01][ui][IdlingResource]:IdlingResource accessed:%s", appIdleStateConsumerWorker);
     return appIdleStateConsumerWorker;
   }
 

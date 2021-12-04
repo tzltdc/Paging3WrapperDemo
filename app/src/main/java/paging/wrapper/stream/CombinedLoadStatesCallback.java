@@ -45,7 +45,7 @@ public class CombinedLoadStatesCallback
   }
 
   private void log(CombinedLoadStates states) {
-    Timber.i("onLoadStateChanged:combinedLoadStates:%s", states);
+    Timber.i("[00][raw]:Raw states emitted:%s", states);
     if (LoadingStateIdleMapper.allIdle(states)) {
       logIdle(states);
     }
@@ -53,7 +53,10 @@ public class CombinedLoadStatesCallback
 
   @Override
   public Observable<LoadState> footer() {
-    return throttleRawInternal().map(CombinedLoadStates::getAppend).distinctUntilChanged();
+    return throttleRawInternal()
+        .map(CombinedLoadStates::getAppend)
+        .distinctUntilChanged()
+        .doOnNext(this::logOnFooter);
   }
 
   @Override
@@ -64,8 +67,12 @@ public class CombinedLoadStatesCallback
         .doOnNext(this::logOnHeader);
   }
 
+  private void logOnFooter(LoadState loadState) {
+    Timber.i("[00][ui][footer]:Footer Stated emitted:%s", loadState);
+  }
+
   private void logOnHeader(LoadState loadState) {
-    Timber.i("logOnHeader:%s", loadState);
+    Timber.i("[00][ui][header]:Header Stated emitted:%s", loadState);
   }
 
   @Override
@@ -94,10 +101,10 @@ public class CombinedLoadStatesCallback
   }
 
   private void logIdle(Unit unit) {
-    Timber.i("onLoadStateChanged: IDLE signal emitted for consumers");
+    Timber.i("[00][ui][idle]:Idle state emitted");
   }
 
   private void logIdle(CombinedLoadStates states) {
-    Timber.i("onLoadStateChanged:combinedLoadStates is becoming idle:%s", states);
+    Timber.i("[00][ui][idle]:Idle state detected:%s", states);
   }
 }
