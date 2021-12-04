@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import paging.wrapper.demo.ui.query.FilterOptionProvider;
 import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.PagingQueryContext;
+import paging.wrapper.model.data.PagingRequest;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
@@ -36,8 +37,9 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
   @NonNull
   @Override
   public Single<LoadResult<Integer, Pokemon>> loadSingle(@NonNull LoadParams<Integer> params) {
+    Timber.i("[remote]:loadSingle:%s", ToStringUtil.toString(params));
     return simulateInitialError(query.description())
-        ? simulateError("Simulated initial error")
+        ? simulateError("[remote]:dataSource simulated initial error")
         : load(params);
   }
 
@@ -46,20 +48,20 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
   }
 
   private Single<LoadResult<Integer, Pokemon>> simulateError(String errorMessage) {
-    Timber.i("RemotePokenmonPagingSource is to simulate error for query:%s", query);
+    Timber.i("[remote]:simulate error for query:%s", query);
     return Single.timer(1000, TimeUnit.MILLISECONDS, appScheduler.worker())
         .map(ignored -> new Error<>(new RuntimeException(errorMessage)));
   }
 
   private Single<LoadResult<Integer, Pokemon>> load(@NonNull LoadParams<Integer> params) {
     return showLoadMoreError(query.description())
-        ? simulateError("Simulated load_more error")
+        ? simulateError("[remote]:dataSource load_more error")
         : execute(params);
   }
 
   private Single<LoadResult<Integer, Pokemon>> execute(@NonNull LoadParams<Integer> params) {
-    return purePokenmonPagingSource.execute(
-        RemoteLoadRequestMapper.getPagingRequest(params, query));
+    PagingRequest pagingRequest = RemoteLoadRequestMapper.getPagingRequest(params, query);
+    return purePokenmonPagingSource.execute(pagingRequest);
   }
 
   private boolean simulateInitialError(String description) {
@@ -69,6 +71,7 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
   @Nullable
   @Override
   public Integer getRefreshKey(@NonNull PagingState<Integer, Pokemon> state) {
+    Timber.i("[remote]:getRefreshKey:%s", state);
     return null;
   }
 }

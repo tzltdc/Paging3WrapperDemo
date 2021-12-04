@@ -3,6 +3,7 @@ package paging.wrapper.data;
 import androidx.annotation.Nullable;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingRemoteRequestConfig;
+import timber.log.Timber;
 
 class NextTargetCountMapper {
 
@@ -16,7 +17,11 @@ class NextTargetCountMapper {
   }
 
   private static boolean hasMore(PageActionResult response) {
-    return actualCount(response) >= expected(response.request().queryConfig());
+    int actualCount = actualCount(response);
+    int targetCount = expected(response.request().queryConfig());
+    boolean result = actualCount >= targetCount;
+    Timber.i("[remote]:actual:%s, target:%s, hasMore:%s", actualCount, targetCount, result);
+    return result;
   }
 
   private static int expected(PagingRemoteRequestConfig config) {
