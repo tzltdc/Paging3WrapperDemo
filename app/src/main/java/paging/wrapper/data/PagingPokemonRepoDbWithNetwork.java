@@ -3,16 +3,13 @@ package paging.wrapper.data;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
-import androidx.paging.PagingSource;
 import androidx.paging.rxjava2.PagingRx;
 import io.reactivex.Observable;
 import javax.inject.Inject;
-import kotlin.jvm.functions.Function0;
 import paging.wrapper.demo.ui.query.QueryStreaming;
 import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.data.PagerContext;
 import paging.wrapper.model.data.PagingQueryContext;
-import paging.wrapper.model.data.PagingQueryParam;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
@@ -20,24 +17,24 @@ public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
 
   private static final int INITIAL_LOAD_KEY = 0;
 
-  private final PokemonRepo pokemonRepo;
   private final PagingConfig androidPagingConfig;
   private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
   private final AppScheduler appScheduler;
+  private final LocalPagingSourceFunctionFactory localPagingSourceFunctionFactory;
 
   @Inject
   public PagingPokemonRepoDbWithNetwork(
-      PokemonRepo pokemonRepo,
       PagingConfig androidPagingConfig,
-      PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory,
+      LocalPagingSourceFunctionFactory localPagingSourceFunctionFactory,
       QueryStreaming queryStreaming,
-      AppScheduler appScheduler) {
-    this.pokemonRepo = pokemonRepo;
+      AppScheduler appScheduler,
+      PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory) {
     this.androidPagingConfig = androidPagingConfig;
     this.pokemonRemoteMediatorFactory = pokemonRemoteMediatorFactory;
     this.queryStreaming = queryStreaming;
     this.appScheduler = appScheduler;
+    this.localPagingSourceFunctionFactory = localPagingSourceFunctionFactory;
   }
 
   @Override
@@ -66,15 +63,9 @@ public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
   }
 
   private PagerContext pagerContext(PagingQueryContext query) {
-    return PagerContext.create(pagingSourceFunction(query.param()), optionalRemoteMediator(query));
-  }
-
-  private PokemonRemoteMediator optionalRemoteMediator(PagingQueryContext query) {
-    return pokemonRemoteMediatorFactory.create(query);
-  }
-
-  private Function0<PagingSource<Integer, Pokemon>> pagingSourceFunction(PagingQueryParam query) {
-    return () -> pokemonRepo.pokemonLocalPagingSource(query);
+    return PagerContext.create(
+        localPagingSourceFunctionFactory.create(query.param()),
+        pokemonRemoteMediatorFactory.create(query));
   }
 
   private Pager<Integer, Pokemon> pager(PagerContext context) {
