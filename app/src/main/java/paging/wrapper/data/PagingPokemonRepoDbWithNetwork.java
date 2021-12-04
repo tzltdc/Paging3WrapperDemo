@@ -1,7 +1,6 @@
 package paging.wrapper.data;
 
 import androidx.paging.Pager;
-import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.rxjava2.PagingRx;
 import io.reactivex.Observable;
@@ -14,26 +13,16 @@ import timber.log.Timber;
 
 public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
 
-  private static final int INITIAL_LOAD_KEY = 0;
-
-  private final PagingConfig androidPagingConfig;
-  private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final QueryStreaming queryStreaming;
   private final AppScheduler appScheduler;
-  private final LocalPagingSourceFunctionFactory localPagingSourceFunctionFactory;
+  private final PagerFactory pagerFactory;
 
   @Inject
   public PagingPokemonRepoDbWithNetwork(
-      PagingConfig androidPagingConfig,
-      LocalPagingSourceFunctionFactory localPagingSourceFunctionFactory,
-      QueryStreaming queryStreaming,
-      AppScheduler appScheduler,
-      PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory) {
-    this.androidPagingConfig = androidPagingConfig;
-    this.pokemonRemoteMediatorFactory = pokemonRemoteMediatorFactory;
+      QueryStreaming queryStreaming, AppScheduler appScheduler, PagerFactory pagerFactory) {
     this.queryStreaming = queryStreaming;
     this.appScheduler = appScheduler;
-    this.localPagingSourceFunctionFactory = localPagingSourceFunctionFactory;
+    this.pagerFactory = pagerFactory;
   }
 
   @Override
@@ -60,11 +49,7 @@ public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
     Timber.i("[ttt]:user query context emitted prior switch thread:%s", context);
   }
 
-  private Pager<Integer, Pokemon> pager(PagingQueryContext query) {
-    return new Pager<>(
-        androidPagingConfig,
-        INITIAL_LOAD_KEY,
-        pokemonRemoteMediatorFactory.create(query),
-        localPagingSourceFunctionFactory.create(query.param()));
+  public Pager<Integer, Pokemon> pager(PagingQueryContext query) {
+    return pagerFactory.pager(query);
   }
 }
