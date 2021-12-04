@@ -4,7 +4,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import paging.wrapper.data.PagerFactory;
-import paging.wrapper.data.PagerFactoryImpl;
+import paging.wrapper.data.RemotePagerFactoryImpl;
 import paging.wrapper.di.app.ActivityScope;
 import paging.wrapper.stream.PagingDataStream;
 import paging.wrapper.stream.PagingDataStreamImpl;
@@ -29,5 +29,5 @@ public abstract class PagingDataModule {
 
   @ActivityScope
   @Binds
-  public abstract PagerFactory pagerFactory(PagerFactoryImpl impl);
+  public abstract PagerFactory pagerFactory(RemotePagerFactoryImpl impl);
 }

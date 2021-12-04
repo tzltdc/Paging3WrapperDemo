@@ -8,8 +8,6 @@ import paging.wrapper.model.data.Pokemon;
 
 public class PagerFactoryImpl implements PagerFactory {
 
-  private static final int INITIAL_LOAD_KEY = 0;
-
   private final PagingConfig androidPagingConfig;
   private final PokemonRemoteMediatorFactory pokemonRemoteMediatorFactory;
   private final LocalPagingSourceFunctionFactory localPagingSourceFunctionFactory;
