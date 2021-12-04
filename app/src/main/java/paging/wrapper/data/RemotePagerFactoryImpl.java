@@ -9,14 +9,14 @@ import paging.wrapper.model.data.Pokemon;
 public class RemotePagerFactoryImpl implements PagerFactory {
 
   private final PagingConfig androidPagingConfig;
-  private final RemotePokenmonPagingSourceFactory remotePokenmonPagingSourceFactory;
+  private final BothRemotePokenmonPagingSourceFactory bothRemotePokenmonPagingSourceFactory;
 
   @Inject
   public RemotePagerFactoryImpl(
       PagingConfig androidPagingConfig,
-      RemotePokenmonPagingSourceFactory remotePokenmonPagingSourceFactory) {
+      BothRemotePokenmonPagingSourceFactory bothRemotePokenmonPagingSourceFactory) {
     this.androidPagingConfig = androidPagingConfig;
-    this.remotePokenmonPagingSourceFactory = remotePokenmonPagingSourceFactory;
+    this.bothRemotePokenmonPagingSourceFactory = bothRemotePokenmonPagingSourceFactory;
   }
 
   @Override
@@ -25,6 +25,6 @@ public class RemotePagerFactoryImpl implements PagerFactory {
         androidPagingConfig,
         PagerFactory.INITIAL_LOAD_KEY,
         null,
-        remotePokenmonPagingSourceFactory.create(query));
+        bothRemotePokenmonPagingSourceFactory.create(query));
   }
 }

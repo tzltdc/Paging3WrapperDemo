@@ -4,7 +4,7 @@ import dagger.assisted.AssistedFactory;
 import paging.wrapper.model.data.PagingQueryContext;
 
 @AssistedFactory
-interface RemotePokenmonPagingSourceFactory {
+interface BothRemotePokenmonPagingSourceFactory {
 
-  RemotePokenmonPagingSource create(PagingQueryContext context);
+  BothRemotePokenmonPagingSource create(PagingQueryContext context);
 }
