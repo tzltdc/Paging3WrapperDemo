@@ -8,7 +8,6 @@ import io.reactivex.Observable;
 import javax.inject.Inject;
 import paging.wrapper.demo.ui.query.QueryStreaming;
 import paging.wrapper.di.thread.AppScheduler;
-import paging.wrapper.model.data.PagerContext;
 import paging.wrapper.model.data.PagingQueryContext;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
@@ -44,7 +43,6 @@ public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
         .doOnNext(this::logOnQueryEmitted)
         .observeOn(appScheduler.worker())
         .doOnNext(this::logOnThreadSwitched)
-        .map(this::pagerContext)
         .map(this::pager)
         .switchMap(PagingRx::getObservable)
         .doOnNext(this::logOnRepoEmitted);
@@ -62,17 +60,11 @@ public class PagingPokemonRepoDbWithNetwork implements PagingPokemonRepo {
     Timber.i("[ttt]:user query context emitted prior switch thread:%s", context);
   }
 
-  private PagerContext pagerContext(PagingQueryContext query) {
-    return PagerContext.create(
-        localPagingSourceFunctionFactory.create(query.param()),
-        pokemonRemoteMediatorFactory.create(query));
-  }
-
-  private Pager<Integer, Pokemon> pager(PagerContext context) {
+  private Pager<Integer, Pokemon> pager(PagingQueryContext query) {
     return new Pager<>(
         androidPagingConfig,
         INITIAL_LOAD_KEY,
-        context.optionalRemoteMediator(),
-        context.localPagingSource());
+        pokemonRemoteMediatorFactory.create(query),
+        localPagingSourceFunctionFactory.create(query.param()));
   }
 }
