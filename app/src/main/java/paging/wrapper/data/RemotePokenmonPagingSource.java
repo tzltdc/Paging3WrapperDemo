@@ -10,7 +10,6 @@ import io.reactivex.Single;
 import paging.wrapper.mapper.PagingRequestMapper;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingQueryContext;
-import paging.wrapper.model.data.PagingRemoteRequestConfig;
 import paging.wrapper.model.data.Pokemon;
 import timber.log.Timber;
 
@@ -42,21 +41,7 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
 
   private RemotePagingResponse remotePagingResponse(PageActionResult response) {
     return RemotePagingResponse.create(
-        response.response(), nextTargetCount(response.request().offSet(), response));
-  }
-
-  @Nullable
-  private static Integer nextTargetCount(int offSet, PageActionResult response) {
-    return hasMore(response) ? next(offSet, response) : null;
-  }
-
-  private static int next(int currentOffset, PageActionResult response) {
-    return currentOffset + response.response().list().size();
-  }
-
-  private static boolean hasMore(PageActionResult response) {
-    return response.response().list().size()
-        >= PagingRemoteRequestConfig.DEFAULT_QUERY_CONFIG.countPerPage();
+        response.response(), NextTargetCountMapper.nextTargetCount(response));
   }
 
   private Integer loadedCount(LoadParams<Integer> params) {
