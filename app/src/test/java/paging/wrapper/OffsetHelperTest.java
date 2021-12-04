@@ -56,7 +56,7 @@ public class OffsetHelperTest {
   @Test
   public void e2e() {
 
-    long offset =
+    int offset =
         offsetHelper.offset(
             remoteDataServer.indexBy("31:Nidoqueen"), PagingQueryParam.create("ee"));
     List<Pokemon> nextBatch =

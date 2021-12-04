@@ -19,15 +19,15 @@ public class OffsetHelper {
   }
 
   /** Temporarily using the remote service to identify the offset position */
-  public long offset(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
-    long loaded = offSet(lastFetchedAsTarget, query);
+  public int offset(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
+    int loaded = offSet(lastFetchedAsTarget, query);
     Timber.i(
         "offset loaded count:%s, query:%s, last item:%s",
         loaded, query.searchKey(), lastFetchedAsTarget);
     return loaded;
   }
 
-  private Long offSet(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
+  private int offSet(Pokemon lastFetchedAsTarget, PagingQueryParam query) {
     List<Pokemon> matched =
         Observable.fromIterable(remoteDataServer.get())
             .filter(item -> PokemonBackendService.validItem(item, query))
@@ -39,7 +39,8 @@ public class OffsetHelper {
               return matchTarget(lastFetchedAsTarget, pokemon);
             })
         .count()
-        .blockingGet();
+        .blockingGet()
+        .intValue();
   }
 
   private static boolean matchTarget(Pokemon lastFetchedAsTarget, Pokemon pokemon) {

@@ -7,7 +7,6 @@ import androidx.paging.rxjava2.RxPagingSource;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedInject;
 import io.reactivex.Single;
-import java.util.List;
 import paging.wrapper.mapper.PagingRequestMapper;
 import paging.wrapper.model.data.PageActionResult;
 import paging.wrapper.model.data.PagingQueryContext;
@@ -34,24 +33,28 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
   @NonNull
   @Override
   public Single<LoadResult<Integer, Pokemon>> loadSingle(@NonNull LoadParams<Integer> params) {
-
-    int loadedCount = loadedCount(params);
     return pokemonRemoteSource
-        .fetch(pagingRequestMapper.nextPagingRequest(loadedCount, query.param()))
-        .map(response -> asResult(response, mutate(loadedCount, response)))
+        .fetch(pagingRequestMapper.nextPagingRequest(loadedCount(params), query.param()))
+        .map(this::remotePagingResponse)
+        .map(this::asLoadResult)
         .onErrorReturn(LoadResult.Error::new);
   }
 
+  private RemotePagingResponse remotePagingResponse(PageActionResult response) {
+    return RemotePagingResponse.create(
+        response.response(), nextTargetCount(response.request().offSet(), response));
+  }
+
   @Nullable
-  private Integer mutate(int count, PageActionResult response) {
-    return hasMore(response) ? next(count, response) : null;
+  private static Integer nextTargetCount(int offSet, PageActionResult response) {
+    return hasMore(response) ? next(offSet, response) : null;
   }
 
-  private int next(int current, PageActionResult response) {
-    return current + response.response().list().size();
+  private static int next(int currentOffset, PageActionResult response) {
+    return currentOffset + response.response().list().size();
   }
 
-  private boolean hasMore(PageActionResult response) {
+  private static boolean hasMore(PageActionResult response) {
     return response.response().list().size()
         >= PagingRemoteRequestConfig.DEFAULT_QUERY_CONFIG.countPerPage();
   }
@@ -67,19 +70,11 @@ class RemotePokenmonPagingSource extends RxPagingSource<Integer, Pokemon> {
     return targetLoadCount;
   }
 
-  private LoadResult<Integer, Pokemon> asResult(
-      PageActionResult response, @Nullable Integer nextKey) {
-    return getIntegerPokemonLoadResult(response, nextKey);
-  }
-
-  private LoadResult<Integer, Pokemon> getIntegerPokemonLoadResult(
-      PageActionResult response, @Nullable Integer nextTargetCount) {
-    List<Pokemon> list = response.response().list();
-    Integer prevKey = null;
+  private LoadResult<Integer, Pokemon> asLoadResult(RemotePagingResponse remotePagingResponse) {
     return new LoadResult.Page<>(
-        list,
-        prevKey, // Only paging forward.
-        nextTargetCount,
+        remotePagingResponse.response().list(),
+        null,
+        remotePagingResponse.nextTargetCount(),
         LoadResult.Page.COUNT_UNDEFINED,
         LoadResult.Page.COUNT_UNDEFINED);
   }
