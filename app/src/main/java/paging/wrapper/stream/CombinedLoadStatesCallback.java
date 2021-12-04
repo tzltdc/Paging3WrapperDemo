@@ -1,6 +1,5 @@
 package paging.wrapper.stream;
 
-import androidx.annotation.NonNull;
 import androidx.pagingx.CombinedLoadStates;
 import androidx.pagingx.CombinedLoadStatesMapper;
 import androidx.pagingx.LoadState;
@@ -19,7 +18,7 @@ public class CombinedLoadStatesCallback
     implements Function1<androidx.paging.CombinedLoadStates, Unit>, LoadStateStreaming {
 
   private final BehaviorRelay<CombinedLoadStates> behaviorRelay = BehaviorRelay.create();
-  private AppScheduler appScheduler;
+  private final AppScheduler appScheduler;
 
   @Inject
   public CombinedLoadStatesCallback(AppScheduler appScheduler) {
@@ -54,27 +53,32 @@ public class CombinedLoadStatesCallback
 
   @Override
   public Observable<LoadState> footer() {
-    return behaviorRelay.hide().map(CombinedLoadStates::getAppend).distinctUntilChanged();
+    return throttleRawInternal().map(CombinedLoadStates::getAppend).distinctUntilChanged();
   }
 
   @Override
   public Observable<LoadState> header() {
-    return behaviorRelay.hide().map(CombinedLoadStates::getRefresh).distinctUntilChanged();
+    return throttleRawInternal()
+        .map(CombinedLoadStates::getRefresh)
+        .distinctUntilChanged()
+        .doOnNext(this::logOnHeader);
+  }
+
+  private void logOnHeader(LoadState loadState) {
+    Timber.i("logOnHeader:%s", loadState);
   }
 
   @Override
   public Observable<Unit> idle() {
-    return behaviorRelay
-        .hide()
+    return throttleRawInternal()
         .filter(LoadingStateIdleMapper::allIdle)
-        .compose(this::throttle)
         .map(state -> Unit.INSTANCE)
         .doOnNext(this::logIdle);
   }
 
   @Override
   public Observable<CombinedLoadStates> raw() {
-    return behaviorRelay.hide();
+    return throttleRawInternal();
   }
 
   /**
@@ -85,9 +89,8 @@ public class CombinedLoadStatesCallback
    *
    * <p>2, The espresso unit test could use a gap to wait the UI thread render the data.
    */
-  @NonNull
-  private Observable<CombinedLoadStates> throttle(Observable<CombinedLoadStates> upstream) {
-    return upstream.throttleLast(350, TimeUnit.MILLISECONDS, appScheduler.worker());
+  private Observable<CombinedLoadStates> throttleRawInternal() {
+    return behaviorRelay.hide().throttleLast(350, TimeUnit.MILLISECONDS, appScheduler.worker());
   }
 
   private void logIdle(Unit unit) {

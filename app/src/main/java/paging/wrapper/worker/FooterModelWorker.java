@@ -6,18 +6,23 @@ import com.uber.autodispose.ScopeProvider;
 import javax.inject.Inject;
 import paging.wrapper.app.AutoDisposeWorker;
 import paging.wrapper.contract.FooterEntityContract;
+import paging.wrapper.di.thread.AppScheduler;
 import paging.wrapper.model.ui.FooterModel;
 import paging.wrapper.stream.FooterModelStreaming;
 import timber.log.Timber;
 
 public class FooterModelWorker implements AutoDisposeWorker {
 
+  private final AppScheduler appScheduler;
   private final FooterModelStreaming footerModelStreaming;
   private final FooterEntityContract footerEntityContract;
 
   @Inject
   public FooterModelWorker(
-      FooterModelStreaming footerModelStreaming, FooterEntityContract footerEntityContract) {
+      AppScheduler appScheduler,
+      FooterModelStreaming footerModelStreaming,
+      FooterEntityContract footerEntityContract) {
+    this.appScheduler = appScheduler;
     this.footerModelStreaming = footerModelStreaming;
     this.footerEntityContract = footerEntityContract;
   }
@@ -26,6 +31,7 @@ public class FooterModelWorker implements AutoDisposeWorker {
   public void attach(ScopeProvider scopeProvider) {
     footerModelStreaming
         .streaming()
+        .observeOn(appScheduler.ui())
         .as(autoDisposable(scopeProvider))
         .subscribe(this::bindFooterModel);
   }

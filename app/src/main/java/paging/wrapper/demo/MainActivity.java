@@ -170,6 +170,7 @@ public class MainActivity extends AppCompatActivity
   }
 
   public void bind(@Nullable HeaderEntity headerEntity) {
+    Timber.i("logOnHeader bind:%s", headerEntity);
     if (headerEntity == null) {
       fl_header_root_view.setVisibility(View.GONE);
       fl_page_data_list_root_view.setVisibility(View.VISIBLE);
