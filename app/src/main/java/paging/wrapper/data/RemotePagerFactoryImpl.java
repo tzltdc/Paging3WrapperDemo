@@ -10,16 +10,12 @@ public class RemotePagerFactoryImpl implements PagerFactory {
 
   private final PagingConfig androidPagingConfig;
   private final RemotePagingFunctionFactory remotePagingFunctionFactory;
-  private final BothRemotePokenmonPagingSourceFactory bothRemotePokenmonPagingSourceFactory;
 
   @Inject
   public RemotePagerFactoryImpl(
-      PagingConfig androidPagingConfig,
-      RemotePagingFunctionFactory remotePagingFunctionFactory,
-      BothRemotePokenmonPagingSourceFactory bothRemotePokenmonPagingSourceFactory) {
+      PagingConfig androidPagingConfig, RemotePagingFunctionFactory remotePagingFunctionFactory) {
     this.androidPagingConfig = androidPagingConfig;
     this.remotePagingFunctionFactory = remotePagingFunctionFactory;
-    this.bothRemotePokenmonPagingSourceFactory = bothRemotePokenmonPagingSourceFactory;
   }
 
   @Override
@@ -28,6 +24,6 @@ public class RemotePagerFactoryImpl implements PagerFactory {
         androidPagingConfig,
         PagerFactory.INITIAL_LOAD_KEY,
         null,
-        bothRemotePokenmonPagingSourceFactory.create(query));
+        remotePagingFunctionFactory.create(query));
   }
 }
